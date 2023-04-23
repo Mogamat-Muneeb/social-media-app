@@ -131,7 +131,7 @@ export const Post = (props: Props) => {
           {likes && (
             <div className="flex flex-col items-center ">
               <p className="font-semibold"> {likes.length} likes</p>
-              <p className="flex items-center text-[14px]">
+              <div className="flex items-center text-[14px]">
                 {likes.length > 0 &&
                   likes.map((like, index) => (
                     <h2 key={like.likeId}>
@@ -141,7 +141,7 @@ export const Post = (props: Props) => {
                         : like.nameId && like.emailId}
                     </h2>
                   ))}
-              </p>
+              </div>
             </div>
           )}
         </div>
