@@ -28,10 +28,11 @@ export const CreateForm = () => {
   const [saving, setSaving] = useState(false);
 
   const schema = yup.object().shape({
-    // title: yup.string().required("You must add a title."),
     description: yup.string().required("You must add a description."),
   });
 
+  console.log(uploadProgress, "uploadProgress");
+  
   const {
     register,
     handleSubmit,
@@ -74,7 +75,9 @@ export const CreateForm = () => {
         addDoc(postsRef, {
           ...data,
           username: user?.displayName,
+          userPp: user?.photoURL,
           userId: user?.uid,
+          date: Date.now(),
           imageUrl: downloadURL, // add the download URL as a property to the document
         }).then(() => {
           setUploaded(true);
@@ -88,15 +91,12 @@ export const CreateForm = () => {
   return (
     <div className="flex items-center justify-center h-screen">
       <form onSubmit={handleSubmit(onPostSubmit)}>
-        {/* <input placeholder="Title..." {...register("title")} /> */}
-        {/* <p className="text-red-500"> {errors.title?.message}</p> */}
         <div className="flex items-center justify-center w-full gap-1">
           <label
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 "
           >
             <div className="flex flex-col items-center justify-center px-12 py-12">
-              {/* <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg> */}
               <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                 <span className="font-semibold">
                   {file ? ` Image Uploaded ` : ` Click to upload`}
@@ -111,19 +111,6 @@ export const CreateForm = () => {
               className="hidden"
             />
           </label>
-          {/* <button
-              className="w-[50px] h-full bg-black text-white py-14  flex justify-center items-center font-semibold rounded-[3px] text-[12px]"
-              onClick={handleUpload}
-              disabled={saving}
-            >
-              {saving ? (
-                <div className="flex items-center justify-center ">
-                  <div className="w-5 h-5 border-b-2 border-white rounded-full animate-spin"></div>
-                </div>
-              ) : (
-                "Save"
-              )}
-            </button> */}
         </div>
         <textarea placeholder="Write a caption." {...register("description")} />
         <p className="text-red-500"> {errors.description?.message}</p>
