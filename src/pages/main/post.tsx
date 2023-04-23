@@ -113,7 +113,7 @@ export const Post = (props: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20 ">
+    <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
         <div className="flex flex-col w-full gap-2 p-2 text-start">
           <div className="flex items-center gap-2">
@@ -188,16 +188,19 @@ export const Post = (props: Props) => {
                     {likes.length} likes
                   </p>
                 </div>
-                <div className="flex items-center text-[14px]">
+                <div className="flex items-center text-[14px] gap-1">
+                  Liked by
                   {likes.length > 0 &&
                     likes.map((like, index) => (
-                      <h2 key={like.likeId}>
-                        Liked by
-                        <span className="pr-1">{index === 0 ? "" : ", "}</span>
-                        {like.userId === user?.uid
-                          ? "You"
-                          : like.nameId && like.emailId}
-                      </h2>
+                      <>
+                        <h2 key={like.likeId}>
+                          <span className="">{index === 0 ? "" : ", "}</span>
+
+                          {like.userId === user?.uid
+                            ? "You"
+                            : like.nameId && like.emailId}
+                        </h2>
+                      </>
                     ))}
                 </div>
               </div>

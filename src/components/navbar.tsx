@@ -11,12 +11,12 @@ export const Navbar = () => {
   };
   return (
     <div
-      className={` sticky top-0 right-0 left-0  ${
+      className={` sticky top-0 right-0 left-0 z-[60]  ${
         user ? "bg-[#212529] text-white " : "text-black"
       } `}
     >
       <div
-        className={`flex items-center max-w-[1228px] w-full mx-auto py-2 ${
+        className={`flex items-center max-w-[1228px] w-full mx-auto  py-2 ${
           user ? " justify-between" : " justify-center "
         }`}
       >
