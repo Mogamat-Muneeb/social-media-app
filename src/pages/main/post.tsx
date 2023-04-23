@@ -150,7 +150,7 @@ export const Post = (props: Props) => {
             </span>
           </div>
 
-          <img src={post.imageUrl} alt="" />
+          <img src={post.imageUrl} alt=" " className="max-h-[600px] object-cover" />
 
           <div className="flex items-center">
             {likes ? (
@@ -164,10 +164,10 @@ export const Post = (props: Props) => {
                       <>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          fill="red"
+                          fill="#ff3040"
                           viewBox="0 0 24 24"
                           strokeWidth="1.5"
-                          stroke="red"
+                          stroke="#ff3040"
                           className="w-6 h-6"
                         >
                           <path

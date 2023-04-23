@@ -26,13 +26,13 @@ export const CreateForm = () => {
   const [loading, setLoading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
   const [saving, setSaving] = useState(false);
-
+  const [show, setShowing] = useState("step1");
   const schema = yup.object().shape({
     description: yup.string().required("You must add a description."),
   });
 
   console.log(uploadProgress, "uploadProgress");
-  
+
   const {
     register,
     handleSubmit,
@@ -78,11 +78,11 @@ export const CreateForm = () => {
           userPp: user?.photoURL,
           userId: user?.uid,
           date: Date.now(),
-          imageUrl: downloadURL, // add the download URL as a property to the document
+          imageUrl: downloadURL, 
         }).then(() => {
           setUploaded(true);
           setSaving(false);
-          navigate("/"); // navigate to the home page after the post is saved
+          navigate("/"); 
         });
       }
     );
@@ -90,31 +90,63 @@ export const CreateForm = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <form onSubmit={handleSubmit(onPostSubmit)}>
-        <div className="flex items-center justify-center w-full gap-1">
-          <label
-            htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 "
-          >
-            <div className="flex flex-col items-center justify-center px-12 py-12">
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">
-                  {file ? ` Image Uploaded ` : ` Click to upload`}
-                </span>
-              </p>
+      <form onSubmit={handleSubmit(onPostSubmit)} className="max-w-[500px] w-full">
+        {show === "step1" && (
+          <>
+            <div className="flex flex-col items-center justify-center w-full gap-4">
+            <button type="button" disabled={!file} className="flex items-end justify-end w-full" onClick={() => setShowing("step2")}>
+              next
+            </button>
+              <label
+                htmlFor="dropzone-file"
+                className="flex flex-col items-center justify-center w-full h-full  rounded-lg cursor-pointer bg-[#0095f6]"
+              >
+                <div className="flex flex-col items-center justify-center px-2 py-4">
+                  <p className="flex items-center text-sm text-white">
+                    <span className="font-medium">
+                      {file ? ` Image Uploaded ` : ` Click to upload`}
+                    </span>
+                  </p>
+                </div>
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  accept="/image/*"
+                  onChange={handleChange}
+                  className="hidden"
+                />
+              </label>
             </div>
-            <input
-              id="dropzone-file"
-              type="file"
-              accept="/image/*"
-              onChange={handleChange}
-              className="hidden"
+          </>
+        )}
+        {show === "step2" && (
+          <>
+            <div className="flex justify-end w-full gap-4">
+            <button type="button" onClick={() => setShowing("step1")}>
+              back
+            </button>
+            <button type="button"     onClick={() => setShowing("step3")}>
+              next
+            </button>
+
+            </div>
+            <textarea
+              placeholder="Write a caption."
+              {...register("description")}
             />
-          </label>
-        </div>
-        <textarea placeholder="Write a caption." {...register("description")} />
-        <p className="text-red-500"> {errors.description?.message}</p>
-        <button type="submit">Creat Post</button>
+            <p className="text-red-500"> {errors.description?.message}</p>
+          </>
+        )}
+        {show === "step3" && (
+          <>
+            <button type="submit" className="text-[#0095f6]">
+              Share
+            </button>
+            <button type="button" onClick={() => setShowing("step2")}>
+              back
+            </button>
+          </>
+        )}
       </form>
     </div>
   );
