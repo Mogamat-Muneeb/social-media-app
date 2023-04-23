@@ -7,6 +7,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -38,17 +39,32 @@ export const Post = (props: Props) => {
     [post.id]
   );
 
+  // const getLikes = async () => {
+  //   const data = await getDocs(likesDoc);
+  //   setLikes(
+  //     data.docs.map((doc) => ({
+  //       userId: doc.data().userId,
+  //       likeId: doc.id,
+  //       nameId: doc.data().nameId,
+  //       emailId: doc.data().emailId,
+  //     }))
+  //   );
+  // };
+
   const getLikes = async () => {
-    const data = await getDocs(likesDoc);
-    setLikes(
-      data.docs.map((doc) => ({
+    const unsubscribe = onSnapshot(likesDoc, (snapshot) => {
+      const likes = snapshot.docs.map((doc) => ({
         userId: doc.data().userId,
         likeId: doc.id,
         nameId: doc.data().nameId,
         emailId: doc.data().emailId,
-      }))
-    );
+      }));
+      setLikes(likes);
+    });
+  
+    return unsubscribe;
   };
+  
   const addLike = async () => {
     try {
       const newDoc = await addDoc(likesRef, {
@@ -198,7 +214,7 @@ export const Post = (props: Props) => {
 
                           {like.userId === user?.uid
                             ? "You"
-                            : like.nameId && like.emailId}
+                            : like.nameId && like.nameId}
                         </h2>
                       </>
                     ))}
