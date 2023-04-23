@@ -116,7 +116,7 @@ export const Post = (props: Props) => {
     <div className="flex flex-col items-center justify-center mt-20 ">
       <div className="max-w-[500px] w-full flex flex-col items-center justify-center shadow-md rounded py-10 h-full">
         <div className="title">
-          <h1> {post.title}</h1>
+          <img src={post.imageUrl} alt="" />
         </div>
         <div className="body">
           <p> {post.description} </p>
