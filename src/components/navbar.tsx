@@ -24,10 +24,18 @@ export const Navbar = () => {
           <Link to="/" className="font-medium text-[16px]">
             Home
           </Link>
+          <Link
+            to="/createpost"
+            className={`font-medium text-[16px] ${user ? "block" : "hidden"}`}
+          >
+            Create
+          </Link>
           {user ? null : (
-            <Link to="/login" className="font-medium text-[16px]">
-              Login
-            </Link>
+            <>
+              <Link to="/login" className="font-medium text-[16px]">
+                Login
+              </Link>
+            </>
           )}
         </div>
         <div className="flex items-center gap-4">
