@@ -30,7 +30,7 @@ export const Post = (props: Props) => {
   const { post } = props;
   const [user] = useAuthState(auth);
   console.log(user?.email, "user");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [likes, setLikes] = useState<Like[] | null>(null);
 
   const likesRef = collection(db, "likes");
@@ -62,13 +62,13 @@ export const Post = (props: Props) => {
       }));
       setLikes(likes);
     });
-  
+
     return unsubscribe;
   };
-  
+
   const addLike = () => {
     try {
-      const newDoc =  addDoc(likesRef, {
+      const newDoc = addDoc(likesRef, {
         userId: user?.uid,
         postId: post.id,
         nameId: user?.displayName ?? null,
@@ -98,15 +98,12 @@ export const Post = (props: Props) => {
               ]
         );
       }
-
     } catch (err) {
       console.log(err);
-      alert('log in to like a post')
+      alert("log in to like a post");
     }
   };
 
-  console.log(likes , "like");
-  
   const removeLike = async () => {
     try {
       const likeToDeleteQuery = query(
@@ -135,6 +132,12 @@ export const Post = (props: Props) => {
     getLikes();
   }, []);
 
+  const currentDate = new Date();
+  const postDate = new Date(post.date);
+  /* @ts-ignore */
+  const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
+  console.log(diffInMinutes, "diffInMinutes");
+
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
@@ -155,9 +158,17 @@ export const Post = (props: Props) => {
                 )
                 .join(" ")}
             </span>
+            <span className="flex gap-1">
+              <span>•</span>
+              {diffInMinutes}m
+            </span>
           </div>
 
-          <img src={post.imageUrl} alt=" " className="max-h-[600px] object-cover" />
+          <img
+            src={post.imageUrl}
+            alt=" "
+            className="max-h-[600px] object-cover"
+          />
 
           <div className="flex items-center">
             {likes ? (

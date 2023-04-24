@@ -11,6 +11,7 @@ export interface Post {
   description: string;
   imageUrl: string;
   userPp: string;
+  date: string
 }
 
 export const Main = () => {
@@ -25,10 +26,9 @@ export const Main = () => {
       })) as Post[];
       setPostsList(posts);
     });
-
+    
     return unsubscribe;
   }, []);
-
   return (
     <div>
       {postsList?.map((post) => (
