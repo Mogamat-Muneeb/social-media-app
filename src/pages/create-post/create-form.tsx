@@ -52,8 +52,10 @@ export const CreateForm = () => {
       alert("Please add the file");
       return;
     }
+    console.log(file, "file");
+    
+    const storageRef = ref(storage, `posts/${user?.displayName}/${Date.now()}`);
 
-    const storageRef = ref(storage, `posts/${user?.displayName}`);
     /* @ts-ignore */
     const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -78,11 +80,11 @@ export const CreateForm = () => {
           userPp: user?.photoURL,
           userId: user?.uid,
           date: Date.now(),
-          imageUrl: downloadURL, 
+          imageUrl: downloadURL,
         }).then(() => {
           setUploaded(true);
           setSaving(false);
-          navigate("/"); 
+          navigate("/");
         });
       }
     );
@@ -90,13 +92,21 @@ export const CreateForm = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <form onSubmit={handleSubmit(onPostSubmit)} className="max-w-[500px] w-full">
+      <form
+        onSubmit={handleSubmit(onPostSubmit)}
+        className="max-w-[500px] w-full"
+      >
         {show === "step1" && (
           <>
             <div className="flex flex-col items-center justify-center w-full gap-4">
-            <button type="button" disabled={!file} className="flex items-end justify-end w-full" onClick={() => setShowing("step2")}>
-              next
-            </button>
+              <button
+                type="button"
+                disabled={!file}
+                className="flex items-end justify-end w-full"
+                onClick={() => setShowing("step2")}
+              >
+                next
+              </button>
               <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-full h-full  rounded-lg cursor-pointer bg-[#0095f6]"
@@ -122,13 +132,12 @@ export const CreateForm = () => {
         {show === "step2" && (
           <>
             <div className="flex justify-end w-full gap-4">
-            <button type="button" onClick={() => setShowing("step1")}>
-              back
-            </button>
-            <button type="button"     onClick={() => setShowing("step3")}>
-              next
-            </button>
-
+              <button type="button" onClick={() => setShowing("step1")}>
+                back
+              </button>
+              <button type="button" onClick={() => setShowing("step3")}>
+                next
+              </button>
             </div>
             <textarea
               placeholder="Write a caption."

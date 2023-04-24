@@ -13,6 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db, auth } from "../../config/firebase";
 import { Post as IPost } from "./main";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   post: IPost;
@@ -29,7 +30,7 @@ export const Post = (props: Props) => {
   const { post } = props;
   const [user] = useAuthState(auth);
   console.log(user?.email, "user");
-
+  const navigate = useNavigate()
   const [likes, setLikes] = useState<Like[] | null>(null);
 
   const likesRef = collection(db, "likes");
@@ -65,9 +66,9 @@ export const Post = (props: Props) => {
     return unsubscribe;
   };
   
-  const addLike = async () => {
+  const addLike = () => {
     try {
-      const newDoc = await addDoc(likesRef, {
+      const newDoc =  addDoc(likesRef, {
         userId: user?.uid,
         postId: post.id,
         nameId: user?.displayName ?? null,
@@ -80,6 +81,7 @@ export const Post = (props: Props) => {
                 ...prev,
                 {
                   userId: user.uid,
+                  /* @ts-ignore */
                   likeId: newDoc.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
@@ -88,6 +90,7 @@ export const Post = (props: Props) => {
             : [
                 {
                   userId: user.uid,
+                  /* @ts-ignore */
                   likeId: newDoc.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
@@ -95,11 +98,15 @@ export const Post = (props: Props) => {
               ]
         );
       }
+
     } catch (err) {
       console.log(err);
+      alert('log in to like a post')
     }
   };
 
+  console.log(likes , "like");
+  
   const removeLike = async () => {
     try {
       const likeToDeleteQuery = query(
