@@ -14,7 +14,7 @@ export const Navbar = () => {
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${
-        user ? "bg-[#212529] text-white " : "text-black"
+        user ? "bg-black text-white " : "bg-white py-2 text-black"
       } `}
     >
       <div
@@ -53,11 +53,13 @@ export const Navbar = () => {
         <div className="flex items-center gap-4">
           {user && (
             <>
+            <Link to={user?.uid}>
               <img
                 src={user?.photoURL || ""}
                 alt={user?.displayName || ""}
                 className="w-8 h-8 rounded-full md:w-10 md:h-10"
               />
+            </Link>
               <div className="flex-col hidden md:flex text-start">
                 <p className="font-medium text-[14px]">
                   {user?.displayName

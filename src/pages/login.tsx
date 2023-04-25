@@ -1,5 +1,6 @@
-import { auth, provider } from "../config/firebase";
+import { auth, provider,db } from "../config/firebase";
 import { signInWithPopup } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
@@ -7,17 +8,23 @@ export const Login = () => {
 
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
-    console.log(result);
+    console.log(result, "the result");
+    await setDoc(doc(db, "users", result.user.uid), {
+      uid: result.user.uid,
+      displayName :result.user.displayName,
+      email: result.user.email,
+      photoURL: result.user.photoURL,
+    });
     navigate("/");
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="flex flex-col items-center justify-center rounded-md shadow">
-        <div className="flex flex-col h-full gap-4 p-10 rounded shadow">
+    <div className="flex items-center justify-center h-screen overflow-hidden">
+      <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col h-full gap-4 p-10">
           <div className="flex flex-col gap-2">
-            <p className="font-bold text-[24px]"> Sign In / Sign Up</p>
-            <span className="border-t-[1px] border-r-0 border-b-0 border-gray-400"></span>
+            <h1 className="font-bold text-[24px]"> Welcome to Circledop !!</h1>
+            <span className="text-[14px]">Easy signup now</span>
           </div>
 
           <div className="border-[1px] border-gray-400 rounded-md w-[300px] flex justify-center">
@@ -48,7 +55,7 @@ export const Login = () => {
                   fill="#1976D2"
                 ></path>
               </svg>
-              Continue with Google
+              Sign in or up with Google
             </button>
           </div>
         </div>

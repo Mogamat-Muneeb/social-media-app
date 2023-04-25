@@ -13,7 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db, auth } from "../../config/firebase";
 import { Post as IPost } from "./main";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link } from "react-router-dom";
 
 interface Props {
   post: IPost;
@@ -29,7 +29,6 @@ interface Like {
 export const Post = (props: Props) => {
   const { post } = props;
   const [user] = useAuthState(auth);
-  console.log(user?.email, "user");
   const navigate = useNavigate();
   const [likes, setLikes] = useState<Like[] | null>(null);
 
@@ -136,18 +135,29 @@ export const Post = (props: Props) => {
   const postDate = new Date(post.date);
   /* @ts-ignore */
   const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
-  console.log(diffInMinutes, "diffInMinutes");
 
+  let timeAgo 
+
+  if (diffInMinutes >= 60) {
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    timeAgo = `${diffInHours}h`
+  }else {
+    timeAgo = `${diffInMinutes}m`
+  }
+
+  
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
         <div className="flex flex-col w-full gap-2 p-2 text-start">
           <div className="flex items-center gap-2">
+            <Link to={`${post.userId}`}>
             <img
               src={post.userPp}
               className="border rounded-full shadow w-9 h-9"
               alt=""
             />
+            </Link>
             <span>
               @
               {post.username
@@ -160,7 +170,7 @@ export const Post = (props: Props) => {
             </span>
             <span className="flex gap-1">
               <span>•</span>
-              {diffInMinutes}m
+              {timeAgo}
             </span>
           </div>
 
@@ -248,10 +258,10 @@ export const Post = (props: Props) => {
                     <>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="red"
+                        fill="#ff3040"
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
-                        stroke="red"
+                        stroke="#ff3040"
                         className="w-6 h-6"
                       >
                         <path
