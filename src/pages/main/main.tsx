@@ -18,6 +18,7 @@ export interface Post {
   imageUrl: string;
   userPp: string;
   date: string;
+  likesCount : any 
 }
 
 export const Main = () => {
@@ -34,12 +35,22 @@ export const Main = () => {
       setPostsList(posts);
       setIsLoading(false); 
     });
+console.log(isLoading, "isLoading");
 
     return unsubscribe;
   }, []);
   return (
 
-     <div className={`${isLoading ? "h-screen" : "h-full"}`}>
+     <div className={`${isLoading  ? "h-screen" : "h-full" && postsList?.length === 0 ? "h-screen" : "h-full" }`} >
+      <div>
+        {
+           postsList?.length === 0 && (
+            <div className="pt-10">
+              No posts right now
+            </div>
+           )
+        }
+      </div>
       {isLoading ? (
              <div className="flex items-center justify-center mt-32">
              <svg
@@ -61,7 +72,7 @@ export const Main = () => {
            </div>
       ) : (
         postsList?.map((post) => (
-          <div key={post.id}>
+          <div key={post.id} >
             <Post post={post} />
           </div>
         ))

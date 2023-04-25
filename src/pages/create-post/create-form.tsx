@@ -95,6 +95,13 @@ export const CreateForm = () => {
           setUploaded(true);
           setSaving(false);
           setIsLoading(false);
+          const userPostsRef = collection(db, "user-posts");
+          addDoc(userPostsRef, {
+            userId: user?.uid,
+            imageUrl: downloadURL,
+          }).then(() => {
+            console.log("Post saved to user-posts collection");
+          });
           navigate("/");
         });
       }
@@ -105,11 +112,11 @@ export const CreateForm = () => {
     <div className="flex flex-wrap items-center justify-center h-screen">
       <form
         onSubmit={handleSubmit(onPostSubmit)}
-        className="md:max-w-[1280px] max-w-[300px] w-full mx-auto "
+        className="md:max-w-[1280px] max-w-[600px] w-full mx-auto px-4 md:px-0"
       >
         {show === "step1" && (
           <>
-            <div className="flex flex-col items-center justify-center w-full  md:max-w-[500px] max-w-[300px] mx-auto  gap-4">
+            <div className="flex flex-col items-center justify-center w-full  max-w-[500px] mx-auto  gap-4">
               <button
                 type="button"
                 disabled={!file}
