@@ -14,7 +14,7 @@ export const Navbar = () => {
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${
-        user ? "bg-black text-white " : "bg-white py-2 text-black"
+        user ? "bg-black text-white " : "bg-white shadow-lg py-2 text-black"
       } `}
     >
       <div

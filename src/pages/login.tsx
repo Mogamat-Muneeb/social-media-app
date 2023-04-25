@@ -23,7 +23,7 @@ export const Login = () => {
       <div className="flex flex-col items-center justify-center ">
         <div className="flex flex-col h-full gap-4 p-10">
           <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-[24px]"> Welcome to Circledop !!</h1>
+            <h1 className="font-bold text-[24px]"> Welcome to <span className="text-[#ff3040] px-1">Circledop !!</span> </h1>
             <span className="text-[14px]">Easy signup now</span>
           </div>
 

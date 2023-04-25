@@ -86,7 +86,8 @@ export const Account = () => {
   return (
     <ProtectedRoute>
       {/* account: {uid} */}
-      <div className="max-w-[1280px] w-full mx-auto h-screen ">
+      
+      <div className={`max-w-[1280px] w-full mx-auto ${userPosts.length > 4 ? "h-full  md:h-screen mb-20 " : "md:h-full  h-screen mb-20"}`}>
         {userData && (
           <div className="px-4 md:px-0">
             <div className="flex w-full gap-4 pt-10">
@@ -94,7 +95,7 @@ export const Account = () => {
                 <img
                   src={userData.photoURL}
                   alt=""
-                  className="rounded-full w-[150px] h-[150px] shadow-lg"
+                  className="rounded-full md:w-[150px] md:h-[150px] w-[130px] h-[130px] shadow-lg"
                 />
               </div>
               <div className="flex flex-col items-start w-full">
@@ -120,7 +121,7 @@ export const Account = () => {
                     /* @ts-ignore */
                     src={post.imageUrl}
                     alt=""
-                    className="md:w-[240px] md:h-[240px] w-[200px] h-[200px] object-cover shadow-lg"
+                    className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
                   />
                 ))}
               </div>

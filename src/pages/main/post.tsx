@@ -298,7 +298,7 @@ export const Post = (props: Props) => {
             )}
           </div>
           <p className="font-semibold  text-[13px] ">
-            {post.username}{" "}
+            {post.username}
             <span className="font-normal">{post.description} </span>{" "}
           </p>
         </div>
