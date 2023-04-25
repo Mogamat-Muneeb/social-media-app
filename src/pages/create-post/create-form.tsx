@@ -120,6 +120,18 @@ export const CreateForm = () => {
               >
                 next
               </button>
+              {file && (
+                  <div className="rounded shadow">
+                    <img
+                      src={
+                        /* @ts-ignore */
+                        URL.createObjectURL(file)
+                      }
+                      className="w-full rounded-sm shadow-lg max-h-[500px] object-cover"
+                      alt="Uploaded file"
+                    />
+                  </div>
+                )}
               <label
                 htmlFor="dropzone-file"
                 className="flex flex-col items-center justify-center w-full h-full bg-black rounded-lg cursor-pointer "
@@ -174,7 +186,7 @@ export const CreateForm = () => {
                         /* @ts-ignore */
                         URL.createObjectURL(file)
                       }
-                      className="w-full rounded shadow-lg max-h-[500px] object-cover"
+                      className="w-full rounded-sm shadow-lg max-h-[500px] object-cover"
                       alt="Uploaded file"
                     />
                   </div>
