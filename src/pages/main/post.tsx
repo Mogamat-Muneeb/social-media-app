@@ -13,8 +13,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db, auth } from "../../config/firebase";
 import { Post as IPost } from "./main";
-import { useNavigate , Link } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import {config}  from "../../config/index";
 interface Props {
   post: IPost;
 }
@@ -59,7 +60,7 @@ export const Post = (props: Props) => {
         likeId: doc.id,
         nameId: doc.data().nameId,
         emailId: doc.data().emailId,
-        postId: doc.data().postId, 
+        postId: doc.data().postId,
       }));
       setLikes(likes);
     });
@@ -86,7 +87,7 @@ export const Post = (props: Props) => {
                   likeId: newDoc.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
-                  postId: post.id, 
+                  postId: post.id,
                 },
               ]
             : [
@@ -102,8 +103,11 @@ export const Post = (props: Props) => {
         );
       }
     } catch (err) {
+      toast('Please log in to like', {
+        ...config,
+        type: 'error',
+      });
       console.log(err);
-      alert("log in to like a post");
     }
   };
 
@@ -133,6 +137,7 @@ export const Post = (props: Props) => {
 
   useEffect(() => {
     getLikes();
+    
   }, []);
 
   const currentDate = new Date();
@@ -140,27 +145,26 @@ export const Post = (props: Props) => {
   /* @ts-ignore */
   const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
 
-  let timeAgo 
+  let timeAgo;
 
   if (diffInMinutes >= 60) {
     const diffInHours = Math.floor(diffInMinutes / 60);
-    timeAgo = `${diffInHours}h`
-  }else {
-    timeAgo = `${diffInMinutes}m`
+    timeAgo = `${diffInHours}h`;
+  } else {
+    timeAgo = `${diffInMinutes}m`;
   }
 
-  
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
         <div className="flex flex-col w-full gap-2 p-2 text-start">
           <div className="flex items-center gap-2">
             <Link to={`${post.userId}`}>
-            <img
-              src={post.userPp}
-              className="border rounded-full shadow w-9 h-9"
-              alt=""
-            />
+              <img
+                src={post.userPp}
+                className="border rounded-full shadow w-9 h-9"
+                alt=""
+              />
             </Link>
             <span>
               @
@@ -297,9 +301,9 @@ export const Post = (props: Props) => {
               </>
             )}
           </div>
-          <p className="font-semibold  text-[13px] ">
-            {post.username}
-            <span className="font-normal">{post.description} </span>{" "}
+          <p className="font-semibold flex gap-1  text-[13px] ">
+            <span> {post.username}</span>
+            <span className="font-normal">{post.description} </span>
           </p>
         </div>
       </div>

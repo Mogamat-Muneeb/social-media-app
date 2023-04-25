@@ -87,7 +87,7 @@ export const Account = () => {
     <ProtectedRoute>
       {/* account: {uid} */}
       
-      <div className={`max-w-[1280px] w-full mx-auto ${userPosts.length > 4 ? "h-full  md:h-screen mb-20 " : "md:h-full  h-screen mb-20"}`}>
+      <div className={`max-w-[1280px] w-full mx-auto ${userPosts.length > 4 ? "h-full  md:h-screen mb-20 " : "md:h-full  h-screen mb-20" && userPosts.length > 0  ? "h-screen" : "h-screen" }`}>
         {userData && (
           <div className="px-4 md:px-0">
             <div className="flex w-full gap-4 pt-10">
