@@ -4,6 +4,7 @@ import { Main } from "./pages/main/main";
 import { Login } from "./pages/login";
 import { Account } from "./pages/account";
 import { Navbar } from "./components/navbar";
+import { Footer } from "./components/footer";
 import { CreatePost } from "./pages/create-post/create-post";
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path=":uid" element={<Account />} />
         </Routes>
+        <Footer/>
       </Router>
     </div>
   );

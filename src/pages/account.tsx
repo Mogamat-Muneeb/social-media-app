@@ -1,6 +1,7 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db } from "../config/firebase";
 import { Route, RouteProps, useParams } from "react-router-dom";
+import { RectIcon } from "../components/icon";
 import {
   doc,
   setDoc,
@@ -23,18 +24,11 @@ export const Account = () => {
   }
 
   const [userPosts, setUserPosts] = useState<IPost[]>([]);
-  console.log(userPosts, "userPosts");
-
-  const [user] = useAuthState(auth); // assume that this context provides information about the current user
-
-  /* @ts-ignore */
+  const [posts, setPosts] = useState([]);
+  const [user] = useAuthState(auth);
   const { uid } = useParams();
-  console.log("uid:", uid);
   const [userData, setUserData] = useState<UserData | null>(null);
-  /* @ts-ignore */
-  console.log(userData, "userData");
 
-  const [isEditable, setIsEditable] = useState(false);
   useEffect(() => {
     const fetchUserData = async () => {
       /* @ts-ignore */
@@ -70,9 +64,6 @@ export const Account = () => {
     }
   }, [user]);
 
-  const [posts, setPosts] = useState([]);
-  console.log(posts, "post");
-
   useEffect(() => {
     const fetchPosts = async () => {
       const postsQuery = query(
@@ -93,7 +84,7 @@ export const Account = () => {
   return (
     <ProtectedRoute>
       {/* account: {uid} */}
-      <div className="max-w-[1280px] w-full mx-auto">
+      <div className="max-w-[1280px] w-full mx-auto h-screen">
         {userData && (
           <div className="">
             <div className="flex w-full gap-4 pt-10">
@@ -112,72 +103,7 @@ export const Account = () => {
             </div>
             <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
               <p className="flex items-center justify-center gap-1 font-medium uppercase ">
-                <svg
-                  aria-label=""
-                  className="_ab6-"
-                  color="rgb(245, 245, 245)"
-                  fill="rgb(245, 245, 245)"
-                  height="12"
-                  role="img"
-                  viewBox="0 0 24 24"
-                  // width="12"
-                >
-                  <rect
-                    fill="none"
-                    height="18"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    width="18"
-                    x="3"
-                    y="3"
-                  ></rect>
-                  <line
-                    fill="none"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    x1="9.015"
-                    x2="9.015"
-                    y1="3"
-                    y2="21"
-                  ></line>
-                  <line
-                    fill="none"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    x1="14.985"
-                    x2="14.985"
-                    y1="3"
-                    y2="21"
-                  ></line>
-                  <line
-                    fill="none"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    x1="21"
-                    x2="3"
-                    y1="9.015"
-                    y2="9.015"
-                  ></line>
-                  <line
-                    fill="none"
-                    stroke="black"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    x1="21"
-                    x2="3"
-                    y1="14.985"
-                    y2="14.985"
-                  ></line>
-                </svg>
+                <RectIcon />
                 Posts
               </p>
               <div className="flex gap-2 max-w-[1000px] mx-auto w-full pt-10">
