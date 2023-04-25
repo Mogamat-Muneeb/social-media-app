@@ -6,5 +6,5 @@ export const config: any = {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "light",
+    theme: "dark",
 }

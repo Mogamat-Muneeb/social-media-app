@@ -103,7 +103,7 @@ export const Post = (props: Props) => {
         );
       }
     } catch (err) {
-      toast('Please log in to like', {
+      toast('Please login to like', {
         ...config,
         type: 'error',
       });
