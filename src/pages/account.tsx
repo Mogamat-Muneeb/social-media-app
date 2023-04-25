@@ -10,6 +10,7 @@ import {
   getDoc,
   where,
   query,
+  orderBy,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
@@ -68,7 +69,8 @@ export const Account = () => {
     const fetchPosts = async () => {
       const postsQuery = query(
         collection(db, "posts"),
-        where("userId", "==", user?.uid)
+        where("userId", "==", user?.uid),
+        orderBy("date", "desc")
       );
       const postsSnapshot = await getDocs(postsQuery);
       const postsData = postsSnapshot.docs.map((doc) => ({
@@ -96,9 +98,13 @@ export const Account = () => {
                 />
               </div>
               <div className="flex flex-col items-start w-full">
-                <p className="text-[20px] font-medium"> {userData.displayName}</p>
+                <p className="text-[20px] font-medium">
+                  {userData.displayName}
+                </p>
                 <p className="text-[14px] font-normal">{userData.email}</p>
-                <p className="text-[16px] font-medium">{userPosts.length} posts</p>
+                <p className="text-[16px] font-medium">
+                  {userPosts.length} posts
+                </p>
               </div>
             </div>
             <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
@@ -114,7 +120,7 @@ export const Account = () => {
                     /* @ts-ignore */
                     src={post.imageUrl}
                     alt=""
-                    className="md:w-[250px] md:h-[250px] w-[200px] h-[200px] object-cover shadow-lg"
+                    className="md:w-[240px] md:h-[240px] w-[200px] h-[200px] object-cover shadow-lg"
                   />
                 ))}
               </div>

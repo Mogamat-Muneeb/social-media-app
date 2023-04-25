@@ -19,11 +19,12 @@ interface Props {
   post: IPost;
 }
 
-interface Like {
+export interface Like {
   likeId: string;
   userId: string;
   nameId: string | null;
   emailId: string | null;
+  postId: string;
 }
 
 export const Post = (props: Props) => {
@@ -58,6 +59,7 @@ export const Post = (props: Props) => {
         likeId: doc.id,
         nameId: doc.data().nameId,
         emailId: doc.data().emailId,
+        postId: doc.data().postId, 
       }));
       setLikes(likes);
     });
@@ -84,6 +86,7 @@ export const Post = (props: Props) => {
                   likeId: newDoc.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
+                  postId: post.id, 
                 },
               ]
             : [
@@ -93,6 +96,7 @@ export const Post = (props: Props) => {
                   likeId: newDoc.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
+                  postId: post.id,
                 },
               ]
         );
