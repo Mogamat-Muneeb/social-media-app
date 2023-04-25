@@ -1,22 +1,44 @@
 import { auth, provider,db } from "../config/firebase";
-import { signInWithPopup } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { sendEmailVerification, signInWithPopup } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const navigate = useNavigate();
 
+  // const signInWithGoogle = async () => {
+  //   const result = await signInWithPopup(auth, provider);
+  //   console.log(result, "the result");
+  //   await setDoc(doc(db, "users", result.user.uid), {
+  //     uid: result.user.uid,
+  //     displayName :result.user.displayName,
+  //     email: result.user.email,
+  //     photoURL: result.user.photoURL,
+  //   });
+
+  //   navigate("/");
+  // };
+
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     console.log(result, "the result");
-    await setDoc(doc(db, "users", result.user.uid), {
-      uid: result.user.uid,
-      displayName :result.user.displayName,
-      email: result.user.email,
-      photoURL: result.user.photoURL,
-    });
+    const userRef = doc(db, "users", result.user.uid);
+    const docSnapshot = await getDoc(userRef);
+  
+    if (!docSnapshot.exists()) {
+      await setDoc(userRef, {
+        uid: result.user.uid,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+      });
+  
+      await sendEmailVerification(result.user);
+    }
+  
     navigate("/");
   };
+  
 
   return (
     <div className="flex items-center justify-center h-screen overflow-hidden">
