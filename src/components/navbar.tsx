@@ -58,6 +58,12 @@ export const Navbar = () => {
                 src={user?.photoURL || ""}
                 alt={user?.displayName || ""}
                 className="w-8 h-8 rounded-full md:w-10 md:h-10"
+                onError={(e) => {
+                  /* @ts-ignore */
+                  e.target.onerror = null;
+                  /* @ts-ignore */
+                  e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
+                }}
               />
             </Link>
               <div className="flex-col hidden md:flex text-start">

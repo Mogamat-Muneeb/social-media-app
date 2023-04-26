@@ -110,7 +110,6 @@ export const Account = () => {
 
   return (
     <ProtectedRoute>
-      account: {uid}
       <Modal show={show} onClose={closeToggle} userID={user?.uid} />
       {isLoading ? (
         <div className="flex items-center justify-center h-screen mt-20">

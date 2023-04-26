@@ -21,7 +21,6 @@ export const Login = () => {
 
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
-    console.log(result, "the result");
     const userRef = doc(db, "users", result.user.uid);
     const docSnapshot = await getDoc(userRef);
 

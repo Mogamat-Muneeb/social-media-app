@@ -10,14 +10,13 @@ import {
   where,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { ExitIcon } from "../components/icon";
+import { ExitIcon } from "./icon";
 const Modal = ({ show, onClose, userID }) => {
   const [userData, setUserData] = useState({
     userName: "",
     bio: "",
   });
-  const [loading, setLoading] = useState(false); // New state variable for loading spinner
-  console.log(userID, "userID");
+  const [loading, setLoading] = useState(false); 
   const [user] = useAuthState(auth);
   useEffect(() => {
     const docRef = doc(db, "users", userID);

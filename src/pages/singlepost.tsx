@@ -7,7 +7,6 @@ export const SinglePost = () => {
   const { postId } = useParams();
   const [post, setPost] = useState<IPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(post, "post");
 
   useEffect(() => {
     /* @ts-ignore */

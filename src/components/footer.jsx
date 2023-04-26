@@ -12,13 +12,13 @@ export const Footer = () => {
     >
       <p className="hidden md:block">
         ©{new Date().getFullYear()}
-        <span className="text-[#ff3040] px-1">Circledop.</span> Made with ❤️ by
+        <span className="text-[#ff3040] px-1 font-medium">Circledop.</span> Made with ❤️ by
         Mog Muneeb Davids
       </p>
       <p className="flex flex-col md:hidden">
         <span className="">
           ©{new Date().getFullYear()}{" "}
-          <span className="text-[#ff3040] px-1">Circledop.</span>
+          <span className="text-[#ff3040] px-1 font-medium">Circledop.</span>
         </span>
         <span>Made with ❤️ by Mog Muneeb Davids</span>
       </p>
