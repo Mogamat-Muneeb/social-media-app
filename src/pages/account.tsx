@@ -77,32 +77,31 @@ export const Account = () => {
           id: doc.id,
           ...doc.data(),
         })) as IPost[];
-               /* @ts-ignore */
+        /* @ts-ignore */
         setPosts(postsData);
       });
-  
+
       const likesQuery = query(collection(db, "likes"));
       const likesUnsubscribe = onSnapshot(likesQuery, (likesSnapshot) => {
         const likesCount = {};
         likesSnapshot.forEach((doc) => {
           const postId = doc.data().postId;
-                 /* @ts-ignore */
+          /* @ts-ignore */
           likesCount[postId] = likesCount[postId] ? likesCount[postId] + 1 : 1;
         });
         setLikesCount(likesCount);
       });
-  
+
       return () => {
         unsubscribe();
         likesUnsubscribe();
       };
     };
-  
+
     getPosts();
   }, [uid]);
-  
-  
-  console.log(likesCount, "likesCount");
+
+  console.log(posts.length, "posts.length");
 
   const closeToggle = () => setShow(!show);
   return (
@@ -110,7 +109,7 @@ export const Account = () => {
       {/* account: {uid} */}
       <Modal show={show} onClose={closeToggle} userID={uid} />
       {isLoading ? (
-        <div className="flex items-center justify-center mt-32">
+        <div className="flex items-center justify-center h-screen mt-20">
           <svg
             aria-hidden="true"
             className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 f"
@@ -132,7 +131,7 @@ export const Account = () => {
         <div
           className={`max-w-[1280px] w-full mx-auto 
           ${
-            posts.length > 4
+            posts.length > 1
               ? "h-full  md:h-screen mb-20 "
               : "md:h-full  h-screen mb-20" && posts.length > 0
               ? "h-screen"
