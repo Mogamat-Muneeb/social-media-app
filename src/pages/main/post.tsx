@@ -16,8 +16,8 @@ import { Post as IPost } from "./main";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { config } from "../../config/index";
-import {UnLikedIcon ,LikedIcon} from '../../components/icon'
- interface Props {
+import { UnLikedIcon, LikedIcon } from "../../components/icon";
+interface Props {
   post: IPost;
 }
 
@@ -167,6 +167,7 @@ export const Post = (props: Props) => {
   }
 
   const [loading, setLoading] = useState(true);
+console.log(post, "post.userPp");
 
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
@@ -256,11 +257,11 @@ export const Post = (props: Props) => {
                   >
                     {hasUserLiked ? (
                       <>
-                     <LikedIcon/>
+                        <LikedIcon />
                       </>
                     ) : (
                       <>
-                            <UnLikedIcon/>
+                        <UnLikedIcon />
                       </>
                     )}
                   </button>
@@ -300,11 +301,11 @@ export const Post = (props: Props) => {
                 >
                   {hasUserLiked ? (
                     <>
-                 <LikedIcon/>
+                      <LikedIcon />
                     </>
                   ) : (
                     <>
-              <UnLikedIcon/>
+                      <UnLikedIcon />
                     </>
                   )}
                 </button>
@@ -312,7 +313,17 @@ export const Post = (props: Props) => {
             )}
           </div>
           <p className="font-semibold flex gap-1  text-[13px] ">
-            <span> {post.username}</span>
+            <span>
+              {post.userName
+                ? post.userName
+                : post.username
+                    ?.split(" ")
+                    .map(
+                      (word) =>
+                        word.substring(0, 1).toLowerCase() + word.substring(1)
+                    )
+                    .join(" ")}
+            </span>
             <span className="font-normal">{post.description} </span>
           </p>
         </div>

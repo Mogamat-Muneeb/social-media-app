@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../config/firebase";
+import { auth, db, storage } from "../config/firebase";
 import {
   collection,
   doc,
@@ -11,13 +11,22 @@ import {
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "./icon";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { updateProfile } from "firebase/auth";
 const Modal = ({ show, onClose, userID }) => {
   const [userData, setUserData] = useState({
     userName: "",
     bio: "",
   });
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
+  const [showUpload, setShowUpload] = useState(false);
+  const [image, setImage] = useState(null);
+  const [file, setFile] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploaded, setUploaded] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const docRef = doc(db, "users", userID);
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
@@ -29,6 +38,10 @@ const Modal = ({ show, onClose, userID }) => {
     return () => unsubscribe();
   }, [userID]);
 
+  const handleClickShowUpload = () => {
+    setShowUpload(!showUpload);
+  };
+
   const handleSave = async () => {
     setLoading(true);
     try {
@@ -39,23 +52,66 @@ const Modal = ({ show, onClose, userID }) => {
       );
       const likesSnapshot = await getDocs(likesQuery);
       likesSnapshot.forEach((doc) => {
-        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio });
+        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio ,  photoURL: userData.photoURL});
       });
-
-      // Update user documents in "posts" collection
       const postsQuery = query(
         collection(db, "posts"),
         where("userId", "==", userID)
       );
       const postsSnapshot = await getDocs(postsQuery);
       postsSnapshot.forEach((doc) => {
-        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio });
+        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio ,photoURL: userData.photoURL });
       });
+      console.log("ayy1");
+      if (file === "") {
+        alert("Please add a file");
+        return;
+      }
+      setUploaded(false);
+      setSaving(true);
+      const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      console.log(uploadTask, "uploadTask");
+      console.log("ayy2");
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          console.log("ay3");
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+          console.log("ay4");
+        },
+        (error) => {
+          console.log(error);
+          console.log("ay5");
+          setSaving(false);
+        },
+        async () => {
+          console.log("ay6");
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log("ay7");
+          setUploaded(true);
+          setSaving(false);
+          console.log("ay8");
+          const userRef = doc(db, "users", userID);
+          console.log("ay9");
+          updateDoc(userRef, {
+            photoURL: downloadURL,
+          });
+        }
+      );
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
+    // await Promise.all([updateDoc(userRef, { photoURL: downloadURL }), ...likesUpdates, ...postsUpdates]);
+
     setLoading(false);
     onClose();
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   return (
@@ -63,9 +119,8 @@ const Modal = ({ show, onClose, userID }) => {
       <div
         className={`flex  justify-center items-center h-screen w-screen fixed top-0 left-0 overflow-hidden  bg-black bg-opacity-30 transition-opacity duration-300 z-[100]
          ${show ? "block" : "hidden"}`}
-        //  onClick={onClose}
       >
-        <div className="flex flex-col h-full bg-white max-h-[420px] w-full max-w-[550px] mx-auto rounded-md z-[60] p-4">
+        <div className="flex flex-col h-full bg-white max-h-[500px] w-full max-w-[550px] mx-auto rounded-md z-[60] p-4">
           <div className="flex items-center p-2">
             <span className="font-semibold text-[18px] max-w-[500px] mx-auto w-full flex justify-start">
               Update your account
@@ -73,6 +128,62 @@ const Modal = ({ show, onClose, userID }) => {
             <button onClick={onClose}>
               <ExitIcon />
             </button>
+          </div>
+          <div className="flex flex-col items-start justify-start py-1 md:px-2">
+            <div className="flex items-start justify-start gap-4 ">
+              <img
+                src={user?.photoURL || ""}
+                alt={user?.displayName || ""}
+                className="w-8 h-8 rounded-full md:w-10 md:h-10"
+                onError={(e) => {
+                  /* @ts-ignore */
+                  e.target.onerror = null;
+                  /* @ts-ignore */
+                  e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
+                }}
+              />
+              <div className="flex flex-col items-start justify-start">
+                <p className="text-[16px] font-medium">
+                  {userData.userName
+                    ? userData.userName
+                    : userData.displayName
+                        ?.split(" ")
+                        .map(
+                          (word) =>
+                            word.substring(0, 1).toLowerCase() +
+                            word.substring(1)
+                        )
+                        .join(" ")}
+                </p>
+                <button
+                  className="text-[14px] font-medium"
+                  // onClick={handleClickShowUpload}
+                >
+                  {showUpload ? " Cancel" : " Change profile picture"}
+                </button>
+              </div>
+            </div>
+            {/* {showUpload && ( */}
+            <>
+              <label
+                htmlFor="dropzone-file"
+                className="flex flex-col items-center justify-center w-32 h-4 pt-5 pb-5 rounded-lg cursor-pointer "
+              >
+                <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
+                  <p className="flex items-center text-sm text-black">
+                    <span className="font-medium">Upload a photo</span>
+                  </p>
+                </div>
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  accept="/image/*"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </>
+            {/* )} */}
           </div>
           <div className="flex flex-col items-start justify-start p-2 gap-7">
             <div className="flex flex-col items-start justify-start gap-2 max-w-[500px] mx-auto w-full">
@@ -125,9 +236,14 @@ const Modal = ({ show, onClose, userID }) => {
                     </svg>
                   </div>
                 ) : (
-                  "                Save"
+                  " Save"
                 )}
               </button>
+              {saving && <p>Saving...</p>}
+              {uploaded && <img src={imageUrl} alt="User Profile" />}
+              {uploadProgress > 0 && uploadProgress < 100 && (
+                <p>Upload Progress: {uploadProgress}%</p>
+              )}
             </div>
           </div>
         </div>

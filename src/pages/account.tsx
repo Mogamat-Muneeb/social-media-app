@@ -1,7 +1,7 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db } from "../config/firebase";
 import { Link, Route, RouteProps, useParams } from "react-router-dom";
-import { RectIcon, RectMobileIcon } from "../components/icon";
+import { RectIcon, RectMobileIcon, LikedIcon } from "../components/icon";
 import Modal from "../components/modal";
 
 import {
@@ -240,7 +240,10 @@ export const Account = () => {
                           />
                           {/* </Link> */}
 
-                          <p>{likesCount[post.id]}</p>
+                          <p className="flex justify-center pt-2">
+                            {likesCount[post.id]}
+                            <LikedIcon />
+                          </p>
                         </div>
                       );
                     })}
@@ -258,8 +261,7 @@ export const Account = () => {
                   </div>
                   <div className="flex items-start justify-start">
                     <p className="text-[16px] font-medium flex flex-col items-center">
-                      {" "}
-                      <span>{posts.length} </span> <span>posts</span>{" "}
+                      <span>{posts.length} </span> <span>posts</span>
                     </p>
                   </div>
                 </div>
@@ -301,7 +303,10 @@ export const Account = () => {
                   <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
                     {posts.map((post: IPost) => {
                       return (
-                        <div key={post.id}>
+                        <div
+                          key={post.id}
+                          className="flex flex-col justify-center"
+                        >
                           <img
                             /* @ts-ignore */
                             key={post.id}
@@ -310,7 +315,10 @@ export const Account = () => {
                             alt=""
                             className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
                           />
-                          <p>{likesCount[post.id]}</p>
+                          <p className="flex items-center justify-center w-full pt-2">
+                            {likesCount[post.id]}
+                            <LikedIcon />
+                          </p>
                         </div>
                       );
                     })}
