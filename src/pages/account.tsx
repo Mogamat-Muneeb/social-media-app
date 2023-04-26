@@ -25,7 +25,7 @@ export const Account = () => {
     email: string;
     otherData: string;
     photoURL: any;
-    username: any;
+    userName: any;
     bio: any;
     uid: any;
   }
@@ -161,8 +161,8 @@ export const Account = () => {
                       <div className="items-center hidden w-full gap-2 md:flex md:gap-10">
                         <div>
                           <p className="text-[20px] font-medium">
-                            {userData.username ? (
-                              <>{userData.username}</>
+                            {userData.userName ? (
+                              <>{userData.userName}</>
                             ) : (
                               <>{userData.displayName}</>
                             )}
@@ -186,8 +186,8 @@ export const Account = () => {
                       <div className="flex items-center justify-between w-full gap-2 md:hidden md:gap-10">
                         <div>
                           <p className="text-[20px] font-medium">
-                            {userData.username ? (
-                              <>{userData.username}</>
+                            {userData.userName ? (
+                              <>{userData.userName}</>
                             ) : (
                               <>{userData.displayName}</>
                             )}
@@ -266,8 +266,8 @@ export const Account = () => {
                 </div>
                 <div className="flex flex-col items-start justify-start pt-5">
                   <p className="text-[16px] font-medium ">
-                    {userData.username ? (
-                      <>{userData.username}</>
+                    {userData.userName ? (
+                      <>{userData.userName}</>
                     ) : (
                       <>{userData.displayName}</>
                     )}

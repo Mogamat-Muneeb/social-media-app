@@ -13,11 +13,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "../components/icon";
 const Modal = ({ show, onClose, userID }) => {
   const [userData, setUserData] = useState({
-    username: "",
+    userName: "",
     bio: "",
   });
   const [loading, setLoading] = useState(false); // New state variable for loading spinner
-console.log(userID, "userID");
+  console.log(userID, "userID");
   const [user] = useAuthState(auth);
   useEffect(() => {
     const docRef = doc(db, "users", userID);
@@ -34,6 +34,24 @@ console.log(userID, "userID");
     setLoading(true);
     try {
       await updateDoc(doc(db, "users", userID), userData);
+      const likesQuery = query(
+        collection(db, "likes"),
+        where("userId", "==", userID)
+      );
+      const likesSnapshot = await getDocs(likesQuery);
+      likesSnapshot.forEach((doc) => {
+        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio });
+      });
+
+      // Update user documents in "posts" collection
+      const postsQuery = query(
+        collection(db, "posts"),
+        where("userId", "==", userID)
+      );
+      const postsSnapshot = await getDocs(postsQuery);
+      postsSnapshot.forEach((doc) => {
+        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio });
+      });
     } catch (error) {
       console.log(error);
     }
@@ -41,51 +59,6 @@ console.log(userID, "userID");
     onClose();
   };
 
-  // const handleSave = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const userRef = doc(db, "users", userID);
-  //     const likeQuerySnapshot = await doc(db, "likes").where(
-  //       "userID",
-  //       "==",
-  //       userID
-  //     );
-  //     const postQuerySnapshot = await doc(db, "posts").where(
-  //       "userID",
-  //       "==",
-  //       userID
-  //     );
-
-  //     const batch = writeBatch(db);
-
-  //     batch.updateDoc(userRef, userData);
-
-  //     likeQuerySnapshot.forEach((doc) => {
-  //       const likeRef = doc(db, "likes", doc.id);
-  //       batch.updateDoc(likeRef, {
-  //         username: userData.username,
-  //         bio: userData.bio,
-  //       });
-  //     });
-
-  //     postQuerySnapshot.forEach((doc) => {
-  //       const postRef = doc(db, "posts", doc.id);
-  //       batch.updateDoc(postRef, {
-  //         username: userData.username,
-  //         bio: userData.bio,
-  //       });
-  //     });
-
-  //     await batch.commit();
-  //   } catch (error) {
-  //     console.log(error);
-  //     console.log(error.message);
-  //   }
-  //   setLoading(false);
-  //   onClose();
-  // };
-
-  
   return (
     <div className="">
       <div
@@ -104,12 +77,12 @@ console.log(userID, "userID");
           </div>
           <div className="flex flex-col items-start justify-start p-2 gap-7">
             <div className="flex flex-col items-start justify-start gap-2 max-w-[500px] mx-auto w-full">
-              <span className="font-medium text-[16px]">Username</span>
+              <span className="font-medium text-[16px]">userName</span>
               <input
                 type="text"
-                value={userData.username}
+                value={userData.userName}
                 onChange={(e) =>
-                  setUserData({ ...userData, username: e.target.value })
+                  setUserData({ ...userData, userName: e.target.value })
                 }
                 className="w-full max-w-[500px] border-[2px] border-black mx-auto h-[40px] rounded p-1 focus:outline-none focus:ring-0"
               />

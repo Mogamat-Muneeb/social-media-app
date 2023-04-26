@@ -15,7 +15,7 @@ import { db, auth } from "../../config/firebase";
 import { Post as IPost } from "./main";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import {config}  from "../../config/index";
+import { config } from "../../config/index";
 interface Props {
   post: IPost;
 }
@@ -26,7 +26,7 @@ export interface Like {
   nameId: string | null;
   emailId: string | null;
   postId: string;
-  username : string | null;
+  userName: string | null;
 }
 
 export const Post = (props: Props) => {
@@ -62,10 +62,10 @@ export const Post = (props: Props) => {
         nameId: doc.data().nameId,
         emailId: doc.data().emailId,
         postId: doc.data().postId,
-        username : doc.data().username
+        userName: doc.data().userName,
       }));
       console.log(likes, "likes");
-      
+
       setLikes(likes);
     });
 
@@ -79,6 +79,8 @@ export const Post = (props: Props) => {
         postId: post.id,
         nameId: user?.displayName ?? null,
         emailId: user?.email ?? null,
+        /* @ts-ignore */
+        userName: user?.userName ?? null,
       });
       if (user) {
         setLikes((prev) =>
@@ -92,7 +94,8 @@ export const Post = (props: Props) => {
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
                   postId: post.id,
-                  username: post.username,
+                  /* @ts-ignore */
+                  userName: post.userName ?? null,
                 },
               ]
             : [
@@ -103,15 +106,16 @@ export const Post = (props: Props) => {
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
                   postId: post.id,
-                  username: post.username,
+                  /* @ts-ignore */
+                  userName: post.userName ?? null,
                 },
               ]
         );
       }
     } catch (err) {
-      toast('Please login to like', {
+      toast("Please login to like", {
         ...config,
-        type: 'error',
+        type: "error",
       });
       console.log(err);
     }
@@ -143,16 +147,15 @@ export const Post = (props: Props) => {
 
   useEffect(() => {
     getLikes();
-    
   }, []);
 
   const currentDate = new Date();
   const postDate = new Date(post.date);
   /* @ts-ignore */
   const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
-  
+
   let timeAgo;
-  
+
   if (diffInMinutes >= 1440) {
     const diffInDays = Math.floor(diffInMinutes / 1440);
     timeAgo = `${diffInDays}d`;
@@ -162,7 +165,6 @@ export const Post = (props: Props) => {
   } else {
     timeAgo = `${diffInMinutes}m`;
   }
-  
 
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
@@ -255,12 +257,16 @@ export const Post = (props: Props) => {
                     likes.map((like, index) => (
                       <>
                         <h2 key={like.likeId}>
-                        <span className="px-1">{index === 0 ? "   Liked by" : ""}</span>
+                          <span className="px-1">
+                            {index === 0 ? "   Liked by" : ""}
+                          </span>
                           <span className="">{index === 0 ? "" : ", "}</span>
 
                           {like.userId === user?.uid
                             ? "You"
-                            : like.nameId && like.nameId}
+                            : like.userName || like.nameId
+                            ? like.userName || like.nameId
+                            : ""}
                         </h2>
                       </>
                     ))}
