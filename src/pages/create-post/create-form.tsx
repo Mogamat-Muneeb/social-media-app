@@ -116,11 +116,11 @@ export const CreateForm = () => {
       >
         {show === "step1" && (
           <>
-            <div className="flex flex-col items-center justify-center w-full  max-w-[500px] mx-auto  gap-4">
+            <div className="flex flex-col items-center justify-center w-full gap-4 mx-auto">
               <button
                 type="button"
                 disabled={!file}
-                className={`flex items-end justify-end w-full text-[#ff3040] font-semibold ${
+                className={`flex items-end justify-end w-full text-[#ff3040] font-semibold max-w-[500px]  ${
                   !file && "opacity-40 font-normal "
                 }`}
                 onClick={() => setShowing("step2")}
@@ -134,14 +134,14 @@ export const CreateForm = () => {
                         /* @ts-ignore */
                         URL.createObjectURL(file)
                       }
-                      className="w-full rounded-sm shadow-lg max-h-[500px] object-cover"
+                      className="rounded-sm shadow-lg  max-w-[500px] w-full  object-cover"
                       alt="Uploaded file"
                     />
                   </div>
                 )}
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-full bg-black rounded-lg cursor-pointer "
+                className="flex flex-col items-center justify-center  h-full bg-black rounded-lg max-w-[500px] w-full cursor-pointer "
               >
                 <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
                   <p className="flex items-center text-sm text-white">
@@ -184,22 +184,22 @@ export const CreateForm = () => {
                 </button>
               </div>
             </div>
-            <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-1  md:max-w-[1000px] max-w-[300px] justify-center  mx-auto w-full h-full pt-5">
+            <div className="grid lg:grid-cols-2 md:grid-cols-1 grid-cols-1  md:max-w-[1000px] max-w-[500px] justify-center  mx-auto w-full h-full pt-5">
               <div className="w-full ">
                 {file && (
-                  <div className="rounded shadow">
+                  <div className="">
                     <img
                       src={
                         /* @ts-ignore */
                         URL.createObjectURL(file)
                       }
-                      className="w-full rounded-sm shadow-lg max-h-[500px] object-cover"
+                      className="w-full rounded-sm shadow-lg max-w-[500px]  object-cover mx-auto"
                       alt="Uploaded file"
                     />
                   </div>
                 )}
               </div>
-              <div className="flex items-start justify-start w-full h-full ">
+              <div className="flex items-start justify-start w-full h-full max-w-[500px] mx-auto  ">
                 <textarea
                   placeholder="Write a caption...."
                   {...register("description")}
@@ -213,7 +213,7 @@ export const CreateForm = () => {
           </>
         )}
         {show === "step3" && (
-          <div className="flex flex-col md:max-w-[500px] max-w-[300px] mx-auto ">
+          <div className="flex flex-col md:max-w-[500px]  mx-auto ">
             <button
               type="button"
               className="flex justify-end"
@@ -223,7 +223,7 @@ export const CreateForm = () => {
             </button>
             <button
               type="submit"
-              className="px-5 py-2 mt-5 text-white bg-black rounded"
+              className="px-5 py-2 mt-5 text-white bg-black rounded "
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">

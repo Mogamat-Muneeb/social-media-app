@@ -1,7 +1,7 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db } from "../config/firebase";
 import { Route, RouteProps, useParams } from "react-router-dom";
-import { RectIcon } from "../components/icon";
+import { RectIcon, RectMobileIcon } from "../components/icon";
 import Modal from "../components/modal";
 import {
   doc,
@@ -142,104 +142,178 @@ export const Account = () => {
           `}
         >
           {userData && (
-            <div className="px-4 md:px-0">
-              <div className="grid w-full grid-cols-1 gap-4 pt-10 md:grid-cols-2 ">
-                <div className="flex justify-center w-full md:justify-end">
-                  <img
-                    src={userData.photoURL}
-                    alt=""
-                    className="rounded-full md:w-[150px] md:h-[150px] w-[130px] h-[130px] shadow-lg"
-                  />
-                </div>
-                <div className="flex flex-col items-start w-full gap-2">
-                  <div className="flex flex-col items-start w-full ">
-                    <div className="items-center hidden w-full gap-2 md:flex md:gap-10">
-                      <div>
-                        <p className="text-[20px] font-medium">
-                          {userData.username ? (
-                            <>{userData.username}</>
-                          ) : (
-                            <>{userData.displayName}</>
-                          )}
-                        </p>
-                      </div>
-
-                      <div>
-                        {user && uid === user.uid && (
-                          <button
-                            className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
-                            onClick={(event) => {
-                              event.preventDefault();
-                              handleClick(event);
-                            }}
-                          >
-                            Edit
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between w-full gap-2 md:hidden md:gap-10">
-                      <div>
-                        <p className="text-[20px] font-medium">
-                          {userData.username ? (
-                            <>{userData.username}</>
-                          ) : (
-                            <>{userData.displayName}</>
-                          )}
-                        </p>
-                      </div>
-                      <div>
-                        {user && uid === user.uid && (
-                          <button
-                            className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
-                            onClick={(event) => {
-                              event.preventDefault();
-                              handleClick(event);
-                            }}
-                          >
-                            Edit
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-[16px] font-medium">
-                      {posts.length} posts
-                    </p>
+            <>
+              <div className="hidden px-4 md:px-0 md:block">
+                <div className="grid w-full grid-cols-1 gap-4 pt-10 md:grid-cols-2 ">
+                  <div className="flex justify-center w-full md:justify-end">
+                    <img
+                      src={userData.photoURL}
+                      alt=""
+                      className="rounded-full md:w-[150px] md:h-[150px] w-[130px] h-[130px] shadow-lg"
+                    />
                   </div>
-                  <div className="flex flex-col items-start">
-                    <p className="text-[16px] font-normal">
-                      {userData.displayName}
-                    </p>
-                    <p className="text-[14px] font-normal">{userData.bio}</p>
+                  <div className="flex flex-col items-start w-full gap-2">
+                    <div className="flex flex-col items-start w-full ">
+                      <div className="items-center hidden w-full gap-2 md:flex md:gap-10">
+                        <div>
+                          <p className="text-[20px] font-medium">
+                            {userData.username ? (
+                              <>{userData.username}</>
+                            ) : (
+                              <>{userData.displayName}</>
+                            )}
+                          </p>
+                        </div>
+
+                        <div>
+                          {user && uid === user.uid && (
+                            <button
+                              className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleClick(event);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between w-full gap-2 md:hidden md:gap-10">
+                        <div>
+                          <p className="text-[20px] font-medium">
+                            {userData.username ? (
+                              <>{userData.username}</>
+                            ) : (
+                              <>{userData.displayName}</>
+                            )}
+                          </p>
+                        </div>
+                        <div>
+                          {user && uid === user.uid && (
+                            <button
+                              className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                handleClick(event);
+                              }}
+                            >
+                              Edit
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-[16px] font-medium">
+                        {posts.length} posts
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-start">
+                      <p className="text-[16px] font-normal">
+                        {userData.displayName}
+                      </p>
+                      <p className="text-[14px] font-normal text-start">{userData.bio}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
+                  <p className="flex items-center justify-center gap-1 font-medium uppercase ">
+                    <RectIcon />
+                    Posts
+                  </p>
+                  <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                    {posts.map((post: IPost) => {
+                      console.log(post);
+
+                      return (
+                        <div key={post.id}>
+                          <img
+                            /* @ts-ignore */
+                            key={post.id}
+                            /* @ts-ignore */
+                            src={post.imageUrl}
+                            alt=""
+                            className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
+                          />
+                          <p>{likesCount[post.id]}</p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-              <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
-                <p className="flex items-center justify-center gap-1 font-medium uppercase ">
-                  <RectIcon />
-                  Posts
-                </p>
-                <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
-                  {posts.map((post: IPost) => {
-                    console.log(post);
+              <div className="flex flex-col px-4 md:px-0 md:hidden">
+                <div className="flex items-center w-full pt-10">
+                  <div className=" w-[200px]">
+                    <img
+                      src={userData.photoURL}
+                      alt=""
+                      className="rounded-full  w-[130px] h-[130px] shadow-lg"
+                    />
+                  </div>
+                  <div className="flex items-start justify-start">
+                    <p className="text-[16px] font-medium flex flex-col items-center">
+                      {" "}
+                      <span>{posts.length} </span> <span>posts</span>{" "}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-start justify-start pt-5">
+                  <p className="text-[16px] font-medium ">
+                    {userData.username ? (
+                      <>{userData.username}</>
+                    ) : (
+                      <>{userData.displayName}</>
+                    )}
+                  </p>
 
-                    return (
-                      <div key={post.id}>
-                        <img
-                          /* @ts-ignore */
-                          key={post.id}
-                          /* @ts-ignore */
-                          src={post.imageUrl}
-                          alt=""
-                          className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
-                        />
-                        <p>{likesCount[post.id]}</p>
-                      </div>
-                    );
-                  })}
+                  <p className="text-[16px] font-normal">
+                    {userData.displayName}
+                  </p>
+
+                  <p className="text-[14px] font-normal text-left">
+                    {userData.bio}
+                  </p>
+                </div>
+                <div className="flex flex-col justify-start pt-5">
+                  {user && uid === user.uid && (
+                    <button
+                      className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleClick(event);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
+                  <p className="flex items-center justify-center gap-1 font-medium ">
+                    <RectMobileIcon />
+                    Posts
+                  </p>
+                  <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
+                    {posts.map((post: IPost) => {
+                      console.log(post);
+
+                      return (
+                        <div key={post.id}>
+                          <img
+                            /* @ts-ignore */
+                            key={post.id}
+                            /* @ts-ignore */
+                            src={post.imageUrl}
+                            alt=""
+                            className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
+                          />
+                          <p>{likesCount[post.id]}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       )}

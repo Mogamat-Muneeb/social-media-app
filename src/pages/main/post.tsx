@@ -144,15 +144,19 @@ export const Post = (props: Props) => {
   const postDate = new Date(post.date);
   /* @ts-ignore */
   const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
-
+  
   let timeAgo;
-
-  if (diffInMinutes >= 60) {
+  
+  if (diffInMinutes >= 1440) {
+    const diffInDays = Math.floor(diffInMinutes / 1440);
+    timeAgo = `${diffInDays}d`;
+  } else if (diffInMinutes >= 60) {
     const diffInHours = Math.floor(diffInMinutes / 60);
     timeAgo = `${diffInHours}h`;
   } else {
     timeAgo = `${diffInMinutes}m`;
   }
+  
 
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
@@ -241,11 +245,11 @@ export const Post = (props: Props) => {
                   </p>
                 </div>
                 <div className="flex items-center text-[14px] gap-1">
-                  Liked by
                   {likes.length > 0 &&
                     likes.map((like, index) => (
                       <>
                         <h2 key={like.likeId}>
+                        <span className="px-1">{index === 0 ? "   Liked by" : ""}</span>
                           <span className="">{index === 0 ? "" : ", "}</span>
 
                           {like.userId === user?.uid
