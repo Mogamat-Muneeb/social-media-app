@@ -26,6 +26,7 @@ export interface Like {
   nameId: string | null;
   emailId: string | null;
   postId: string;
+  username : string | null;
 }
 
 export const Post = (props: Props) => {
@@ -61,7 +62,10 @@ export const Post = (props: Props) => {
         nameId: doc.data().nameId,
         emailId: doc.data().emailId,
         postId: doc.data().postId,
+        username : doc.data().username
       }));
+      console.log(likes, "likes");
+      
       setLikes(likes);
     });
 
@@ -88,6 +92,7 @@ export const Post = (props: Props) => {
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
                   postId: post.id,
+                  username: post.username,
                 },
               ]
             : [
@@ -98,6 +103,7 @@ export const Post = (props: Props) => {
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
                   postId: post.id,
+                  username: post.username,
                 },
               ]
         );

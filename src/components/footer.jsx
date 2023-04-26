@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 
 export const Footer = () => {
   const pathName = useLocation();
-  console.log(pathName, "pathName");
   return (
     <div
       className={`flex items-center justify-center h-20 mt-5 shadow bg-white  ${

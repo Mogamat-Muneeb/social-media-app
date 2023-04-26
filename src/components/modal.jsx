@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../config/firebase";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "../components/icon";
 const Modal = ({ show, onClose, userID }) => {
@@ -9,7 +17,7 @@ const Modal = ({ show, onClose, userID }) => {
     bio: "",
   });
   const [loading, setLoading] = useState(false); // New state variable for loading spinner
-
+console.log(userID, "userID");
   const [user] = useAuthState(auth);
   useEffect(() => {
     const docRef = doc(db, "users", userID);
@@ -33,6 +41,51 @@ const Modal = ({ show, onClose, userID }) => {
     onClose();
   };
 
+  // const handleSave = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const userRef = doc(db, "users", userID);
+  //     const likeQuerySnapshot = await doc(db, "likes").where(
+  //       "userID",
+  //       "==",
+  //       userID
+  //     );
+  //     const postQuerySnapshot = await doc(db, "posts").where(
+  //       "userID",
+  //       "==",
+  //       userID
+  //     );
+
+  //     const batch = writeBatch(db);
+
+  //     batch.updateDoc(userRef, userData);
+
+  //     likeQuerySnapshot.forEach((doc) => {
+  //       const likeRef = doc(db, "likes", doc.id);
+  //       batch.updateDoc(likeRef, {
+  //         username: userData.username,
+  //         bio: userData.bio,
+  //       });
+  //     });
+
+  //     postQuerySnapshot.forEach((doc) => {
+  //       const postRef = doc(db, "posts", doc.id);
+  //       batch.updateDoc(postRef, {
+  //         username: userData.username,
+  //         bio: userData.bio,
+  //       });
+  //     });
+
+  //     await batch.commit();
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.log(error.message);
+  //   }
+  //   setLoading(false);
+  //   onClose();
+  // };
+
+  
   return (
     <div className="">
       <div
@@ -80,7 +133,6 @@ const Modal = ({ show, onClose, userID }) => {
                 }}
                 className="w-full px-5 py-3 mt-5 text-white bg-black rounded focus:outline-none focus:ring-0"
               >
-
                 {loading ? (
                   <div className="flex items-center justify-center ">
                     <svg
@@ -101,7 +153,7 @@ const Modal = ({ show, onClose, userID }) => {
                     </svg>
                   </div>
                 ) : (
-"                Save"
+                  "                Save"
                 )}
               </button>
             </div>

@@ -6,6 +6,7 @@ import { Account } from "./pages/account";
 import { Navbar } from "./components/navbar";
 import { Footer } from "./components/footer";
 import { CreatePost } from "./pages/create-post/create-post";
+import { SinglePost } from "./pages/singlepost";
 function App() {
   return (
     <div className="App">
@@ -16,6 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/createpost" element={<CreatePost />} />
           <Route path=":uid" element={<Account />} />
+          <Route  path="/posts/:postId" element={<SinglePost/>} />
         </Routes>
         <Footer/>
       </Router>

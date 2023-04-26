@@ -92,7 +92,7 @@ export function RectMobileIcon() {
   return (
     <svg
       aria-label="Posts"
-      class="_ab6-"
+      className="_ab6-"
       color="rgb(245, 245, 245)"
       fill="rgb(245, 245, 245)"
       height="24"
