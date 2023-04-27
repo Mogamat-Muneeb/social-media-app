@@ -110,13 +110,13 @@ export const CreateForm = () => {
         addDoc(postsRef, {
           ...data,
           /* @ts-ignore */
-          userName: userData.userName,
+          userName: userData.userName  ?? null, 
           /* @ts-ignore */
-          bio: userData.bio,
+          bio: userData.bio  ?? null,
           /* @ts-ignore */
-          username: userData.displayName,
+          username: userData.displayName  ?? null ,
           /* @ts-ignore */
-          photoURL: userData.photoURL,
+          photoURL: userData.photoURL  ,
           /* @ts-ignore */
           userId: userData.uid,
           date: Date.now(),

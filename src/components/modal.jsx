@@ -100,6 +100,10 @@ const Modal = ({ show, onClose, userID }) => {
             setSaving(false);
             const userRef = doc(db, "users", userID);
             console.log("image upload fully");
+            toast("mage upload fully", {
+              ...config,
+              type: "success",
+            });
             updateDoc(userRef, {
               photoURL: downloadURL,
             });
@@ -253,11 +257,11 @@ const Modal = ({ show, onClose, userID }) => {
                   " Save"
                 )}
               </button>
-              {/* {saving && <p>Saving...</p>}
-              {uploaded && <img src={imageUrl} alt="User Profile" />}
+              {saving && <p>Saving...</p>}
+              {/* {uploaded && <img src={imageUrl} alt="User Profile" />} */}
               {uploadProgress > 0 && uploadProgress < 100 && (
                 <p>Upload Progress: {uploadProgress}%</p>
-              )} */}
+              )}
             </div>
           </div>
         </div>
