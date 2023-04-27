@@ -13,6 +13,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "./icon";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
+import { toast } from "react-toastify";
+import { config } from "../config/index";
 const Modal = ({ show, onClose, userID }) => {
   const [userData, setUserData] = useState({
     userName: "",
@@ -44,6 +46,7 @@ const Modal = ({ show, onClose, userID }) => {
 
   const handleSave = async () => {
     setLoading(true);
+    setSaving(true);
     try {
       await updateDoc(doc(db, "users", userID), userData);
       const likesQuery = query(
@@ -52,7 +55,11 @@ const Modal = ({ show, onClose, userID }) => {
       );
       const likesSnapshot = await getDocs(likesQuery);
       likesSnapshot.forEach((doc) => {
-        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio ,  photoURL: userData.photoURL});
+        updateDoc(doc.ref, {
+          userName: userData.userName,
+          bio: userData.bio,
+          photoURL: userData.photoURL,
+        });
       });
       const postsQuery = query(
         collection(db, "posts"),
@@ -60,54 +67,53 @@ const Modal = ({ show, onClose, userID }) => {
       );
       const postsSnapshot = await getDocs(postsQuery);
       postsSnapshot.forEach((doc) => {
-        updateDoc(doc.ref, { userName: userData.userName, bio: userData.bio ,photoURL: userData.photoURL });
+        updateDoc(doc.ref, {
+          userName: userData.userName,
+          bio: userData.bio,
+          photoURL: userData.photoURL,
+        });
       });
-      console.log("ayy1");
-      if (file === "") {
-        alert("Please add a file");
-        return;
-      }
+
       setUploaded(false);
       setSaving(true);
-      const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      console.log(uploadTask, "uploadTask");
-      console.log("ayy2");
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          console.log("ay3");
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(progress);
-          console.log("ay4");
-        },
-        (error) => {
-          console.log(error);
-          console.log("ay5");
-          setSaving(false);
-        },
-        async () => {
-          console.log("ay6");
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log("ay7");
-          setUploaded(true);
-          setSaving(false);
-          console.log("ay8");
-          const userRef = doc(db, "users", userID);
-          console.log("ay9");
-          updateDoc(userRef, {
-            photoURL: downloadURL,
-          });
-        }
-      );
+
+      if (file) {
+        const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress);
+          },
+          (error) => {
+            console.log(error);
+            setSaving(false);
+            setLoading(false);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            setUploaded(true);
+            setSaving(false);
+            const userRef = doc(db, "users", userID);
+            console.log("image upload fully");
+            updateDoc(userRef, {
+              photoURL: downloadURL,
+            });
+            onClose();
+            setLoading(false);
+          }
+        );
+      } else {
+        onClose();
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
-    // await Promise.all([updateDoc(userRef, { photoURL: downloadURL }), ...likesUpdates, ...postsUpdates]);
-
-    setLoading(false);
-    onClose();
   };
 
   const handleFileChange = (e) => {
@@ -120,12 +126,19 @@ const Modal = ({ show, onClose, userID }) => {
         className={`flex  justify-center items-center h-screen w-screen fixed top-0 left-0 overflow-hidden  bg-black bg-opacity-30 transition-opacity duration-300 z-[100]
          ${show ? "block" : "hidden"}`}
       >
-        <div className="flex flex-col h-full bg-white max-h-[500px] w-full max-w-[550px] mx-auto rounded-md z-[60] p-4">
+        <div className="flex flex-col h-full bg-white max-h-[600px] w-full max-w-[550px] mx-auto rounded-md z-[60] p-4">
           <div className="flex items-center p-2">
             <span className="font-semibold text-[18px] max-w-[500px] mx-auto w-full flex justify-start">
               Update your account
             </span>
-            <button onClick={onClose}>
+            <button
+              onClick={() => {
+                onClose();
+                if (!uploaded) {
+                  return;
+                }
+              }}
+            >
               <ExitIcon />
             </button>
           </div>
@@ -136,9 +149,7 @@ const Modal = ({ show, onClose, userID }) => {
                 alt={user?.displayName || ""}
                 className="w-8 h-8 rounded-full md:w-10 md:h-10"
                 onError={(e) => {
-                  /* @ts-ignore */
                   e.target.onerror = null;
-                  /* @ts-ignore */
                   e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                 }}
               />
@@ -157,33 +168,35 @@ const Modal = ({ show, onClose, userID }) => {
                 </p>
                 <button
                   className="text-[14px] font-medium"
-                  // onClick={handleClickShowUpload}
+                  onClick={handleClickShowUpload}
                 >
                   {showUpload ? " Cancel" : " Change profile picture"}
                 </button>
               </div>
             </div>
-            {/* {showUpload && ( */}
-            <>
-              <label
-                htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-32 h-4 pt-5 pb-5 rounded-lg cursor-pointer "
-              >
-                <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
-                  <p className="flex items-center text-sm text-black">
-                    <span className="font-medium">Upload a photo</span>
-                  </p>
-                </div>
-                <input
-                  id="dropzone-file"
-                  type="file"
-                  accept="/image/*"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-              </label>
-            </>
-            {/* )} */}
+            {showUpload && (
+              <>
+                <label
+                  htmlFor="dropzone-file"
+                  className="flex flex-col items-center justify-center h-4 mt-5 mb-5 rounded-lg cursor-pointer w-52 "
+                >
+                  <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
+                    <div className="flex items-center text-sm text-black">
+                      <p className="flex items-center w-full mt-5 font-medium">
+                        {file ? ` Image Uploaded ` : ` Upload a photo`}
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    accept="/image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </>
+            )}
           </div>
           <div className="flex flex-col items-start justify-start p-2 gap-7">
             <div className="flex flex-col items-start justify-start gap-2 max-w-[500px] mx-auto w-full">
@@ -239,11 +252,11 @@ const Modal = ({ show, onClose, userID }) => {
                   " Save"
                 )}
               </button>
-              {saving && <p>Saving...</p>}
+              {/* {saving && <p>Saving...</p>}
               {uploaded && <img src={imageUrl} alt="User Profile" />}
               {uploadProgress > 0 && uploadProgress < 100 && (
                 <p>Upload Progress: {uploadProgress}%</p>
-              )}
+              )} */}
             </div>
           </div>
         </div>

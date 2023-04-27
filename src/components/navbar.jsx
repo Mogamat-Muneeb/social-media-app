@@ -1,16 +1,37 @@
 import { Link, useLocation } from "react-router-dom";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
-
+  const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation();
-
+  const [userData, setUserData] = useState(null);
   const signUserOut = async () => {
     await signOut(auth);
   };
+
+  useEffect(() => {
+    if (user && user.uid) {
+      const docRef = doc(db, "users", user.uid);
+      const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          setUserData(docSnapshot.data());
+        } else {
+          console.log("No such document!");
+        }
+        setIsLoading(false);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [user?.uid]);
+
+  // console.log(userData, "userData navbar");
+  // console.log(user, "user navbar");
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${
@@ -39,11 +60,13 @@ export const Navbar = () => {
           >
             Create
           </Link>
-          {user ? null : (
+          {user?.uid ? null : (
             <>
               <Link
                 to="/login"
-                className={`font-medium md:text-[16px]  text-[14px] ${pathName.pathname === "/login" && "text-[#ff3040]"}`}
+                className={`font-medium md:text-[16px]  text-[14px] ${
+                  pathName.pathname === "/login" && "text-[#ff3040]"
+                }`}
               >
                 Login
               </Link>
@@ -53,28 +76,33 @@ export const Navbar = () => {
         <div className="flex items-center gap-4">
           {user && (
             <>
-            <Link to={user?.uid}>
-              <img
-                src={user?.photoURL || ""}
-                alt={user?.displayName || ""}
-                className="w-8 h-8 rounded-full md:w-10 md:h-10"
-                onError={(e) => {
-                  /* @ts-ignore */
-                  e.target.onerror = null;
-                  /* @ts-ignore */
-                  e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
-                }}
-              />
-            </Link>
+              <Link to={user?.uid}>
+                <img
+                  src={userData?.photoURL}
+                  alt={user?.displayName || ""}
+                  className="w-8 h-8 rounded-full md:w-10 md:h-10"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
+                  }}
+                />
+              </Link>
               <div className="flex-col hidden md:flex text-start">
                 <p className="font-medium text-[14px]">
-                  {user?.displayName
-                    ?.split(" ")
-                    .map(
-                      (word) =>
-                        word.substring(0, 1).toUpperCase() + word.substring(1)
-                    )
-                    .join(" ")}
+                  {userData?.userName ? (
+                    <>{userData?.userName}</>
+                  ) : (
+                    <>
+                      {user?.displayName
+                        ?.split(" ")
+                        .map(
+                          (word) =>
+                            word.substring(0, 1).toUpperCase() +
+                            word.substring(1)
+                        )
+                        .join(" ")}
+                    </>
+                  )}
                 </p>
 
                 <p className="font-normal text-[14px]"> {user?.email} </p>

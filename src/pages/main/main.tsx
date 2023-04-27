@@ -20,6 +20,8 @@ export interface Post {
   date: string;
   likesCount: any;
   userName: any;
+  imageURL : any
+  photoURL : any
 }
 
 export const Main = () => {

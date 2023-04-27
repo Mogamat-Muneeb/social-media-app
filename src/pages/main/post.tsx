@@ -167,7 +167,6 @@ export const Post = (props: Props) => {
   }
 
   const [loading, setLoading] = useState(true);
-console.log(post, "post.userPp");
 
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
@@ -176,6 +175,7 @@ console.log(post, "post.userPp");
           <div className="flex items-center gap-2">
             <Link to={`${post.userId}`}>
               <img
+                // src={post.imageUrl || post.userPp}
                 src={post.userPp}
                 className="border rounded-full shadow w-9 h-9"
                 alt=""
@@ -197,24 +197,12 @@ console.log(post, "post.userPp");
                         word.substring(0, 1).toLowerCase() + word.substring(1)
                     )
                     .join(" ")}
-              {/* {post.username
-                ?.split(" ")
-                .map(
-                  (word) =>
-                    word.substring(0, 1).toLowerCase() + word.substring(1)
-                )
-                .join(" ")} */}
             </span>
             <span className="flex gap-1">
               <span>•</span>
               {timeAgo}
             </span>
           </div>
-          {/* <img
-            src={post.imageUrl}
-            alt=" "
-            className="max-h-[600px] object-cover"
-          /> */}
           {loading && (
             <>
               <div className="h-[600px]">

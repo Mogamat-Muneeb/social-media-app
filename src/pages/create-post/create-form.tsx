@@ -95,13 +95,13 @@ export const CreateForm = () => {
           setUploaded(true);
           setSaving(false);
           setIsLoading(false);
-          const userPostsRef = collection(db, "user-posts");
-          addDoc(userPostsRef, {
-            userId: user?.uid,
-            imageUrl: downloadURL,
-          }).then(() => {
-            console.log("Post saved to user-posts collection");
-          });
+          // const userPostsRef = collection(db, "user-posts");
+          // addDoc(userPostsRef, {
+          //   userId: user?.uid,
+          //   imageUrl: downloadURL,
+          // }).then(() => {
+          //   console.log("Post saved to user-posts collection");
+          // });
           navigate("/");
         });
       }
