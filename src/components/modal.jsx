@@ -19,6 +19,7 @@ const Modal = ({ show, onClose, userID }) => {
   const [userData, setUserData] = useState({
     userName: "",
     bio: "",
+    photoURL: "",
   });
   const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
@@ -28,7 +29,7 @@ const Modal = ({ show, onClose, userID }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploaded, setUploaded] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  // const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const docRef = doc(db, "users", userID);
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {

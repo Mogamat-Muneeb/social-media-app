@@ -87,7 +87,7 @@ export const CreateForm = () => {
         addDoc(postsRef, {
           ...data,
           username: user?.displayName,
-          userPp: user?.photoURL,
+          photoURL: user?.photoURL,
           userId: user?.uid,
           date: Date.now(),
           imageUrl: downloadURL,

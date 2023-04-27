@@ -152,7 +152,7 @@ export const Account = () => {
                     <img
                       src={userData.photoURL}
                       alt=""
-                      className="rounded-full md:w-[150px] md:h-[150px] w-[130px] h-[130px] shadow-lg"
+                      className="rounded-full md:w-[150px] md:h-[150px] w-[130px] h-[130px] shadow-lg object-cover"
                     />
                   </div>
                   <div className="flex flex-col items-start w-full gap-2">
@@ -256,7 +256,7 @@ export const Account = () => {
                     <img
                       src={userData.photoURL}
                       alt=""
-                      className="rounded-full  w-[130px] h-[130px] shadow-lg"
+                      className="rounded-full  w-[130px] h-[130px] shadow-lg object-cover"
                     />
                   </div>
                   <div className="flex items-start justify-start">
