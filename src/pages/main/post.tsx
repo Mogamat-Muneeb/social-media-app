@@ -167,7 +167,7 @@ export const Post = (props: Props) => {
   }
 
   const [loading, setLoading] = useState(true);
-console.log("post", post )
+  console.log("post", post);
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
@@ -176,8 +176,8 @@ console.log("post", post )
             <Link to={`${post.userId}`}>
               <img
                 // src={post.imageUrl || post.userPp}
-                src={post.photoURL}
-                className="border rounded-full shadow w-9 h-9"
+                src={post.photoURL || post.userPp}
+                className="object-cover border rounded-full shadow w-9 h-9"
                 alt=""
                 onError={(e) => {
                   /* @ts-ignore */
@@ -205,7 +205,7 @@ console.log("post", post )
           </div>
           {loading && (
             <>
-              <div className="h-[400px]">
+              <div className="h-[20px]">
                 <div className="flex items-center justify-center mt-32">
                   <svg
                     aria-hidden="true"
