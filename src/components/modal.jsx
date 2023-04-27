@@ -45,6 +45,86 @@ const Modal = ({ show, onClose, userID }) => {
     setShowUpload(!showUpload);
   };
 
+  // const handleSave = async () => {
+  //   setLoading(true);
+  //   setSaving(true);
+  //   try {
+  //     await updateDoc(doc(db, "users", userID), userData);
+  //     const likesQuery = query(
+  //       collection(db, "likes"),
+  //       where("userId", "==", userID)
+  //     );
+  //     const likesSnapshot = await getDocs(likesQuery);
+  //     likesSnapshot.forEach((doc) => {
+  //       updateDoc(doc.ref, {
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //         photoURL: userData.photoURL,
+  //       });
+  //     });
+  //     const postsQuery = query(
+  //       collection(db, "posts"),
+  //       where("userId", "==", userID)
+  //     );
+  //     const postsSnapshot = await getDocs(postsQuery);
+  //     postsSnapshot.forEach((doc) => {
+  //       updateDoc(doc.ref, {
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //         photoURL: userData.photoURL,
+  //       });
+  //     });
+
+  //     setUploaded(false);
+  //     setSaving(true);
+
+  //     if (file) {
+  //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+  //       console.log(storageRef,"storageRef" );
+  //       const uploadTask = uploadBytesResumable(storageRef, file);
+  //       console.log(uploadTask, "uploadTask");
+
+  //       uploadTask.on(
+  //         "state_changed",
+  //         (snapshot) => {
+  //           const progress =
+  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //           setUploadProgress(progress);
+  //           console.log(progress, "progress");
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //           setSaving(false);
+  //           setLoading(false);
+  //         },
+  //         async () => {
+  //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  //           console.log(downloadURL, "downloadURL");
+  //           setUploaded(true);
+  //           setSaving(false);
+  //           const userRef = doc(db, "users", userID);
+  //           console.log("image upload fully");
+  //           toast("mage upload fully", {
+  //             ...config,
+  //             type: "success",
+  //           });
+  //           updateDoc(userRef, {
+  //             photoURL: downloadURL,
+  //           });
+  //           onClose();
+  //           setLoading(false);
+  //         }
+  //       );
+  //     } else {
+  //       onClose();
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSave = async () => {
     setLoading(true);
     setSaving(true);
@@ -75,9 +155,7 @@ const Modal = ({ show, onClose, userID }) => {
         });
       });
 
-      setUploaded(false);
-      setSaving(true);
-
+      // Wait until image has been successfully uploaded
       if (file) {
         const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -97,10 +175,8 @@ const Modal = ({ show, onClose, userID }) => {
           async () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             setUploaded(true);
-            setSaving(false);
             const userRef = doc(db, "users", userID);
-            console.log("image upload fully");
-            toast("mage upload fully", {
+            toast("Image uploaded successfully", {
               ...config,
               type: "success",
             });
@@ -257,11 +333,11 @@ const Modal = ({ show, onClose, userID }) => {
                   " Save"
                 )}
               </button>
-              {saving && <p>Saving...</p>}
+              {/* {saving && <p>Saving...</p>} */}
               {/* {uploaded && <img src={imageUrl} alt="User Profile" />} */}
-              {uploadProgress > 0 && uploadProgress < 100 && (
+              {/* {uploadProgress > 0 && uploadProgress < 100 && (
                 <p>Upload Progress: {uploadProgress}%</p>
-              )}
+              )} */}
             </div>
           </div>
         </div>

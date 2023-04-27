@@ -167,7 +167,6 @@ export const Post = (props: Props) => {
   }
 
   const [loading, setLoading] = useState(true);
-  console.log("post", post);
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
@@ -187,7 +186,7 @@ export const Post = (props: Props) => {
                 }}
               />
             </Link>
-            <span>
+            <Link to={`${post.userId}`}>
               {post.userName
                 ? post.userName
                 : post.username
@@ -197,7 +196,7 @@ export const Post = (props: Props) => {
                         word.substring(0, 1).toLowerCase() + word.substring(1)
                     )
                     .join(" ")}
-            </span>
+            </Link>
             <span className="flex gap-1">
               <span>•</span>
               {timeAgo}
