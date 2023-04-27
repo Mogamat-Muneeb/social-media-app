@@ -241,8 +241,14 @@ export const Account = () => {
                           {/* </Link> */}
 
                           <p className="flex justify-center pt-2">
-                            {likesCount[post.id]}
-                            <LikedIcon />
+                            {likesCount[post.id] ? (
+                              <>
+                                {likesCount[post.id]}
+                                <LikedIcon />
+                              </>
+                            ) : (
+                              ""
+                            )}
                           </p>
                         </div>
                       );
@@ -315,9 +321,21 @@ export const Account = () => {
                             alt=""
                             className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
                           />
-                          <p className="flex items-center justify-center w-full pt-2">
-                            {likesCount[post.id]}
-                            <LikedIcon />
+                          <p
+                            className={`flex items-center justify-center w-full  ${
+                              likesCount[post.id] === undefined
+                                ? "pt-8 "
+                                : "pt-2"
+                            }`}
+                          >
+                            {likesCount[post.id] ? (
+                              <>
+                                {likesCount[post.id]}
+                                <LikedIcon />
+                              </>
+                            ) : (
+                              ""
+                            )}
                           </p>
                         </div>
                       );

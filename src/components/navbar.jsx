@@ -88,7 +88,7 @@ export const Navbar = () => {
                 />
               </Link>
               <div className="flex-col hidden md:flex text-start">
-                <p className="font-medium text-[14px]">
+                <p className="font-normal text-[14px]">
                   {userData?.userName ? (
                     <>{userData?.userName}</>
                   ) : (
@@ -105,7 +105,7 @@ export const Navbar = () => {
                   )}
                 </p>
 
-                <p className="font-normal text-[14px]"> {user?.email} </p>
+                {/* <p className="font-normal text-[14px]"> {user?.email} </p> */}
               </div>
               <button
                 onClick={signUserOut}

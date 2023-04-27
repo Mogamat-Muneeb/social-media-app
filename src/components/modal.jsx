@@ -159,7 +159,7 @@ const Modal = ({ show, onClose, userID }) => {
       if (file) {
         const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
-
+        await uploadTask;
         uploadTask.on(
           "state_changed",
           (snapshot) => {
