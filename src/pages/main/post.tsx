@@ -169,7 +169,7 @@ export const Post = (props: Props) => {
   const [loading, setLoading] = useState(true);
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
-      <div className="max-w-[500px] w-full flex flex-col  shadow-lg rounded   h-full">
+      <div className="max-w-[500px] w-full flex flex-col border-[1px] rounded   h-full">
         <div className="flex flex-col w-full gap-2 p-2 text-start">
           <div className="flex items-center gap-2">
             <Link to={`${post.userId}`}>
@@ -178,12 +178,8 @@ export const Post = (props: Props) => {
                 src={post.photoURL || post.userPp}
                 className="object-cover border rounded-full shadow w-9 h-9"
                 alt=""
-                onError={(e) => {
-                  /* @ts-ignore */
-                  e.target.onerror = null;
-                  /* @ts-ignore */
-                  e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
-                }}
+           
+              
               />
             </Link>
             <Link to={`${post.userId}`}>

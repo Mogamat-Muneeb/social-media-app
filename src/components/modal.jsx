@@ -43,8 +43,10 @@ const Modal = ({ show, onClose, userID }) => {
 
   const handleClickShowUpload = () => {
     setShowUpload(!showUpload);
+    // setFile(null);
   };
 
+  console.log("file", file);
   // const handleSave = async () => {
   //   setLoading(true);
   //   setSaving(true);
@@ -57,9 +59,9 @@ const Modal = ({ show, onClose, userID }) => {
   //     const likesSnapshot = await getDocs(likesQuery);
   //     likesSnapshot.forEach((doc) => {
   //       updateDoc(doc.ref, {
+  //         photoURL: userData.photoURL,
   //         userName: userData.userName,
   //         bio: userData.bio,
-  //         photoURL: userData.photoURL,
   //       });
   //     });
   //     const postsQuery = query(
@@ -69,28 +71,23 @@ const Modal = ({ show, onClose, userID }) => {
   //     const postsSnapshot = await getDocs(postsQuery);
   //     postsSnapshot.forEach((doc) => {
   //       updateDoc(doc.ref, {
+  //         photoURL: userData.photoURL,
   //         userName: userData.userName,
   //         bio: userData.bio,
-  //         photoURL: userData.photoURL,
   //       });
   //     });
 
-  //     setUploaded(false);
-  //     setSaving(true);
-
+  //     // Wait until image has been successfully uploaded
   //     if (file) {
   //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
-  //       console.log(storageRef,"storageRef" );
   //       const uploadTask = uploadBytesResumable(storageRef, file);
-  //       console.log(uploadTask, "uploadTask");
-
+  //       await uploadTask;
   //       uploadTask.on(
   //         "state_changed",
   //         (snapshot) => {
   //           const progress =
   //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
   //           setUploadProgress(progress);
-  //           console.log(progress, "progress");
   //         },
   //         (error) => {
   //           console.log(error);
@@ -99,29 +96,29 @@ const Modal = ({ show, onClose, userID }) => {
   //         },
   //         async () => {
   //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-  //           console.log(downloadURL, "downloadURL");
   //           setUploaded(true);
-  //           setSaving(false);
   //           const userRef = doc(db, "users", userID);
-  //           console.log("image upload fully");
-  //           toast("mage upload fully", {
+  //           toast("Image uploaded successfully", {
   //             ...config,
   //             type: "success",
   //           });
-  //           updateDoc(userRef, {
+  //           await updateDoc(userRef, {
   //             photoURL: downloadURL,
   //           });
   //           onClose();
   //           setLoading(false);
+  //           setFile(null);
   //         }
   //       );
   //     } else {
   //       onClose();
   //       setLoading(false);
+  //       setFile(null);
   //     }
   //   } catch (error) {
   //     console.log(error.message);
   //     setLoading(false);
+  //     setFile(null);
   //   }
   // };
 
@@ -135,11 +132,11 @@ const Modal = ({ show, onClose, userID }) => {
         where("userId", "==", userID)
       );
       const likesSnapshot = await getDocs(likesQuery);
-      likesSnapshot.forEach((doc) => {
-        updateDoc(doc.ref, {
+      const likesUpdatePromises = likesSnapshot.docs.map((doc) => {
+        return updateDoc(doc.ref, {
+          photoURL: userData.photoURL,
           userName: userData.userName,
           bio: userData.bio,
-          photoURL: userData.photoURL,
         });
       });
       const postsQuery = query(
@@ -147,13 +144,14 @@ const Modal = ({ show, onClose, userID }) => {
         where("userId", "==", userID)
       );
       const postsSnapshot = await getDocs(postsQuery);
-      postsSnapshot.forEach((doc) => {
-        updateDoc(doc.ref, {
+      const postsUpdatePromises = postsSnapshot.docs.map((doc) => {
+        return updateDoc(doc.ref, {
+          photoURL: userData.photoURL,
           userName: userData.userName,
           bio: userData.bio,
-          photoURL: userData.photoURL,
         });
       });
+      await Promise.all([...likesUpdatePromises, ...postsUpdatePromises]);
 
       // Wait until image has been successfully uploaded
       if (file) {
@@ -180,20 +178,23 @@ const Modal = ({ show, onClose, userID }) => {
               ...config,
               type: "success",
             });
-            updateDoc(userRef, {
+            await updateDoc(userRef, {
               photoURL: downloadURL,
             });
             onClose();
             setLoading(false);
+            setFile(null);
           }
         );
       } else {
         onClose();
         setLoading(false);
+        setFile(null);
       }
     } catch (error) {
       console.log(error.message);
       setLoading(false);
+      setFile(null);
     }
   };
 
@@ -218,6 +219,7 @@ const Modal = ({ show, onClose, userID }) => {
                 if (!uploaded) {
                   return;
                 }
+                setShowUpload(!showUpload);
               }}
             >
               <ExitIcon />
@@ -234,7 +236,7 @@ const Modal = ({ show, onClose, userID }) => {
                   e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                 }}
               />
-              <div className="flex flex-col items-start justify-start">
+              <div className="flex flex-col items-start justify-start gap-3">
                 <p className="text-[16px] font-medium">
                   {userData.userName
                     ? userData.userName
@@ -248,7 +250,7 @@ const Modal = ({ show, onClose, userID }) => {
                         .join(" ")}
                 </p>
                 <button
-                  className="text-[14px] font-medium"
+                  className="text-[14px] font-medium bg-red-500"
                   onClick={handleClickShowUpload}
                 >
                   {showUpload ? " Cancel" : " Change profile picture"}
@@ -259,9 +261,9 @@ const Modal = ({ show, onClose, userID }) => {
               <>
                 <label
                   htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center h-4 mt-5 mb-5 rounded-lg cursor-pointer w-52 "
+                  className="flex flex-col items-center justify-center h-4 mt-5 mb-5 bg-green-500 cursor-pointer w-52 "
                 >
-                  <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
+                  <div className="flex flex-col items-center justify-center px-1 md:px-2 md:py-4">
                     <div className="flex items-center text-sm text-black">
                       <p className="flex items-center w-full mt-5 font-medium">
                         {file ? ` Image Uploaded ` : ` Upload a photo`}
