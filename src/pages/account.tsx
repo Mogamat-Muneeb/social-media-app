@@ -221,9 +221,13 @@ export const Account = () => {
                   </div>
                 </div>
                 <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
-                  <p className="flex items-center justify-center gap-1 font-medium uppercase ">
-                    <RectIcon />
-                    Posts
+                  <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase ">
+                    <span className="flex items-center">
+                      <RectIcon />
+                      Posts
+                    </span>
+
+                    {/* <span className="border-[0.1px] border-gray-400 w-full"></span> */}
                   </p>
                   <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
                     {posts.map((post: IPost) => {

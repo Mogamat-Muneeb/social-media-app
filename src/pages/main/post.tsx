@@ -167,6 +167,43 @@ export const Post = (props: Props) => {
   }
 
   const [loading, setLoading] = useState(true);
+
+  const savePost = async () => {
+    // const { user } = useAuth();
+    const savedPostsRef = collection(db, "savedPosts");
+    // check if the post has already been saved by the user
+    const savedPostDoc = await getDoc(
+      doc(savedPostsRef, `${user?.uid}_${post.id}`)
+    );
+    if (savedPostDoc.exists()) {
+      console.log("Post has already been saved by the user");
+      toast("You have already saved this post", {
+        ...config,
+        type: "info",
+      });
+      return;
+    }
+  
+    // save the post
+    await addDoc(savedPostsRef, {
+      userId: post.userId,
+      username: post.username ?? null,
+      description: post.description ?? null,
+      imageUrl: post.imageUrl ?? null,
+      userPp: post.userPp ?? null,
+      date: post.date,
+      likesCount: post.likesCount ?? null,
+      userName: post.userName ?? null,
+      imageURL: post.imageURL ?? null,
+      photoURL: post.photoURL ?? null,
+    });
+    console.log("Post saved successfully");
+    toast("Post saved successfully", {
+      ...config,
+      type: "success",
+    });
+  };
+  
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col border-[1px] rounded   h-full">
@@ -178,8 +215,6 @@ export const Post = (props: Props) => {
                 src={post.photoURL || post.userPp}
                 className="object-cover border rounded-full shadow w-9 h-9"
                 alt=""
-           
-              
               />
             </Link>
             <Link to={`${post.userId}`}>
@@ -200,7 +235,7 @@ export const Post = (props: Props) => {
           </div>
           {loading && (
             <>
-              <div className="h-[20px]">
+              <div className="h-[250px]">
                 <div className="flex items-center justify-center mt-32">
                   <svg
                     aria-hidden="true"
@@ -230,10 +265,10 @@ export const Post = (props: Props) => {
             onLoad={() => setLoading(false)} // set loading to false when the image is loaded
             onError={() => setLoading(false)} // set loading to false if the image fails to load
           />
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             {likes ? (
               <div className="flex flex-col">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center w-full gap-3">
                   <button
                     className=""
                     onClick={hasUserLiked ? removeLike : addLike}
@@ -248,6 +283,7 @@ export const Post = (props: Props) => {
                       </>
                     )}
                   </button>
+
                   <p
                     className={`font-semibold  text-[14px]  ${
                       likes.length === 0 && "hidden"
@@ -256,7 +292,7 @@ export const Post = (props: Props) => {
                     {likes.length} likes
                   </p>
                 </div>
-                <div className="flex items-center text-[14px] gap-1">
+                <div className="flex items-center text-[14px] gap-1 ">
                   {likes.length > 0 &&
                     likes.map((like, index) => (
                       <>
@@ -294,7 +330,30 @@ export const Post = (props: Props) => {
                 </button>
               </>
             )}
+            <button onClick={savePost}>
+              <svg
+                aria-label="Save"
+                className="x1lliihq x1n2onr6"
+                color="black"
+                fill="rgb(245, 245, 245)"
+                height="24"
+                role="img"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <title>Save</title>
+                <polygon
+                  fill="none"
+                  points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                  stroke="black"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></polygon>
+              </svg>
+            </button>
           </div>
+
           <p className="font-semibold flex gap-1  text-[13px] ">
             <span>
               {post.userName

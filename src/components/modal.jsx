@@ -250,7 +250,7 @@ const Modal = ({ show, onClose, userID }) => {
                         .join(" ")}
                 </p>
                 <button
-                  className="text-[14px] font-medium bg-red-500"
+                  className="text-[14px] font-medium"
                   onClick={handleClickShowUpload}
                 >
                   {showUpload ? " Cancel" : " Change profile picture"}
