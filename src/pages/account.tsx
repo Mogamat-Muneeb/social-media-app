@@ -42,6 +42,8 @@ export const Account = () => {
   const [likesCount, setLikesCount] = useState<LikesCount>({});
   const [isLoading, setIsLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState([]);
+
+  const [tab, setTab] = useState("Saved");
   useEffect(() => {
     /* @ts-ignore */
     const docRef = doc(db, "users", uid);
@@ -232,58 +234,96 @@ export const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
-                  <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase ">
+                <div className="flex justify-center gap-5 ">
+                  <button onClick={() => setTab("Posts")}>
                     <span className="flex items-center">
                       <RectIcon />
                       Posts
                     </span>
+                  </button>
+                  <button onClick={() => setTab("Saved")}>
+                    <span className="flex items-center">
+                      <svg
+                        aria-label=""
+                        className="_ab6-"
+                        color="black"
+                        fill="rgb(245, 245, 245)"
+                        height="12"
+                        role="img"
+                        viewBox="0 0 24 24"
+                        width="12"
+                      >
+                        <polygon
+                          fill="none"
+                          points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                        ></polygon>
+                      </svg>
+                      Saved
+                    </span>
+                  </button>
+                </div>
+                <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
+                  {tab === "Posts" && (
+                    <>
+                      <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase ">
+                        <span className="flex items-center">
+                          <RectIcon />
+                          Posts
+                        </span>
+                      </p>
+                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                        {posts.map((post: IPost) => {
+                          return (
+                            <div key={post.id} className="relative">
+                              {/* <Link to={`/posts/${post.id}`}> */}
+                              <img
+                                /* @ts-ignore */
+                                key={post.id}
+                                /* @ts-ignore */
+                                src={post.imageUrl}
+                                alt=""
+                                className={`lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg `}
+                              />
+                              {/* </Link> */}
 
-                    {/* <span className="border-[0.1px] border-gray-400 w-full"></span> */}
-                  </p>
-                  <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
-                    {posts.map((post: IPost) => {
-                      return (
-                        <div key={post.id} className="relative">
-                          {/* <Link to={`/posts/${post.id}`}> */}
-                          <img
-                            /* @ts-ignore */
-                            key={post.id}
-                            /* @ts-ignore */
-                            src={post.imageUrl}
-                            alt=""
-                            className={`lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg `}
-                          />
-                          {/* </Link> */}
-
-                          <p className="flex justify-center pt-2">
-                            {likesCount[post.id] ? (
-                              <>
-                                {likesCount[post.id]}
-                                <LikedIcon />
-                              </>
-                            ) : (
-                              ""
-                            )}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <h2>Your saved posts:</h2>
-                  <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
-                    {savedPosts.map((saved) => (
-                      /* @ts-ignore */
-                      <div key={saved.id}>
-                        <img
-                          /* @ts-ignore */
-                          src={saved.imageUrl}
-                          alt=""
-                          className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg"
-                        />
+                              <p className="flex justify-center pt-2">
+                                {likesCount[post.id] ? (
+                                  <>
+                                    {likesCount[post.id]}
+                                    <LikedIcon />
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+                              </p>
+                            </div>
+                          );
+                        })}
                       </div>
-                    ))}
-                  </div>
+                    </>
+                  )}
+                  {tab === "Saved" && (
+                    <>
+                      <h2>Your saved posts:</h2>
+                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                        {savedPosts.map((saved) => (
+                          /* @ts-ignore */
+                          <div key={saved.id}>
+                            <img
+                              /* @ts-ignore */
+                              src={saved.imageUrl}
+                              alt=""
+                              className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col px-4 md:px-0 md:hidden">
@@ -332,61 +372,99 @@ export const Account = () => {
                   )}
                 </div>
                 <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
-                  <p className="flex items-center justify-center gap-1 font-medium ">
-                    <RectMobileIcon />
-                    Posts
-                  </p>
-                  <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
-                    {posts.map((post: IPost) => {
-                      return (
-                        <div
-                          key={post.id}
-                          className="flex flex-col justify-center"
+                  <div className="flex justify-center gap-5 ">
+                    <button onClick={() => setTab("Posts")}>
+                      <span className="flex items-center">
+                        <RectIcon />
+                        Posts
+                      </span>
+                    </button>
+                    <button onClick={() => setTab("Saved")}>
+                      <span className="flex items-center">
+                        <svg
+                          aria-label=""
+                          className="_ab6-"
+                          color="black"
+                          fill="rgb(245, 245, 245)"
+                          height="12"
+                          role="img"
+                          viewBox="0 0 24 24"
+                          width="12"
                         >
-                          <img
-                            /* @ts-ignore */
-                            key={post.id}
-                            /* @ts-ignore */
-                            src={post.imageUrl}
-                            alt=""
-                            className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
-                          />
-                          <p
-                            className={`flex items-center justify-center w-full  ${
-                              likesCount[post.id] === undefined
-                                ? "pt-8 "
-                                : "pt-2"
-                            }`}
-                          >
-                            {likesCount[post.id] ? (
-                              <>
-                                {likesCount[post.id]}
-                                <LikedIcon />
-                              </>
-                            ) : (
-                              ""
-                            )}
-                          </p>
-                        </div>
-                      );
-                    })}
+                          <polygon
+                            fill="none"
+                            points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                          ></polygon>
+                        </svg>
+                        Saved
+                      </span>
+                    </button>
                   </div>
-                  <h2>Your saved posts:</h2>
-                  <div  className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
-                  {savedPosts.map((saved) => (
-                    /* @ts-ignore */
-                    <div key={saved.id}>
-                      <img
-                        /* @ts-ignore */
-                        src={saved.imageUrl}
-                        alt=""
-                        className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
-                      />
-                    </div>
-                  ))}
-
-
-                  </div>
+                  {tab === "Posts" && (
+                    <>
+                      <p className="flex items-center justify-center gap-1 font-medium ">
+                        <RectMobileIcon />
+                        Posts
+                      </p>
+                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
+                        {posts.map((post: IPost) => {
+                          return (
+                            <div
+                              key={post.id}
+                              className="flex flex-col justify-center"
+                            >
+                              <img
+                                /* @ts-ignore */
+                                key={post.id}
+                                /* @ts-ignore */
+                                src={post.imageUrl}
+                                alt=""
+                                className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
+                              />
+                              <p
+                                className={`flex items-center justify-center w-full  ${
+                                  likesCount[post.id] === undefined
+                                    ? "pt-8 "
+                                    : "pt-2"
+                                }`}
+                              >
+                                {likesCount[post.id] ? (
+                                  <>
+                                    {likesCount[post.id]}
+                                    <LikedIcon />
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+                  {tab === "Saved" && (
+                    <>
+                      <h2> Saved</h2>
+                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
+                        {savedPosts.map((saved) => (
+                          /* @ts-ignore */
+                          <div key={saved.id}>
+                            <img
+                              /* @ts-ignore */
+                              src={saved.imageUrl}
+                              alt=""
+                              className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </>
