@@ -123,39 +123,50 @@ export function UnLikedIcon() {
     </svg>
   );
 }
-export function UnSavedIcon() {
+export function UnSavedIcon({height, width}) {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+    aria-label=""
+    className="_ab6-"
+    color="black"
+    fill="rgb(245, 245, 245)"
+    height={height}
+    role="img"
+    viewBox="0 0 24 24"
+    width={width}
+  >
+    <polygon
       fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="black"
-      className="w-6 h-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-      />
-    </svg>
+      points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    ></polygon>
+  </svg>
   );
 }
-export function SavedIcon() {
+export function SavedIcon({height, width}) {
   return (
     <svg
-      aria-label="Remove"
-      class="x1lliihq x1n2onr6"
-      color="rgb(245, 245, 245)"
-      fill="rgb(245, 245, 245)"
-      height="24"
-      role="img"
-      viewBox="0 0 24 24"
-      width="24"
-    >
-      <title>Remove</title>
-      <path d="M20 22a.999.999 0 0 1-.687-.273L12 14.815l-7.313 6.912A1 1 0 0 1 3 21V3a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1Z"></path>
-    </svg>
+    aria-label=""
+    className="_ab6-"
+    color="black"
+    fill="black"
+    height={height}
+    role="img"
+    viewBox="0 0 24 24"
+    width={width}
+  >
+    <polygon
+      fill="black"
+      points="20 21 12 13.44 4 21 4 3 20 3 20 21"
+      stroke="black"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    ></polygon>
+  </svg>
   );
 }
 

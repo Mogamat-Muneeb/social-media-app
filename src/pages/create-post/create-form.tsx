@@ -78,8 +78,6 @@ export const CreateForm = () => {
     return () => unsubscribe();
   }, [user?.uid]);
 
-  console.log(userData, "userData");
-
   const onPostSubmit = async (data: CreateFormData) => {
     if (file === "") {
       alert("Please add the file");
@@ -110,13 +108,13 @@ export const CreateForm = () => {
         addDoc(postsRef, {
           ...data,
           /* @ts-ignore */
-          userName: userData.userName  ?? null, 
+          userName: userData.userName ?? null,
           /* @ts-ignore */
-          bio: userData.bio  ?? null,
+          bio: userData.bio ?? null,
           /* @ts-ignore */
-          username: userData.displayName  ?? null ,
+          username: userData.displayName ?? null,
           /* @ts-ignore */
-          photoURL: userData.photoURL  ,
+          photoURL: userData.photoURL,
           /* @ts-ignore */
           userId: userData.uid,
           date: Date.now(),

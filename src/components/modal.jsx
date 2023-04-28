@@ -48,81 +48,6 @@ const Modal = ({ show, onClose, userID }) => {
     // setFile(null);
   };
 
-  console.log("file", file);
-  // const handleSave = async () => {
-  //   setLoading(true);
-  //   setSaving(true);
-  //   try {
-  //     await updateDoc(doc(db, "users", userID), userData);
-  //     const likesQuery = query(
-  //       collection(db, "likes"),
-  //       where("userId", "==", userID)
-  //     );
-  //     const likesSnapshot = await getDocs(likesQuery);
-  //     likesSnapshot.forEach((doc) => {
-  //       updateDoc(doc.ref, {
-  //         photoURL: userData.photoURL,
-  //         userName: userData.userName,
-  //         bio: userData.bio,
-  //       });
-  //     });
-  //     const postsQuery = query(
-  //       collection(db, "posts"),
-  //       where("userId", "==", userID)
-  //     );
-  //     const postsSnapshot = await getDocs(postsQuery);
-  //     postsSnapshot.forEach((doc) => {
-  //       updateDoc(doc.ref, {
-  //         photoURL: userData.photoURL,
-  //         userName: userData.userName,
-  //         bio: userData.bio,
-  //       });
-  //     });
-
-  //     if (file) {
-  //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
-  //       const uploadTask = uploadBytesResumable(storageRef, file);
-  //       await uploadTask;
-  //       uploadTask.on(
-  //         "state_changed",
-  //         (snapshot) => {
-  //           const progress =
-  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //           setUploadProgress(progress);
-  //         },
-  //         (error) => {
-  //           console.log(error);
-  //           setSaving(false);
-  //           setLoading(false);
-  //         },
-  //         async () => {
-  //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-  //           setUploaded(true);
-  //           const userRef = doc(db, "users", userID);
-  //           toast("Image uploaded successfully", {
-  //             ...config,
-  //             type: "success",
-  //           });
-  //           await updateDoc(userRef, {
-  //             photoURL: downloadURL,
-  //           });
-  //           onClose();
-  //           setLoading(false);
-  //           setFile(null);
-  //         }
-  //       );
-  //     } else {
-  //       onClose();
-  //       setLoading(false);
-  //       setFile(null);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     setLoading(false);
-  //     setFile(null);
-  //   }
-  // };
-
   const handleSave = async () => {
     setLoading(true);
     setSaving(true);
@@ -247,7 +172,7 @@ const Modal = ({ show, onClose, userID }) => {
           <div className="flex flex-col items-start justify-start py-1 md:px-2">
             <div className="flex items-start justify-start gap-4 ">
               <img
-                src={userData.photoURL ||user?.photoURL || ""}
+                src={userData.photoURL || user?.photoURL || ""}
                 alt={user?.displayName || ""}
                 className="w-8 h-8 rounded-full md:w-10 md:h-10"
                 onError={(e) => {

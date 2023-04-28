@@ -1,15 +1,17 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db } from "../config/firebase";
-import { Link, Route, RouteProps, useParams } from "react-router-dom";
-import { RectIcon, RectMobileIcon, LikedIcon } from "../components/icon";
+import { useParams } from "react-router-dom";
+import {
+  RectIcon,
+  RectMobileIcon,
+  LikedIcon,
+  UnSavedIcon,
+} from "../components/icon";
 import Modal from "../components/modal";
 
 import {
   doc,
-  setDoc,
   collection,
-  getDocs,
-  getDoc,
   where,
   query,
   orderBy,
@@ -18,7 +20,6 @@ import {
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { Post as IPost } from "../pages/main/main";
-import { Like } from "../pages/main/post";
 export const Account = () => {
   interface UserData {
     displayName: string;
@@ -34,7 +35,6 @@ export const Account = () => {
   }
 
   const [posts, setPosts] = useState([]);
-  const [likes, setLikes] = useState([]);
   const [user] = useAuthState(auth);
   const { uid } = useParams();
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -43,7 +43,7 @@ export const Account = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState([]);
 
-  const [tab, setTab] = useState("Saved");
+  const [tab, setTab] = useState("Posts");
   useEffect(() => {
     /* @ts-ignore */
     const docRef = doc(db, "users", uid);
@@ -243,25 +243,7 @@ export const Account = () => {
                   </button>
                   <button onClick={() => setTab("Saved")}>
                     <span className="flex items-center">
-                      <svg
-                        aria-label=""
-                        className="_ab6-"
-                        color="black"
-                        fill="rgb(245, 245, 245)"
-                        height="12"
-                        role="img"
-                        viewBox="0 0 24 24"
-                        width="12"
-                      >
-                        <polygon
-                          fill="none"
-                          points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                        ></polygon>
-                      </svg>
+                      <UnSavedIcon width={20} height={30} />
                       Saved
                     </span>
                   </button>
@@ -326,6 +308,7 @@ export const Account = () => {
                   )}
                 </div>
               </div>
+
               <div className="flex flex-col px-4 md:px-0 md:hidden">
                 <div className="flex items-center w-full pt-10">
                   <div className=" w-[200px]">
@@ -376,31 +359,11 @@ export const Account = () => {
                     <button onClick={() => setTab("Posts")}>
                       <span className="flex items-center">
                         <RectIcon />
-                        Posts
                       </span>
                     </button>
                     <button onClick={() => setTab("Saved")}>
                       <span className="flex items-center">
-                        <svg
-                          aria-label=""
-                          className="_ab6-"
-                          color="black"
-                          fill="rgb(245, 245, 245)"
-                          height="12"
-                          role="img"
-                          viewBox="0 0 24 24"
-                          width="12"
-                        >
-                          <polygon
-                            fill="none"
-                            points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                          ></polygon>
-                        </svg>
-                        Saved
+                        <UnSavedIcon width={20} height={30} />
                       </span>
                     </button>
                   </div>

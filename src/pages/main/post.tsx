@@ -41,7 +41,7 @@ export interface Saved {
   savedId: string;
   userId: string;
   postId: string;
-  imageUrl : any
+  imageUrl: any;
 }
 
 export const Post = (props: Props) => {
@@ -63,23 +63,13 @@ export const Post = (props: Props) => {
     where("postId", "==", post.id),
     where("userId", "==", user?.uid)
   );
-  // const getLikes = async () => {
-  //   const data = await getDocs(likesDoc);
-  //   setLikes(
-  //     data.docs.map((doc) => ({
-  //       userId: doc.data().userId,
-  //       likeId: doc.id,
-  //       nameId: doc.data().nameId,
-  //       emailId: doc.data().emailId,
-  //     }))
-  //   );
-  // };
+
   const addSaved = async () => {
     try {
       const newDoc = await addDoc(collection(db, "saved"), {
         userId: user?.uid,
         postId: post.id,
-        imageUrl: post.imageUrl
+        imageUrl: post.imageUrl,
       });
       setIsSaved(true);
     } catch (err) {
@@ -128,7 +118,6 @@ export const Post = (props: Props) => {
         userName: doc.data().userName,
         photoURL: doc.data().photoURL,
       }));
-      console.log(likes, "likes");
 
       setLikes(likes);
     });
@@ -374,17 +363,12 @@ export const Post = (props: Props) => {
 
             {isSaved ? (
               <button onClick={removeSaved}>
-
-                {/* <UnSavedIcon  /> */}
-                UnSavedIcon
+                <UnSavedIcon width={20} height={30} />
               </button>
             ) : (
               <button onClick={addSaved}>
-
-                {/* <SavedIcon  /> */}
-                SavedIcon
+                <SavedIcon width={20} height={30} />
               </button>
-
             )}
           </div>
 
