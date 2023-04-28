@@ -37,12 +37,19 @@ export interface Like {
   postId: string;
   userName: string | null;
 }
+export interface Saved {
+  savedId: string;
+  userId: string;
+  postId: string;
+  imageUrl : any
+}
 
 export const Post = (props: Props) => {
   const { post } = props;
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const [likes, setLikes] = useState<Like[] | null>(null);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
 
   const likesRef = collection(db, "likes");
 
@@ -51,6 +58,11 @@ export const Post = (props: Props) => {
     [post.id]
   );
 
+  const savedRef = query(
+    collection(db, "saved"),
+    where("postId", "==", post.id),
+    where("userId", "==", user?.uid)
+  );
   // const getLikes = async () => {
   //   const data = await getDocs(likesDoc);
   //   setLikes(
@@ -62,6 +74,48 @@ export const Post = (props: Props) => {
   //     }))
   //   );
   // };
+  const addSaved = async () => {
+    try {
+      const newDoc = await addDoc(collection(db, "saved"), {
+        userId: user?.uid,
+        postId: post.id,
+        imageUrl: post.imageUrl
+      });
+      setIsSaved(true);
+    } catch (err) {
+      toast("Please login to save", {
+        ...config,
+        type: "error",
+      });
+      console.log(err);
+    }
+  };
+
+  const removeSaved = async () => {
+    try {
+      const savedToDeleteQuery = query(
+        collection(db, "saved"),
+        where("postId", "==", post.id),
+        where("userId", "==", user?.uid)
+      );
+      const savedToDeleteData = await getDocs(savedToDeleteQuery);
+      const savedId = savedToDeleteData.docs[0].id;
+      const savedToDelete = doc(db, "saved", savedId);
+      await deleteDoc(savedToDelete);
+
+      setIsSaved(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const checkSaved = async () => {
+      const savedData = await getDocs(savedRef);
+      setIsSaved(!savedData.empty);
+    };
+    checkSaved();
+  }, []);
 
   const getLikes = async () => {
     const unsubscribe = onSnapshot(likesDoc, (snapshot) => {
@@ -177,120 +231,6 @@ export const Post = (props: Props) => {
   }
 
   const [loading, setLoading] = useState(true);
-
-  // const savePost = async () => {
-  //   const savedPostsRef = collection(db, "savedPosts");
-  //   const savedPostDoc = await getDoc(
-  //     doc(savedPostsRef, `${user?.uid}_${post.id}`)
-  //   );
-  //   if (savedPostDoc.exists()) {
-  //     console.log("Post has already been saved by the user");
-  //     toast("You have already saved this post", {
-  //       ...config,
-  //       type: "info",
-  //     });
-  //     return;
-  //   }
-
-  //   await addDoc(savedPostsRef, {
-  //     userId: post.userId,
-  //     username: post.username ?? null,
-  //     description: post.description ?? null,
-  //     imageUrl: post.imageUrl ?? null,
-  //     userPp: post.userPp ?? null,
-  //     date: post.date,
-  //     likesCount: post.likesCount ?? null,
-  //     userName: post.userName ?? null,
-  //     photoURL: post.photoURL ?? null,
-  //   });
-  //   console.log("Post saved successfully");
-  //   toast("Post saved successfully", {
-  //     ...config,
-  //     type: "success",
-  //   });
-  // };
-
-  const savePost = async () => {
-    const user = auth.currentUser;
-
-    if (!user) {
-      console.log("User is not logged in");
-      return;
-    }
-
-    const savedPostsRef = collection(db, "savedPosts");
-    const savedPostDoc = await getDoc(
-      doc(savedPostsRef, `${user?.uid}_${post.id}`)
-    );
-
-    if (savedPostDoc.exists()) {
-      console.log("Post already saved");
-      toast("You have already saved this post", {
-        ...config,
-        type: "info",
-      });
-    } else {
-      await addDoc(savedPostsRef, {
-        userId: user.uid,
-        username: post.username ?? null,
-        description: post.description ?? null,
-        imageUrl: post.imageUrl ?? null,
-        userPp: post.userPp ?? null,
-        date: post.date,
-        likesCount: post.likesCount ?? null,
-        userName: post.userName ?? null,
-        photoURL: post.photoURL ?? null,
-      });
-
-      console.log("Post saved successfully");
-      toast("Post saved successfully", {
-        ...config,
-        type: "success",
-      });
-    }
-  };
-
-  const removeSavedPost = async () => {
-    const user = auth.currentUser;
-
-    if (!user) {
-      console.log("User is not logged in");
-      return;
-    }
-
-    const savedPostsRef = collection(db, "savedPosts");
-    const savedPostDoc = await getDoc(
-      doc(savedPostsRef, `${user?.uid}_${post.id}`)
-    );
-
-    if (savedPostDoc.exists()) {
-      await deleteDoc(savedPostDoc.ref);
-      console.log("Post removed from saved");
-      toast("Post removed from saved", {
-        ...config,
-        type: "success",
-      });
-    } else {
-      await setDoc(doc(savedPostsRef, `${user?.uid}_${post.id}`), {
-        userId: post.userId,
-        username: post.username ?? null,
-        description: post.description ?? null,
-        imageUrl: post.imageUrl ?? null,
-        userPp: post.userPp ?? null,
-        date: post.date,
-        likesCount: post.likesCount ?? null,
-        userName: post.userName ?? null,
-        photoURL: post.photoURL ?? null,
-        // postId: post.id,
-        // userId: user.uid,
-      });
-      console.log("Post added to saved");
-      toast("Post added to saved", {
-        ...config,
-        type: "success",
-      });
-    }
-  };
 
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
@@ -431,83 +371,21 @@ export const Post = (props: Props) => {
                 </button>
               </>
             )}
-            {/* <button onClick={savePost}>
-              r
-              <svg
-                aria-label="Like"
-                className="x1lliihq x1n2onr6"
-                // color={post.likedBy?.includes(user?.uid) ? "red" : "black"}
-                fill={post.likedBy?.includes(user?.uid) ? "red" : "black"}
-                height="24"
-                role="img"
-                viewBox="0 0 24 24"
-                width="24"
-              >
-                <title>Like</title>
-                <path d="M12 21.35l-.65-.6C5.55 15.12 2 12.25 2 8.5 2 5.42 4.42 3 7.5 3c2.19 0 3.99 1.61 4.41 3.73h1.18C12.51 4.61 14.31 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.75-3.55 6.62-9.35 12.25L12 21.35z" />
-              </svg>
-            </button> */}
-            <button
-              // onClick={post.likedBy ? savePost : removeSavedPost}
-              onClick={savePost}
-              disabled={post.likedBy}
-            >
-              <svg
-                aria-label="Like"
-                className="x1lliihq x1n2onr6"
-                fill="red"
-                height="24"
-                role="img"
-                viewBox="0 0 24 24"
-                width="24"
-              >
-                <title>Like</title>
-                <path d="M12 21.35l-.65-.6C5.55 15.12 2 12.25 2 8.5 2 5.42 4.42 3 7.5 3c2.19 0 3.99 1.61 4.41 3.73h1.18C12.51 4.61 14.31 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.75-3.55 6.62-9.35 12.25L12 21.35z" />
-              </svg>
-              {post.likedBy ? "Saved" : "Save"}
-            </button>
-            {/* 
-            <button onClick={removeSavedPost}>
-              d
-              <svg
-                aria-label="Remove from saved"
-                className="x1lliihq x1n2onr6"
-                color="black"
-                fill="none"
-                height="24"
-                role="img"
-                viewBox="0 0 24 24"
-                width="24"
-              >
-                <title>Remove from saved</title>
-                <path d="M6 8v12a2 2 0 002 2h8a2 2 0 002-2V8h2V6H4v2h2z" />
-              </svg>
-            </button> */}
 
-            {/* <button
-            onClick={savePost}
-            >
-              <svg
-                aria-label="Save"
-                className="x1lliihq x1n2onr6"
-                color="black"
-                fill="rgb(245, 245, 245)"
-                height="24"
-                role="img"
-                viewBox="0 0 24 24"
-                width="24"
-              >
-                <title>Save</title>
-                <polygon
-                  fill="none"
-                  points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-                  stroke="black"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                ></polygon>
-              </svg>
-            </button> */}
+            {isSaved ? (
+              <button onClick={removeSaved}>
+
+                {/* <UnSavedIcon  /> */}
+                UnSavedIcon
+              </button>
+            ) : (
+              <button onClick={addSaved}>
+
+                {/* <SavedIcon  /> */}
+                SavedIcon
+              </button>
+
+            )}
           </div>
 
           <p className="font-semibold flex gap-1  text-[13px] ">

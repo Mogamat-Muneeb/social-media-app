@@ -247,7 +247,7 @@ const Modal = ({ show, onClose, userID }) => {
           <div className="flex flex-col items-start justify-start py-1 md:px-2">
             <div className="flex items-start justify-start gap-4 ">
               <img
-                src={user?.photoURL || ""}
+                src={userData.photoURL ||user?.photoURL || ""}
                 alt={user?.displayName || ""}
                 className="w-8 h-8 rounded-full md:w-10 md:h-10"
                 onError={(e) => {
@@ -280,7 +280,7 @@ const Modal = ({ show, onClose, userID }) => {
               <>
                 <label
                   htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center h-4 mt-5 mb-5 bg-green-500 cursor-pointer w-52 "
+                  className="flex flex-col items-center justify-center h-4 mt-5 mb-5 cursor-pointer w-52 "
                 >
                   <div className="flex flex-col items-center justify-center px-1 md:px-2 md:py-4">
                     <div className="flex items-center text-sm text-black">

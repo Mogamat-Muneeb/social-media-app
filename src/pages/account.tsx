@@ -107,11 +107,10 @@ export const Account = () => {
   }, [uid]);
 
   const closeToggle = () => setShow(!show);
-console.log(uid, "uid");
 
   useEffect(() => {
     if (uid) {
-      const q = query(collection(db, "savedPosts"), where("userId", "==", uid));
+      const q = query(collection(db, "saved"), where("userId", "==", uid));
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const data = querySnapshot.docs.map((doc) => doc.data());
         /* @ts-ignore */
@@ -120,8 +119,6 @@ console.log(uid, "uid");
       return unsubscribe;
     }
   }, []);
-
-  console.log(savedPosts, "savedPosts");
 
   return (
     <ProtectedRoute>
@@ -152,7 +149,7 @@ console.log(uid, "uid");
             posts.length > 1
               ? "h-full  md:h-screen mb-20 "
               : "md:h-full  h-screen mb-20" && posts.length > 0
-              ? "h-screen"
+              ? "h-full"
               : "h-screen" && isLoading
               ? "h-screen"
               : "h-screen"
@@ -273,6 +270,20 @@ console.log(uid, "uid");
                       );
                     })}
                   </div>
+                  <h2>Your saved posts:</h2>
+                  <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                    {savedPosts.map((saved) => (
+                      /* @ts-ignore */
+                      <div key={saved.id}>
+                        <img
+                          /* @ts-ignore */
+                          src={saved.imageUrl}
+                          alt=""
+                          className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col px-4 md:px-0 md:hidden">
@@ -361,6 +372,7 @@ console.log(uid, "uid");
                     })}
                   </div>
                   <h2>Your saved posts:</h2>
+                  <div  className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
                   {savedPosts.map((saved) => (
                     /* @ts-ignore */
                     <div key={saved.id}>
@@ -372,6 +384,9 @@ console.log(uid, "uid");
                       />
                     </div>
                   ))}
+
+
+                  </div>
                 </div>
               </div>
             </>
