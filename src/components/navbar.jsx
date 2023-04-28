@@ -11,7 +11,9 @@ export const Navbar = () => {
   const pathName = useLocation();
   const [userData, setUserData] = useState(null);
   const signUserOut = async () => {
-    await signOut(auth);
+    if (auth) {
+      await signOut(auth);
+    }
   };
 
   useEffect(() => {
@@ -30,8 +32,6 @@ export const Navbar = () => {
     }
   }, [user?.uid]);
 
-  // console.log(userData, "userData navbar");
-  console.log(userData?.photoURL, "userData?.photoURL");
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${

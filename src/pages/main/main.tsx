@@ -22,6 +22,7 @@ export interface Post {
   userName: any;
   imageURL: any;
   photoURL: any;
+  likedBy: any
 }
 
 export const Main = () => {

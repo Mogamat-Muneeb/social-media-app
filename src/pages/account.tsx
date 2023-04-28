@@ -41,7 +41,7 @@ export const Account = () => {
   const [show, setShow] = useState(false);
   const [likesCount, setLikesCount] = useState<LikesCount>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [hoveredPost, setHoveredPost] = useState();
+  const [savedPosts, setSavedPosts] = useState([]);
   useEffect(() => {
     /* @ts-ignore */
     const docRef = doc(db, "users", uid);
@@ -107,6 +107,21 @@ export const Account = () => {
   }, [uid]);
 
   const closeToggle = () => setShow(!show);
+console.log(uid, "uid");
+
+  useEffect(() => {
+    if (uid) {
+      const q = query(collection(db, "savedPosts"), where("userId", "==", uid));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const data = querySnapshot.docs.map((doc) => doc.data());
+        /* @ts-ignore */
+        setSavedPosts(data);
+      });
+      return unsubscribe;
+    }
+  }, []);
+
+  console.log(savedPosts, "savedPosts");
 
   return (
     <ProtectedRoute>
@@ -345,6 +360,18 @@ export const Account = () => {
                       );
                     })}
                   </div>
+                  <h2>Your saved posts:</h2>
+                  {savedPosts.map((saved) => (
+                    /* @ts-ignore */
+                    <div key={saved.id}>
+                      <img
+                        /* @ts-ignore */
+                        src={saved.imageUrl}
+                        alt=""
+                        className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </>
