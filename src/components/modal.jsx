@@ -8,6 +8,7 @@ import {
   query,
   updateDoc,
   where,
+  writeBatch,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "./icon";
@@ -41,7 +42,8 @@ const Modal = ({ show, onClose, userID }) => {
     return () => unsubscribe();
   }, [userID]);
 
-  const handleClickShowUpload = () => {
+  const handleClickShowUpload = (e) => {
+    e.preventDefault();
     setShowUpload(!showUpload);
     // setFile(null);
   };
@@ -77,7 +79,6 @@ const Modal = ({ show, onClose, userID }) => {
   //       });
   //     });
 
-  //     // Wait until image has been successfully uploaded
   //     if (file) {
   //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
   //       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -132,8 +133,8 @@ const Modal = ({ show, onClose, userID }) => {
         where("userId", "==", userID)
       );
       const likesSnapshot = await getDocs(likesQuery);
-      const likesUpdatePromises = likesSnapshot.docs.map((doc) => {
-        return updateDoc(doc.ref, {
+      likesSnapshot.forEach((doc) => {
+        updateDoc(doc.ref, {
           photoURL: userData.photoURL,
           userName: userData.userName,
           bio: userData.bio,
@@ -144,20 +145,17 @@ const Modal = ({ show, onClose, userID }) => {
         where("userId", "==", userID)
       );
       const postsSnapshot = await getDocs(postsQuery);
-      const postsUpdatePromises = postsSnapshot.docs.map((doc) => {
-        return updateDoc(doc.ref, {
+      postsSnapshot.forEach((doc) => {
+        updateDoc(doc.ref, {
           photoURL: userData.photoURL,
           userName: userData.userName,
           bio: userData.bio,
         });
       });
-      await Promise.all([...likesUpdatePromises, ...postsUpdatePromises]);
 
-      // Wait until image has been successfully uploaded
       if (file) {
         const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
-        await uploadTask;
         uploadTask.on(
           "state_changed",
           (snapshot) => {
@@ -174,18 +172,39 @@ const Modal = ({ show, onClose, userID }) => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             setUploaded(true);
             const userRef = doc(db, "users", userID);
+            await updateDoc(userRef, {
+              photoURL: downloadURL,
+            });
+            await Promise.all([
+              updateDoc(userRef, {
+                userName: userData.userName,
+                bio: userData.bio,
+              }),
+              likesSnapshot.forEach((doc) => {
+                updateDoc(doc.ref, {
+                  photoURL: downloadURL,
+                  userName: userData.userName,
+                  bio: userData.bio,
+                });
+              }),
+              postsSnapshot.forEach((doc) => {
+                updateDoc(doc.ref, {
+                  photoURL: downloadURL,
+                  userName: userData.userName,
+                  bio: userData.bio,
+                });
+              }),
+            ]);
             toast("Image uploaded successfully", {
               ...config,
               type: "success",
-            });
-            await updateDoc(userRef, {
-              photoURL: downloadURL,
             });
             onClose();
             setLoading(false);
             setFile(null);
           }
         );
+        await uploadTask;
       } else {
         onClose();
         setLoading(false);
@@ -197,6 +216,259 @@ const Modal = ({ show, onClose, userID }) => {
       setFile(null);
     }
   };
+
+  // const handleSave = async () => {
+  //   setLoading(true);
+  //   setSaving(true);
+  //   try {
+  //     await updateDoc(doc(db, "users", userID), userData);
+  //     const likesQuery = query(
+  //       collection(db, "likes"),
+  //       where("userId", "==", userID)
+  //     );
+  //     const likesSnapshot = await getDocs(likesQuery);
+  //     const likesUpdatePromises = likesSnapshot.docs.map((doc) => {
+  //       return updateDoc(doc.ref, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       });
+  //     });
+  //     const postsQuery = query(
+  //       collection(db, "posts"),
+  //       where("userId", "==", userID)
+  //     );
+  //     const postsSnapshot = await getDocs(postsQuery);
+  //     const postsUpdatePromises = postsSnapshot.docs.map((doc) => {
+  //       return updateDoc(doc.ref, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       });
+  //     });
+  //     await Promise.all([...likesUpdatePromises, ...postsUpdatePromises]);
+
+  //     // Wait until image has been successfully uploaded
+  //     if (file) {
+  //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+  //       const uploadTask = uploadBytesResumable(storageRef, file);
+  //       await uploadTask;
+  //       uploadTask.on(
+  //         "state_changed",
+  //         (snapshot) => {
+  //           const progress =
+  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //           setUploadProgress(progress);
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //           setSaving(false);
+  //           setLoading(false);
+  //         },
+  //         async () => {
+  //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  //           setUploaded(true);
+  //           const userRef = doc(db, "users", userID);
+  //           toast("Image uploaded successfully", {
+  //             ...config,
+  //             type: "success",
+  //           });
+  //           await updateDoc(userRef, {
+  //             photoURL: downloadURL,
+  //           });
+  //           // Wait for updates to complete before continuing
+  //           await Promise.all([...likesUpdatePromises, ...postsUpdatePromises]);
+  //           onClose();
+  //           setLoading(false);
+  //           setFile(null);
+  //         }
+  //         // async () => {
+  //         //   const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  //         //   setUploaded(true);
+  //         //   const userRef = doc(db, "users", userID);
+  //         //   toast("Image uploaded successfully", {
+  //         //     ...config,
+  //         //     type: "success",
+  //         //   });
+  //         //   await updateDoc(userRef, {
+  //         //     photoURL: downloadURL,
+  //         //   });
+  //         //   onClose();
+  //         //   setLoading(false);
+  //         //   setFile(null);
+  //         // }
+  //       );
+  //     } else {
+  //       onClose();
+  //       setLoading(false);
+  //       setFile(null);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     setLoading(false);
+  //     setFile(null);
+  //   }
+  // };
+  // const handleSave = async () => {
+  //   setLoading(true);
+  //   setSaving(true);
+  //   try {
+
+  //     await updateDoc(doc(db, "users", userID), userData);
+
+  //     const batch = writeBatch(db);
+  //     const likesQuery = query(collection(db, "likes"), where("userId", "==", userID));
+  //     const likesSnapshot = await getDocs(likesQuery);
+  //     likesSnapshot.docs.forEach((doc) => {
+  //       const docRef = doc.ref;
+  //       batch.update(docRef, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       });
+  //     });
+  //     const postsQuery = query(collection(db, "posts"), where("userId", "==", userID));
+  //     const postsSnapshot = await getDocs(postsQuery);
+  //     postsSnapshot.docs.forEach((doc) => {
+  //       const docRef = doc.ref;
+  //       batch.update(docRef, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       });
+  //     });
+  //     await batch.commit();
+
+  //     if (file) {
+  //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+  //       const uploadTask = uploadBytesResumable(storageRef, file);
+  //       await uploadTask;
+  //       uploadTask.on(
+  //         "state_changed",
+  //         (snapshot) => {
+  //           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //           setUploadProgress(progress);
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //           setSaving(false);
+  //           setLoading(false);
+  //         },
+  //         async () => {
+  //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  //           setUploaded(true);
+  //           const userRef = doc(db, "users", userID);
+  //           toast("Image uploaded successfully", {
+  //             ...config,
+  //             type: "success",
+  //           });
+  //           await updateDoc(userRef, {
+  //             photoURL: downloadURL,
+  //           });
+  //           onClose();
+  //           setLoading(false);
+  //           setFile(null);
+  //         }
+  //       );
+  //     } else {
+  //       onClose();
+  //       setLoading(false);
+  //       setFile(null);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     setLoading(false);
+  //     setFile(null);
+  //   }
+  // };
+  // const handleSave = async () => {
+  //   setLoading(true);
+  //   setSaving(true);
+  //   try {
+  //     const userRef = doc(db, "users", userID);
+  //     const likesQuery = query(
+  //       collection(db, "likes"),
+  //       where("userId", "==", userID)
+  //     );
+  //     const likesSnapshot = await getDocs(likesQuery);
+  //     const likesUpdatePromises = likesSnapshot.docs.map((doc) => {
+  //       return updateDoc(doc.ref, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       }).then(() => {
+  //         console.log("likes document updated:", doc.data());
+  //       });
+  //     });
+  //     const postsQuery = query(
+  //       collection(db, "posts"),
+  //       where("userId", "==", userID)
+  //     );
+  //     const postsSnapshot = await getDocs(postsQuery);
+  //     const postsUpdatePromises = postsSnapshot.docs.map((doc) => {
+  //       return updateDoc(doc.ref, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       }).then(() => {
+  //         console.log("posts document updated:", doc.data());
+  //       });
+  //     });
+
+  //     if (file) {
+  //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+  //       const uploadTask = uploadBytesResumable(storageRef, file);
+  //       await uploadTask;
+  //       uploadTask.on(
+  //         "state_changed",
+  //         (snapshot) => {
+  //           const progress =
+  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //           setUploadProgress(progress);
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //           setSaving(false);
+  //           setLoading(false);
+  //         },
+  //         async () => {
+  //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+  //           console.log("downloadURL:", downloadURL);
+  //           setUploaded(true);
+  //           const userRef = doc(db, "users", userID);
+  //           toast("Image uploaded successfully", {
+  //             ...config,
+  //             type: "success",
+  //           });
+  //           await updateDoc(userRef, {
+  //             photoURL: downloadURL,
+  //           });
+
+  //           await Promise.all([...likesUpdatePromises, ...postsUpdatePromises]);
+  //           onClose();
+  //           setLoading(false);
+  //           setFile(null);
+  //         }
+  //       );
+  //     } else {
+
+  //       await updateDoc(userRef, {
+  //         photoURL: userData.photoURL,
+  //         userName: userData.userName,
+  //         bio: userData.bio,
+  //       });
+
+  //       await Promise.all([...likesUpdatePromises, ...postsUpdatePromises]);
+  //       onClose();
+  //       setLoading(false);
+  //       setFile(null);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     setLoading(false);
+  //     setFile(null);
+  //   }
+  // };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -236,7 +508,7 @@ const Modal = ({ show, onClose, userID }) => {
                   e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                 }}
               />
-              <div className="flex flex-col items-start justify-start gap-3">
+              <form className="flex flex-col items-start justify-start gap-3">
                 <p className="text-[16px] font-medium">
                   {userData.userName
                     ? userData.userName
@@ -255,7 +527,7 @@ const Modal = ({ show, onClose, userID }) => {
                 >
                   {showUpload ? " Cancel" : " Change profile picture"}
                 </button>
-              </div>
+              </form>
             </div>
             {showUpload && (
               <>
@@ -307,9 +579,7 @@ const Modal = ({ show, onClose, userID }) => {
             </div>
             <div className="flex flex-col items-start justify-start gap-2 max-w-[500px] mx-auto w-full">
               <button
-                onClick={() => {
-                  handleSave();
-                }}
+                onClick={handleSave}
                 className="w-full px-5 py-3 mt-5 text-white bg-black rounded focus:outline-none focus:ring-0"
               >
                 {loading ? (

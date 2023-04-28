@@ -31,7 +31,7 @@ export const Navbar = () => {
   }, [user?.uid]);
 
   // console.log(userData, "userData navbar");
-  // console.log(user, "user navbar");
+  console.log(userData?.photoURL, "userData?.photoURL");
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${

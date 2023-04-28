@@ -41,6 +41,7 @@ export const Main = () => {
 
     return unsubscribe;
   }, []);
+
   return (
     <div
       className={`${

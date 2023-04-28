@@ -64,7 +64,9 @@ export const Post = (props: Props) => {
         emailId: doc.data().emailId,
         postId: doc.data().postId,
         userName: doc.data().userName,
+        photoURL: doc.data().photoURL,
       }));
+      console.log(likes, "likes");
 
       setLikes(likes);
     });
@@ -168,54 +170,67 @@ export const Post = (props: Props) => {
 
   const [loading, setLoading] = useState(true);
 
-  const savePost = async () => {
-    // const { user } = useAuth();
-    const savedPostsRef = collection(db, "savedPosts");
-    // check if the post has already been saved by the user
-    const savedPostDoc = await getDoc(
-      doc(savedPostsRef, `${user?.uid}_${post.id}`)
-    );
-    if (savedPostDoc.exists()) {
-      console.log("Post has already been saved by the user");
-      toast("You have already saved this post", {
-        ...config,
-        type: "info",
-      });
-      return;
-    }
-  
-    // save the post
-    await addDoc(savedPostsRef, {
-      userId: post.userId,
-      username: post.username ?? null,
-      description: post.description ?? null,
-      imageUrl: post.imageUrl ?? null,
-      userPp: post.userPp ?? null,
-      date: post.date,
-      likesCount: post.likesCount ?? null,
-      userName: post.userName ?? null,
-      imageURL: post.imageURL ?? null,
-      photoURL: post.photoURL ?? null,
-    });
-    console.log("Post saved successfully");
-    toast("Post saved successfully", {
-      ...config,
-      type: "success",
-    });
-  };
-  
+  // const savePost = async () => {
+  //   const savedPostsRef = collection(db, "savedPosts");
+  //   const savedPostDoc = await getDoc(
+  //     doc(savedPostsRef, `${user?.uid}_${post.id}`)
+  //   );
+  //   if (savedPostDoc.exists()) {
+  //     console.log("Post has already been saved by the user");
+  //     toast("You have already saved this post", {
+  //       ...config,
+  //       type: "info",
+  //     });
+  //     return;
+  //   }
+
+  //   await addDoc(savedPostsRef, {
+  //     userId: post.userId,
+  //     username: post.username ?? null,
+  //     description: post.description ?? null,
+  //     imageUrl: post.imageUrl ?? null,
+  //     userPp: post.userPp ?? null,
+  //     date: post.date,
+  //     likesCount: post.likesCount ?? null,
+  //     userName: post.userName ?? null,
+  //     imageURL: post.imageURL ?? null,
+  //     photoURL: post.photoURL ?? null,
+  //   });
+  //   console.log("Post saved successfully");
+  //   toast("Post saved successfully", {
+  //     ...config,
+  //     type: "success",
+  //   });
+  // };
+
+  console.log(post.photoURL, "post.photoURL");
+  console.log(post.userPp, "post.userPp");
+
   return (
     <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
       <div className="max-w-[500px] w-full flex flex-col border-[1px] rounded   h-full">
         <div className="flex flex-col w-full gap-2 p-2 text-start">
           <div className="flex items-center gap-2">
             <Link to={`${post.userId}`}>
-              <img
-                // src={post.imageUrl || post.userPp}
-                src={post.photoURL || post.userPp}
-                className="object-cover border rounded-full shadow w-9 h-9"
-                alt=""
-              />
+              {post.photoURL ? (
+                <>
+                  <img
+                    // src={post.photoURL}
+                    src={`${post.photoURL}?${new Date().getTime()}`}
+                    className="object-cover border rounded-full shadow w-9 h-9"
+                    alt=""
+                    key={Date.now()}
+                  />
+                </>
+              ) : (
+                <>
+                  <img
+                    src={post.userPp}
+                    className="object-cover border rounded-full shadow w-9 h-9"
+                    alt=""
+                  />
+                </>
+              )}
             </Link>
             <Link to={`${post.userId}`}>
               {post.userName
@@ -257,13 +272,13 @@ export const Post = (props: Props) => {
               </div>
             </>
           )}
-          {/* show the loader if loading is true */}
+
           <img
             src={post.imageUrl}
             alt=""
             className="max-h-[600px] object-cover"
-            onLoad={() => setLoading(false)} // set loading to false when the image is loaded
-            onError={() => setLoading(false)} // set loading to false if the image fails to load
+            onLoad={() => setLoading(false)}
+            onError={() => setLoading(false)}
           />
           <div className="flex items-center justify-between">
             {likes ? (
@@ -330,7 +345,9 @@ export const Post = (props: Props) => {
                 </button>
               </>
             )}
-            <button onClick={savePost}>
+            <button
+            // onClick={savePost}
+            >
               <svg
                 aria-label="Save"
                 className="x1lliihq x1n2onr6"
