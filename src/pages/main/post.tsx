@@ -62,19 +62,9 @@ export const Post = (props: Props) => {
     () => query(
       collection(db, "saved"),
       where("postId", "==", post?.id),
-      // where("userId", "==", user.uid ?? null)
     ),
     [post?.id, user?.uid]
   );
-  
-  // where("userId", "==", user?.uid)),
-
-  // const savedRef = query(
-  //   collection(db, "saved"),
-  //   where("postId", "==", post?.id),
-  //   where("userId", "==", user?.uid)
-  // );
-
   const addSaved = async () => {
     try {
       const newDoc = await addDoc(collection(db, "saved"), {
@@ -109,16 +99,17 @@ const USER_ID = user?.uid
       console.log(err);
     }
   };
-
   useEffect(() => {
     if (user && user.uid) {
       const checkSaved = async () => {
         const savedData = await getDocs(savedRef);
-        setIsSaved(!savedData);
+        setIsSaved(!savedData.empty);
       };
       checkSaved();
+    } else {
+      setIsSaved(false);
     }
-  }, []);
+  }, [user]);
 
   const getLikes = async () => {
     const unsubscribe = onSnapshot(likesDoc, (snapshot) => {
