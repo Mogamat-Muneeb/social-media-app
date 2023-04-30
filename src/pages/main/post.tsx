@@ -58,11 +58,20 @@ export const Post = (props: Props) => {
     [post.id]
   );
   const savedSaveref = collection(db, "saved");
+  // const savedRef = useMemo(
+  //   () => query(
+  //     collection(db, "saved"),
+  //     where("postId", "==", post?.id),
+  //   ),
+  //   [post?.id, user?.uid]
+  // );
   const savedRef = useMemo(
-    () => query(
-      collection(db, "saved"),
-      where("postId", "==", post?.id),
-    ),
+    () =>
+      query(
+        collection(db, "saved"),
+        where("postId", "==", post?.id),
+        where("userId", "==", user?.uid ?? "")
+      ),
     [post?.id, user?.uid]
   );
   const addSaved = async () => {
@@ -81,7 +90,7 @@ export const Post = (props: Props) => {
       console.log(err);
     }
   };
-const USER_ID = user?.uid
+  const USER_ID = user?.uid;
   const removeSaved = async () => {
     try {
       const savedToDeleteQuery = query(
