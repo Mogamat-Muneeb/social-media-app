@@ -238,16 +238,16 @@ console.log(posts.length, "posts.length");
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-center gap-5 pt-10">
+                <div className="flex justify-center gap-10 pt-10">
                   <button onClick={() => setTab("Posts")}>
-                    <span className="flex items-center">
-                      <RectIcon height={20} />
+                    <span className={`flex items-center ${tab === "Posts" && "text-blue-500" }`}>
+                      <RectIcon height={20} color={`${tab === "Posts" ? "#3b82f6" : "black"}`}/>
                       Posts
                     </span>
                   </button>
                   <button onClick={() => setTab("Saved")}>
-                    <span className="flex items-center">
-                      <UnSavedIcon width={20} height={30} />
+                    <span  className={`flex items-center ${tab === "Saved" && "text-blue-500" }`}>
+                      <UnSavedIcon width={20} height={30} color={`${tab === "Saved" ? "#3b82f6" : "black"}`} />
                       Saved
                     </span>
                   </button>
@@ -354,15 +354,15 @@ console.log(posts.length, "posts.length");
                   )}
                 </div>
                 <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
-                  <div className="flex justify-center gap-5 ">
+                  <div className="flex justify-center gap-10 ">
                     <button onClick={() => setTab("Posts")}>
                       <span className="flex items-center">
-                        <RectIcon height={20} />
+                        <RectIcon height={20} color={`${tab === "Posts" ? "#3b82f6" : "black"}`} />
                       </span>
                     </button>
                     <button onClick={() => setTab("Saved")}>
                       <span className="flex items-center">
-                        <UnSavedIcon width={20} height={30} />
+                        <UnSavedIcon width={20} height={30} color={`${tab === "Saved" ? "#3b82f6" : "black"}`} />
                       </span>
                     </button>
                   </div>

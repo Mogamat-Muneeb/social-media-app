@@ -149,7 +149,7 @@ const Modal = ({ show, onClose, userID }) => {
   return (
     <div className="">
       <div
-        className={`flex  justify-center items-center h-screen w-screen fixed top-0 left-0 overflow-hidden  bg-black bg-opacity-30 transition-opacity duration-300 z-[100]
+        className={`flex  justify-center items-center h-screen w-screen fixed top-0 left-0 overflow-hidden  bg-black bg-opacity-70 transition-opacity duration-300 z-[100]
          ${show ? "block" : "hidden"}`}
       >
         <div className="flex flex-col h-full bg-white max-h-[600px] w-full max-w-[550px] mx-auto rounded-md z-[60] p-4">

@@ -372,7 +372,7 @@ export const Post = (props: Props) => {
               </button>
             ) : (
               <button onClick={addSaved}>
-                <UnSavedIcon width={20} height={30} />
+                <UnSavedIcon width={20} height={30}  color={"black"} />
               </button>
             )}
           </div>

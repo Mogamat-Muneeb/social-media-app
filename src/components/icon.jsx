@@ -1,4 +1,4 @@
-export function RectIcon({height}) {
+export function RectIcon({height, color}) {
   return (
     <svg
       aria-label=""
@@ -13,7 +13,7 @@ export function RectIcon({height}) {
       <rect
         fill="none"
         height="18"
-        stroke="black"
+        stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
@@ -23,7 +23,7 @@ export function RectIcon({height}) {
       ></rect>
       <line
         fill="none"
-        stroke="black"
+        stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
@@ -34,7 +34,7 @@ export function RectIcon({height}) {
       ></line>
       <line
         fill="none"
-        stroke="black"
+        stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
@@ -45,7 +45,7 @@ export function RectIcon({height}) {
       ></line>
       <line
         fill="none"
-        stroke="black"
+        stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
@@ -56,7 +56,7 @@ export function RectIcon({height}) {
       ></line>
       <line
         fill="none"
-        stroke="black"
+        stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
@@ -123,7 +123,7 @@ export function UnLikedIcon() {
     </svg>
   );
 }
-export function UnSavedIcon({height, width}) {
+export function UnSavedIcon({height, width, color}) {
   return (
     <svg
     aria-label=""
@@ -138,7 +138,8 @@ export function UnSavedIcon({height, width}) {
     <polygon
       fill="none"
       points="20 21 12 13.44 4 21 4 3 20 3 20 21"
-      stroke="currentColor"
+      stroke={color}
+      // #3b82f6
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2"
