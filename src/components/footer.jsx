@@ -8,6 +8,10 @@ export const Footer = () => {
         pathName.pathname === "/"
           ? "bottom-0 relative right-0 left-0 "
           : "bottom-0 sticky right-0 left-0"
+          &&
+          pathName.pathname === ":uid"
+          ? "bottom-0 relative right-0 left-0 "
+          : "bottom-0 sticky right-0 left-0"
       }`}
     >
       <p className="hidden md:block">

@@ -10,18 +10,13 @@ export const Navbar = () => {
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
-  // const signUserOut = async () => {
-  //   if (auth) {
-  //     await signOut(auth);
-  //   }
-  // };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const signUserOut = async () => {
-    console.log("auth:", auth); // log auth object to check if it's defined
+    // console.log("auth:", auth);
     if (auth) {
-      console.log("auth.currentUser:", auth.currentUser); // log currentUser object to check if it's defined
+      // console.log("auth.currentUser:", auth.currentUser);
       await signOut(auth);
-      navigate("/")
+      navigate("/");
     }
   };
   useEffect(() => {

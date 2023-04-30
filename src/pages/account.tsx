@@ -121,6 +121,7 @@ export const Account = () => {
       return unsubscribe;
     }
   }, []);
+console.log(posts.length, "posts.length");
 
   return (
     <ProtectedRoute>
@@ -150,9 +151,12 @@ export const Account = () => {
           ${
             posts.length > 1
               ? "h-full  md:h-screen mb-20 "
-              : "md:h-full  h-screen mb-20" && posts.length > 0
+              : "md:h-full  h-screen mb-20" && posts.length < 0
               ? "h-full"
               : "h-screen" && isLoading
+              ? "h-screen"
+              : "h-screen"
+              && posts.length === 1
               ? "h-screen"
               : "h-screen"
           }
@@ -234,10 +238,10 @@ export const Account = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-center gap-5 ">
+                <div className="flex justify-center gap-5 pt-10">
                   <button onClick={() => setTab("Posts")}>
                     <span className="flex items-center">
-                      <RectIcon />
+                      <RectIcon height={20} />
                       Posts
                     </span>
                   </button>
@@ -252,10 +256,6 @@ export const Account = () => {
                   {tab === "Posts" && (
                     <>
                       <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase ">
-                        <span className="flex items-center">
-                          <RectIcon />
-                          Posts
-                        </span>
                       </p>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
                         {posts.map((post: IPost) => {
@@ -290,7 +290,6 @@ export const Account = () => {
                   )}
                   {tab === "Saved" && (
                     <>
-                      <h2>Your saved posts:</h2>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
                         {savedPosts.map((saved) => (
                           /* @ts-ignore */
@@ -358,7 +357,7 @@ export const Account = () => {
                   <div className="flex justify-center gap-5 ">
                     <button onClick={() => setTab("Posts")}>
                       <span className="flex items-center">
-                        <RectIcon />
+                        <RectIcon height={20} />
                       </span>
                     </button>
                     <button onClick={() => setTab("Saved")}>
@@ -370,7 +369,7 @@ export const Account = () => {
                   {tab === "Posts" && (
                     <>
                       <p className="flex items-center justify-center gap-1 font-medium ">
-                        <RectMobileIcon />
+                        {/* <RectMobileIcon /> */}
                         Posts
                       </p>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">

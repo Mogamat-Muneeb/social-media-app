@@ -1,11 +1,11 @@
-export function RectIcon() {
+export function RectIcon({height}) {
   return (
     <svg
       aria-label=""
       className="_ab6-"
       color="rgb(245, 245, 245)"
       fill="rgb(245, 245, 245)"
-      height="12"
+      height={height}
       role="img"
       viewBox="0 0 24 24"
       // width="12"
