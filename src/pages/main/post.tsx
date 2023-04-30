@@ -54,22 +54,33 @@ export const Post = (props: Props) => {
   const likesRef = collection(db, "likes");
 
   const likesDoc = useMemo(
-    () => query(likesRef, where("postId", "==", post.id)),
+    () => query(likesRef, where("postId", "==", post?.id)),
     [post.id]
   );
-
-  const savedRef = query(
-    collection(db, "saved"),
-    where("postId", "==", post.id),
-    where("userId", "==", user?.uid)
+  const savedSaveref = collection(db, "saved");
+  const savedRef = useMemo(
+    () => query(
+      collection(db, "saved"),
+      where("postId", "==", post?.id),
+      // where("userId", "==", user.uid ?? null)
+    ),
+    [post?.id, user?.uid]
   );
+  
+  // where("userId", "==", user?.uid)),
+
+  // const savedRef = query(
+  //   collection(db, "saved"),
+  //   where("postId", "==", post?.id),
+  //   where("userId", "==", user?.uid)
+  // );
 
   const addSaved = async () => {
     try {
       const newDoc = await addDoc(collection(db, "saved"), {
         userId: user?.uid,
-        postId: post.id,
-        imageUrl: post.imageUrl,
+        postId: post?.id,
+        imageUrl: post?.imageUrl,
       });
       setIsSaved(true);
     } catch (err) {
@@ -80,13 +91,13 @@ export const Post = (props: Props) => {
       console.log(err);
     }
   };
-
+const USER_ID = user?.uid
   const removeSaved = async () => {
     try {
       const savedToDeleteQuery = query(
         collection(db, "saved"),
-        where("postId", "==", post.id),
-        where("userId", "==", user?.uid)
+        where("postId", "==", post.id ?? null),
+        where("userId", "==", USER_ID ?? null)
       );
       const savedToDeleteData = await getDocs(savedToDeleteQuery);
       const savedId = savedToDeleteData.docs[0].id;
@@ -100,11 +111,13 @@ export const Post = (props: Props) => {
   };
 
   useEffect(() => {
-    const checkSaved = async () => {
-      const savedData = await getDocs(savedRef);
-      setIsSaved(!savedData.empty);
-    };
-    checkSaved();
+    if (user && user.uid) {
+      const checkSaved = async () => {
+        const savedData = await getDocs(savedRef);
+        setIsSaved(!savedData);
+      };
+      checkSaved();
+    }
   }, []);
 
   const getLikes = async () => {
@@ -363,11 +376,11 @@ export const Post = (props: Props) => {
 
             {isSaved ? (
               <button onClick={removeSaved}>
-                <UnSavedIcon width={20} height={30} />
+                <SavedIcon width={20} height={30} />
               </button>
             ) : (
               <button onClick={addSaved}>
-                <SavedIcon width={20} height={30} />
+                <UnSavedIcon width={20} height={30} />
               </button>
             )}
           </div>
