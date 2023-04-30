@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
@@ -8,14 +8,22 @@ import { doc, onSnapshot } from "firebase/firestore";
 export const Navbar = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
-  const pathName = useLocation();
+  const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
+  // const signUserOut = async () => {
+  //   if (auth) {
+  //     await signOut(auth);
+  //   }
+  // };
+  const navigate = useNavigate()
   const signUserOut = async () => {
+    console.log("auth:", auth); // log auth object to check if it's defined
     if (auth) {
+      console.log("auth.currentUser:", auth.currentUser); // log currentUser object to check if it's defined
       await signOut(auth);
+      navigate("/")
     }
   };
-
   useEffect(() => {
     if (user && user.uid) {
       const docRef = doc(db, "users", user.uid);

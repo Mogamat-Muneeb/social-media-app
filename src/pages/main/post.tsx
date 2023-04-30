@@ -57,14 +57,6 @@ export const Post = (props: Props) => {
     () => query(likesRef, where("postId", "==", post?.id)),
     [post.id]
   );
-  const savedSaveref = collection(db, "saved");
-  // const savedRef = useMemo(
-  //   () => query(
-  //     collection(db, "saved"),
-  //     where("postId", "==", post?.id),
-  //   ),
-  //   [post?.id, user?.uid]
-  // );
   const savedRef = useMemo(
     () =>
       query(
