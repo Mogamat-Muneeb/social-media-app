@@ -262,36 +262,30 @@ export const Post = (props: Props) => {
   }, [post.id]);
   const uid = user?.uid;
   useEffect(() => {
-    console.log('uid:', uid);
+    console.log("uid:", uid);
     if (!uid) {
-      console.warn('uid is not defined. Aborting onSnapshot() subscription.');
+      console.warn("uid is not defined. Aborting onSnapshot() subscription.");
       return;
     }
-  
+
     const docRef = doc(db, "users", uid);
-    console.log('docRef:', docRef);
-  
+
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
-      console.log('docSnapshot:', docSnapshot);
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data();
-        console.log('userData:', userData);
-  
+
+        setUserData(docSnapshot.data() as UserData);
         if (!userData || !Array.isArray(userData.myArray)) {
-          console.warn('userData or userData.myArray is not defined. Aborting further processing of onSnapshot() subscription.');
           return;
         }
-  
-        const index = userData.myArray.indexOf('myValue');
-        console.log('index:', index);
       } else {
         console.log("No such document!");
       }
     });
-  
+
     return () => unsubscribe();
   }, [user?.uid]);
-  
+
   const [newCommentText, setNewCommentText] = useState("");
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
@@ -308,7 +302,7 @@ export const Post = (props: Props) => {
         userName: userData?.userName ?? null,
         displayName: user?.displayName ?? null,
       };
-      console.log(newComment, "newComment");
+
       await addDoc(commentsRef, newComment);
       setNewCommentText("");
     } catch (error) {
@@ -327,8 +321,6 @@ export const Post = (props: Props) => {
       document.body.classList.remove("overflow-hidden");
     }
   }, [showModal]);
-  console.log(comments, "userId");
-  console.log(userData, "userData");
 
   return (
     <>
@@ -564,7 +556,7 @@ export const Post = (props: Props) => {
           <div className="flex flex-col items-start justify-start w-full px-2 pb-2 md:px-2">
             <p className="text-[12px]">View all {comments?.length} comments</p>
 
-            {comments.slice(0,2).map((comment) => (
+            {comments.slice(0, 2).map((comment) => (
               /* @ts-ignore */
               <div key={comment.id}>
                 <div
@@ -573,17 +565,9 @@ export const Post = (props: Props) => {
                 >
                   <p className=" font-semibold  text-[13px]">
                     {/* @ts-ignore */}
-                    {comment?.userName ? (
-                      <>
-                        {/* @ts-ignore */}
-                        {comment?.userName}
-                      </>
-                    ) : (
-                      <>
-                        {/* @ts-ignore */}
-                        {comment?.displayName}
-                      </>
-                    )}
+                    {comment?.userName}
+                    {/* @ts-ignore */}
+                    {/* {comment?.displayName} */}
                   </p>
                   <p className="font-normal  text-[13px]">
                     {/* @ts-ignore */}
@@ -594,30 +578,26 @@ export const Post = (props: Props) => {
             ))}
           </div>
           {user?.uid ? (
-          <div className="flex items-center justify-center w-full px-2 pt-2 pb-2 md:px-2">
-            <form
-              onSubmit={handleCommentSubmit}
-              className="flex items-center justify-center w-full "
-            >
-              <input
-                type="text"
-                value={newCommentText}
-                onChange={(e) => setNewCommentText(e.target.value)}
-                placeholder="Add a comment..."
-                className="w-full placeholder:font-normal placeholder:text-[14px] focus:outline-none focus:ring-0"
-              />
-              <button type="submit" className="font-medium">
-                Post
-              </button>
-            </form>
-          </div>
-
-          ): (
+            <div className="flex items-center justify-center w-full px-2 pt-2 pb-2 md:px-2">
+              <form
+                onSubmit={handleCommentSubmit}
+                className="flex items-center justify-center w-full "
+              >
+                <input
+                  type="text"
+                  value={newCommentText}
+                  onChange={(e) => setNewCommentText(e.target.value)}
+                  placeholder="Add a comment..."
+                  className="w-full placeholder:font-normal placeholder:text-[14px] focus:outline-none focus:ring-0"
+                />
+                <button type="submit" className="font-medium">
+                  Post
+                </button>
+              </form>
+            </div>
+          ) : (
             ""
           )}
-
-
-        
         </div>
       </div>
     </>
