@@ -262,7 +262,7 @@ export const Post = (props: Props) => {
   }, [post.id]);
   const uid = user?.uid;
   useEffect(() => {
-    console.log("uid:", uid);
+    
     if (!uid) {
       console.warn("uid is not defined. Aborting onSnapshot() subscription.");
       return;
@@ -460,6 +460,7 @@ export const Post = (props: Props) => {
               onLoad={() => setLoading(false)}
               onError={() => setLoading(false)}
             />
+            ii
             {/* </Link> */}
             <div className="flex items-center justify-between">
               {likes ? (

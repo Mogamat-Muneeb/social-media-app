@@ -121,7 +121,7 @@ export const Account = () => {
       return unsubscribe;
     }
   }, []);
-  console.log(posts.length, "posts.length");
+
 
   return (
     <ProtectedRoute>

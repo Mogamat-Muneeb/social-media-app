@@ -34,7 +34,7 @@ export const Navbar = () => {
       return () => unsubscribe();
     }
   }, [user?.uid]);
-  console.log(userData, "user");
+
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${
