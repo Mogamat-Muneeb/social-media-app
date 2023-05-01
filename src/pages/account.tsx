@@ -7,7 +7,7 @@ import {
   LikedIcon,
   UnSavedIcon,
 } from "../components/icon";
-import Modal from "../components/modal";
+import Modal from "../components/accountmodal";
 
 import {
   doc,
