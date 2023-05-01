@@ -34,7 +34,7 @@ export const Navbar = () => {
       return () => unsubscribe();
     }
   }, [user?.uid]);
-
+  console.log(userData, "user");
   return (
     <div
       className={` sticky top-0 right-0 left-0 z-[60]  ${
@@ -91,38 +91,35 @@ export const Navbar = () => {
                 />
               </Link>
               <div className="flex-col hidden md:flex text-start">
-              <Link to={user?.uid}>
-                <p className="font-normal text-[14px]">
-                  {userData?.userName ? (
-                    <>{userData?.userName}</>
-                  ) : (
-                    <>
-                      {user?.displayName
-                        ?.split(" ")
-                        .map(
-                          (word) =>
-                            word.substring(0, 1).toUpperCase() +
-                            word.substring(1)
-                        )
-                        .join(" ")}
-                    </>
-                  )}
-                </p>
-
-
-              </Link>
-
-                {/* <p className="font-normal text-[14px]"> {user?.email} </p> */}
+                <Link to={user?.uid}>
+                  <p className="font-normal text-[14px] flex flex-col">
+                    {userData?.userName ? (
+                      <>{userData?.userName}</>
+                    ) : (
+                      <>
+                        {user?.displayName
+                          ?.split(" ")
+                          .map(
+                            (word) =>
+                              word.substring(0, 1).toUpperCase() +
+                              word.substring(1)
+                          )
+                          .join(" ")}
+                      </>
+                    )}
+                    <span>{userData?.displayName}</span>
+                  </p>
+                </Link>
               </div>
               <button
                 onClick={signUserOut}
-                className="font-medium text-[16px] md:block hidden"
+                className="font-normal text-[16px] md:block hidden"
               >
                 Logout
               </button>
               <button
                 onClick={signUserOut}
-                className="font-medium text-[16px] md:hidden block"
+                className="font-normal text-[16px] md:hidden block"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
