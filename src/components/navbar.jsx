@@ -91,6 +91,7 @@ export const Navbar = () => {
                 />
               </Link>
               <div className="flex-col hidden md:flex text-start">
+              <Link to={user?.uid}>
                 <p className="font-normal text-[14px]">
                   {userData?.userName ? (
                     <>{userData?.userName}</>
@@ -107,6 +108,9 @@ export const Navbar = () => {
                     </>
                   )}
                 </p>
+
+
+              </Link>
 
                 {/* <p className="font-normal text-[14px]"> {user?.email} </p> */}
               </div>

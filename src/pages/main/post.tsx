@@ -292,14 +292,15 @@ export const Post = (props: Props) => {
               </div>
             </>
           )}
-
-          <img
-            src={post.imageUrl}
-            alt=""
-            className="max-h-[600px] object-cover"
-            onLoad={() => setLoading(false)}
-            onError={() => setLoading(false)}
-          />
+          {/* <Link to={`/posts/${post.id}`}> */}
+              <img
+                src={post.imageUrl}
+                alt=""
+                className="max-h-[600px] object-cover"
+                onLoad={() => setLoading(false)}
+                onError={() => setLoading(false)}
+              />
+          {/* </Link> */}
           <div className="flex items-center justify-between">
             {likes ? (
               <div className="flex flex-col">
@@ -372,7 +373,7 @@ export const Post = (props: Props) => {
               </button>
             ) : (
               <button onClick={addSaved}>
-                <UnSavedIcon width={20} height={30}  color={"black"} />
+                <UnSavedIcon width={20} height={30} color={"black"} />
               </button>
             )}
           </div>

@@ -1,6 +1,6 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db } from "../config/firebase";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   RectIcon,
   RectMobileIcon,
@@ -121,7 +121,7 @@ export const Account = () => {
       return unsubscribe;
     }
   }, []);
-console.log(posts.length, "posts.length");
+  console.log(posts.length, "posts.length");
 
   return (
     <ProtectedRoute>
@@ -155,8 +155,7 @@ console.log(posts.length, "posts.length");
               ? "h-full"
               : "h-screen" && isLoading
               ? "h-screen"
-              : "h-screen"
-              && posts.length === 1
+              : "h-screen" && posts.length === 1
               ? "h-screen"
               : "h-screen"
           }
@@ -240,14 +239,29 @@ console.log(posts.length, "posts.length");
                 </div>
                 <div className="flex justify-center gap-10 pt-10">
                   <button onClick={() => setTab("Posts")}>
-                    <span className={`flex items-center ${tab === "Posts" && "text-blue-500" }`}>
-                      <RectIcon height={20} color={`${tab === "Posts" ? "#3b82f6" : "black"}`}/>
+                    <span
+                      className={`flex items-center ${
+                        tab === "Posts" && "text-blue-500"
+                      }`}
+                    >
+                      <RectIcon
+                        height={20}
+                        color={`${tab === "Posts" ? "#3b82f6" : "black"}`}
+                      />
                       Posts
                     </span>
                   </button>
                   <button onClick={() => setTab("Saved")}>
-                    <span  className={`flex items-center ${tab === "Saved" && "text-blue-500" }`}>
-                      <UnSavedIcon width={20} height={30} color={`${tab === "Saved" ? "#3b82f6" : "black"}`} />
+                    <span
+                      className={`flex items-center ${
+                        tab === "Saved" && "text-blue-500"
+                      }`}
+                    >
+                      <UnSavedIcon
+                        width={20}
+                        height={30}
+                        color={`${tab === "Saved" ? "#3b82f6" : "black"}`}
+                      />
                       Saved
                     </span>
                   </button>
@@ -255,8 +269,7 @@ console.log(posts.length, "posts.length");
                 <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
                   {tab === "Posts" && (
                     <>
-                      <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase ">
-                      </p>
+                      <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase "></p>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
                         {posts.map((post: IPost) => {
                           return (
@@ -270,7 +283,7 @@ console.log(posts.length, "posts.length");
                                 alt=""
                                 className={`lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg `}
                               />
-                              {/* </Link> */}
+                              {/* </Link>  */}
 
                               <p className="flex justify-center pt-2">
                                 {likesCount[post.id] ? (
@@ -357,12 +370,19 @@ console.log(posts.length, "posts.length");
                   <div className="flex justify-center gap-10 ">
                     <button onClick={() => setTab("Posts")}>
                       <span className="flex items-center">
-                        <RectIcon height={20} color={`${tab === "Posts" ? "#3b82f6" : "black"}`} />
+                        <RectIcon
+                          height={20}
+                          color={`${tab === "Posts" ? "#3b82f6" : "black"}`}
+                        />
                       </span>
                     </button>
                     <button onClick={() => setTab("Saved")}>
                       <span className="flex items-center">
-                        <UnSavedIcon width={20} height={30} color={`${tab === "Saved" ? "#3b82f6" : "black"}`} />
+                        <UnSavedIcon
+                          width={20}
+                          height={30}
+                          color={`${tab === "Saved" ? "#3b82f6" : "black"}`}
+                        />
                       </span>
                     </button>
                   </div>
