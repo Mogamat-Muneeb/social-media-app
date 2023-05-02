@@ -20,6 +20,10 @@ export interface Post {
   date: string;
   likesCount: any;
   userName: any;
+  imageURL: any;
+  photoURL: any;
+  likedBy: any;
+  storageRef: any
 }
 
 export const Main = () => {
@@ -39,6 +43,7 @@ export const Main = () => {
 
     return unsubscribe;
   }, []);
+
   return (
     <div
       className={`${

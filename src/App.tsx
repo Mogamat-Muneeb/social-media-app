@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Main } from "./pages/main/main";
 import { Login } from "./pages/login";
 import { Account } from "./pages/account";
-import { Navbar } from "./components/navbar";
+import { Navbar } from "./components/navbar.jsx";
 import { Footer } from "./components/footer";
 import { CreatePost } from "./pages/create-post/create-post";
 import { SinglePost } from "./pages/singlepost";

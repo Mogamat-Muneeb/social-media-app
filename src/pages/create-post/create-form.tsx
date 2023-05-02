@@ -1,7 +1,13 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
 import { auth, db, storage } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -56,6 +62,21 @@ export const CreateForm = () => {
   }, [description]);
 
   const postsRef = collection(db, "posts");
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Fetch user data from Firebase when the component mounts
+    /* @ts-ignore */
+    const docRef = doc(db, "users", user?.uid);
+    const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        /* @ts-ignore */
+        setUserData(docSnapshot.data());
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user?.uid]);
 
   const onPostSubmit = async (data: CreateFormData) => {
     if (file === "") {
@@ -86,22 +107,29 @@ export const CreateForm = () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         addDoc(postsRef, {
           ...data,
-          username: user?.displayName,
-          userPp: user?.photoURL,
-          userId: user?.uid,
+          /* @ts-ignore */
+          userName: userData.userName ?? null,
+          /* @ts-ignore */
+          bio: userData.bio ?? null,
+          /* @ts-ignore */
+          username: userData.displayName ?? null,
+          /* @ts-ignore */
+          photoURL: userData.photoURL,
+          /* @ts-ignore */
+          userId: userData.uid,
           date: Date.now(),
           imageUrl: downloadURL,
         }).then(() => {
           setUploaded(true);
           setSaving(false);
           setIsLoading(false);
-          const userPostsRef = collection(db, "user-posts");
-          addDoc(userPostsRef, {
-            userId: user?.uid,
-            imageUrl: downloadURL,
-          }).then(() => {
-            console.log("Post saved to user-posts collection");
-          });
+          // const userPostsRef = collection(db, "user-posts");
+          // addDoc(userPostsRef, {
+          //   userId: user?.uid,
+          //   imageUrl: downloadURL,
+          // }).then(() => {
+          //   console.log("Post saved to user-posts collection");
+          // });
           navigate("/");
         });
       }
