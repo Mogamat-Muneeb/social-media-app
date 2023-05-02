@@ -264,7 +264,7 @@ export const Post = (props: Props) => {
   const uid = user?.uid;
   useEffect(() => {
     if (!uid) {
-      console.warn("uid is not defined. Aborting onSnapshot() subscription.");
+      // console.warn("uid is not defined. Aborting onSnapshot() subscription.");
       return;
     }
 
