@@ -1,5 +1,5 @@
 import ProtectedRoute from "../components/ProtectedRoute";
-import { auth, db } from "../config/firebase";
+import { auth, db, storage } from "../config/firebase";
 import { Link, useParams } from "react-router-dom";
 import {
   RectIcon,
@@ -16,10 +16,12 @@ import {
   query,
   orderBy,
   onSnapshot,
+  deleteDoc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { Post as IPost } from "../pages/main/main";
+import { deleteObject, ref } from "firebase/storage";
 export const Account = () => {
   interface UserData {
     displayName: string;
@@ -122,6 +124,28 @@ export const Account = () => {
     }
   }, []);
 
+  const deletePost = async (postId: string, storageRef: string) => {
+    try {
+      // Delete the post document from Firestore
+      await deleteDoc(doc(db, "posts", postId));
+  
+      // Delete the post image from Cloud Storage
+      const postImageRef = ref(storage, storageRef);
+      await deleteObject(postImageRef);
+  
+      console.log(`Post with ID ${postId} deleted successfully`);
+    } catch (error) {
+      console.error("Error deleting post", error);
+    }
+  };
+
+  const handleDelete = async (postId: string, storageRef: string) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      await deletePost(postId, storageRef);
+    }
+  };
+
+console.log(posts, "storageRef");
 
   return (
     <ProtectedRoute>
@@ -294,6 +318,13 @@ export const Account = () => {
                                 ) : (
                                   ""
                                 )}
+                              </p>
+                              <p
+                                onClick={() =>
+                                  handleDelete(post.id, post.imageUrl)
+                                }
+                              >
+                                delete
                               </p>
                             </div>
                           );

@@ -22,7 +22,8 @@ export interface Post {
   userName: any;
   imageURL: any;
   photoURL: any;
-  likedBy: any
+  likedBy: any;
+  storageRef: any
 }
 
 export const Main = () => {
