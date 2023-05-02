@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "./icon";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import { config } from "../config/index";
@@ -52,6 +52,14 @@ const Modal = ({ show, onClose, userID }) => {
     setLoading(true);
     setSaving(true);
     try {
+
+      const currentPhotoURL = userData.photoURL;
+
+      if (file && currentPhotoURL) {
+        // Delete the old image from storage
+        const storageRef = ref(storage, currentPhotoURL);
+        await deleteObject(storageRef);
+      }
       await updateDoc(doc(db, "users", userID), userData);
       const likesQuery = query(
         collection(db, "likes"),

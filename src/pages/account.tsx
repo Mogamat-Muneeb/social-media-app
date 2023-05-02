@@ -128,11 +128,11 @@ export const Account = () => {
     try {
       // Delete the post document from Firestore
       await deleteDoc(doc(db, "posts", postId));
-  
+
       // Delete the post image from Cloud Storage
       const postImageRef = ref(storage, storageRef);
       await deleteObject(postImageRef);
-  
+
       console.log(`Post with ID ${postId} deleted successfully`);
     } catch (error) {
       console.error("Error deleting post", error);
@@ -145,7 +145,7 @@ export const Account = () => {
     }
   };
 
-console.log(posts, "storageRef");
+  console.log(posts, "storageRef");
 
   return (
     <ProtectedRoute>
