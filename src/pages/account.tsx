@@ -311,7 +311,7 @@ export const Account = () => {
                                 {likesCount[post.id] ? (
                                   <>
                                     {likesCount[post.id]}
-                                    <LikedIcon />
+                                    <LikedIcon  styling={"w-6 h-6"} />
                                   </>
                                 ) : (
                                   ""
@@ -449,7 +449,7 @@ export const Account = () => {
                                 {likesCount[post.id] ? (
                                   <>
                                     {likesCount[post.id]}
-                                    <LikedIcon />
+                                    <LikedIcon  styling={"w-6 h-6"}/>
                                   </>
                                 ) : (
                                   ""

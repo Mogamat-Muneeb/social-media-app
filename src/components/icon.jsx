@@ -87,7 +87,7 @@ export function ExitIcon() {
     </svg>
   );
 }
-export function LikedIcon() {
+export function LikedIcon({styling}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +95,7 @@ export function LikedIcon() {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="#ff3040"
-      className="w-6 h-6"
+      className={styling }
     >
       <path
         strokeLinecap="round"
@@ -105,7 +105,7 @@ export function LikedIcon() {
     </svg>
   );
 }
-export function UnLikedIcon() {
+export function UnLikedIcon({styling}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +113,7 @@ export function UnLikedIcon() {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="black"
-      className="w-6 h-6"
+      className={styling}
     >
       <path
         strokeLinecap="round"

@@ -97,7 +97,7 @@ export const SinglePost = () => {
                 {/* @ts-ignore */}
                 {likesCount[postId] && (
                   <div className="flex items-center text-gray-500">
-                    <LikedIcon />
+                    <LikedIcon   styling={"w-6 h-6"}/>
                     {/* @ts-ignore */}
                     <span className="px-1"> {likesCount[postId]}</span>
                     {/* @ts-ignore */}

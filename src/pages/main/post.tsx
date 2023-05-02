@@ -458,11 +458,11 @@ export const Post = (props: Props) => {
                     >
                       {hasUserLiked ? (
                         <>
-                          <LikedIcon />
+                          <LikedIcon styling={"w-6 h-6"} />
                         </>
                       ) : (
                         <>
-                          <UnLikedIcon />
+                          <UnLikedIcon styling={"w-6 h-6"}  />
                         </>
                       )}
                     </button>
@@ -503,11 +503,11 @@ export const Post = (props: Props) => {
                   >
                     {hasUserLiked ? (
                       <>
-                        <LikedIcon />
+                        <LikedIcon styling={"w-6 h-6"} />
                       </>
                     ) : (
                       <>
-                        <UnLikedIcon />
+                        <UnLikedIcon styling={"w-6 h-6"}  />
                       </>
                     )}
                   </button>
@@ -540,14 +540,18 @@ export const Post = (props: Props) => {
             </p>
           </div>
           <div className="flex flex-col items-start justify-start w-full px-2 pb-2 md:px-2">
-            <button className="text-[12px]" disabled={comments?.length === 0} onClick={handleToggleClick}>
+            <button
+              className="text-[12px]"
+              disabled={comments?.length === 0}
+              onClick={handleToggleClick}
+            >
               View all {comments?.length} comments
             </button>
 
             {comments.slice(0, 2).map((comment) => (
               /* @ts-ignore */
-              <div key={comment.id}>
-                <div className="flex items-center gap-1 ">
+              <div key={comment.id} className="flex justify-between w-full">
+                <div className="flex items-center w-full gap-1 ">
                   <p className=" font-semibold  text-[13px]">
                     {/* @ts-ignore */}
                     {/* {comment?.userName} */}
@@ -571,6 +575,11 @@ export const Post = (props: Props) => {
                     {comment?.commentText}
                   </p>
                 </div>
+                <div>
+                  <button>
+                    <LikedIcon styling={"w-4 h-4"} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -587,7 +596,12 @@ export const Post = (props: Props) => {
                   placeholder="Add a comment..."
                   className="w-full placeholder:font-normal placeholder:text-[14px] focus:outline-none focus:ring-0"
                 />
-                <button type="submit" className={`font-medium ${newCommentText ? "flex" : "hidden"}`}>
+                <button
+                  type="submit"
+                  className={`font-medium ${
+                    newCommentText ? "flex" : "hidden"
+                  }`}
+                >
                   Post
                 </button>
               </form>
