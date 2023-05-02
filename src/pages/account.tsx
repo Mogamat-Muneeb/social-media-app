@@ -145,8 +145,6 @@ export const Account = () => {
     }
   };
 
-  console.log(posts, "storageRef");
-
   return (
     <ProtectedRoute>
       <Modal show={show} onClose={closeToggle} userID={user?.uid} />
@@ -319,13 +317,16 @@ export const Account = () => {
                                   ""
                                 )}
                               </p>
-                              <p
-                                onClick={() =>
-                                  handleDelete(post.id, post.imageUrl)
-                                }
-                              >
-                                delete
-                              </p>
+
+                              {user && uid === user.uid && (
+                                <button
+                                  onClick={() =>
+                                    handleDelete(post.id, post.imageUrl)
+                                  }
+                                >
+                                  delete
+                                </button>
+                              )}
                             </div>
                           );
                         })}
