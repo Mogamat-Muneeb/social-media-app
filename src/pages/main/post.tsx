@@ -262,7 +262,6 @@ export const Post = (props: Props) => {
   }, [post.id]);
   const uid = user?.uid;
   useEffect(() => {
-    
     if (!uid) {
       console.warn("uid is not defined. Aborting onSnapshot() subscription.");
       return;
@@ -460,7 +459,7 @@ export const Post = (props: Props) => {
               onLoad={() => setLoading(false)}
               onError={() => setLoading(false)}
             />
-            ii
+
             {/* </Link> */}
             <div className="flex items-center justify-between">
               {likes ? (
@@ -538,7 +537,6 @@ export const Post = (props: Props) => {
                 </button>
               )}
             </div>
-
             <p className="font-semibold flex gap-1  text-[13px] ">
               <span>
                 {post.userName
@@ -555,20 +553,31 @@ export const Post = (props: Props) => {
             </p>
           </div>
           <div className="flex flex-col items-start justify-start w-full px-2 pb-2 md:px-2">
-            <p className="text-[12px]">View all {comments?.length} comments</p>
+            <button className="text-[12px]" onClick={handleToggleClick}>
+              View all {comments?.length} comments
+            </button>
 
             {comments.slice(0, 2).map((comment) => (
               /* @ts-ignore */
               <div key={comment.id}>
-                <div
-                  className="flex items-center gap-1 "
-                  onClick={handleToggleClick}
-                >
+                <div className="flex items-center gap-1 ">
                   <p className=" font-semibold  text-[13px]">
                     {/* @ts-ignore */}
-                    {comment?.userName}
+                    {/* {comment?.userName} */}
                     {/* @ts-ignore */}
                     {/* {comment?.displayName} */}
+                    {/* @ts-ignore */}
+                    {comment.userName ? (
+                      <>
+                        {/* @ts-ignore */}
+                        {comment.userName}
+                      </>
+                    ) : (
+                      <>
+                        {/* @ts-ignore */}
+                        {comment.displayName}
+                      </>
+                    )}
                   </p>
                   <p className="font-normal  text-[13px]">
                     {/* @ts-ignore */}
