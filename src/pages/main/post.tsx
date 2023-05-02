@@ -540,7 +540,7 @@ export const Post = (props: Props) => {
             </p>
           </div>
           <div className="flex flex-col items-start justify-start w-full px-2 pb-2 md:px-2">
-            <button className="text-[12px]" onClick={handleToggleClick}>
+            <button className="text-[12px]" disabled={comments?.length === 0} onClick={handleToggleClick}>
               View all {comments?.length} comments
             </button>
 
@@ -587,7 +587,7 @@ export const Post = (props: Props) => {
                   placeholder="Add a comment..."
                   className="w-full placeholder:font-normal placeholder:text-[14px] focus:outline-none focus:ring-0"
                 />
-                <button type="submit" className="font-medium">
+                <button type="submit" className={`font-medium ${newCommentText ? "flex" : "hidden"}`}>
                   Post
                 </button>
               </form>
