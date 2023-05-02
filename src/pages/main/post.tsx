@@ -322,6 +322,8 @@ export const Post = (props: Props) => {
     }
   }, [showModal]);
 
+  console.log(comments);
+
   return (
     <>
       {showModal && (
@@ -462,7 +464,7 @@ export const Post = (props: Props) => {
                         </>
                       ) : (
                         <>
-                          <UnLikedIcon styling={"w-6 h-6"}  />
+                          <UnLikedIcon styling={"w-6 h-6"} />
                         </>
                       )}
                     </button>
@@ -507,7 +509,7 @@ export const Post = (props: Props) => {
                       </>
                     ) : (
                       <>
-                        <UnLikedIcon styling={"w-6 h-6"}  />
+                        <UnLikedIcon styling={"w-6 h-6"} />
                       </>
                     )}
                   </button>
@@ -575,11 +577,11 @@ export const Post = (props: Props) => {
                     {comment?.commentText}
                   </p>
                 </div>
-                <div>
+                {/* <div>
                   <button>
                     <LikedIcon styling={"w-4 h-4"} />
                   </button>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
