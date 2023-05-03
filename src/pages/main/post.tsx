@@ -335,7 +335,7 @@ export const Post = (props: Props) => {
                   src={post.imageUrl}
                   alt=""
                   className="max-w-[500px]
-                  min-w-[405px]  object-cover"
+                  min-w-[405px]  object-cover rounded-l"
                   onLoad={() => setLoading(false)}
                   onError={() => setLoading(false)}
                 />
