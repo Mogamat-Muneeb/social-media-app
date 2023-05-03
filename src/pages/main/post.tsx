@@ -431,25 +431,40 @@ export const Post = (props: Props) => {
                         </p>
                       </div>
                       <div className="flex items-center text-[14px] gap-1 ">
-                        {likes.length > 0 &&
-                          likes.map((like, index) => (
-                            <>
-                              <h2 key={like.likeId}>
-                                <span className="p-[3px]">
-                                  {index === 0 ? "Liked by" : ""}
-                                </span>
-                                <span className="">
-                                  {index === 0 ? "" : ", "}
-                                </span>
-
-                                {like.userId === user?.uid
+                        {likes.length > 0 && (
+                          <h2>
+                            {likes.length === 1 ? (
+                              <>
+                                <span className="p-[3px]">Liked by </span>
+                                {likes[0].userId === user?.uid
                                   ? "You"
-                                  : like.userName || like.nameId
-                                  ? like.userName || like.nameId
-                                  : ""}
-                              </h2>
-                            </>
-                          ))}
+                                  : likes[0].userName || likes[0].nameId || ""}
+                              </>
+                            ) : likes.length === 2 ? (
+                              <>
+                                <span className="p-[3px]">Liked by </span>
+                                {likes[0].userId === user?.uid
+                                  ? "You"
+                                  : likes[0].userName ||
+                                    likes[0].nameId ||
+                                    ""}{" "}
+                                and{" "}
+                                {likes[1].userId === user?.uid
+                                  ? "you"
+                                  : likes[1].userName || likes[1].nameId || ""}
+                              </>
+                            ) : (
+                              <>
+                                <span className="p-[3px]">{`Liked by ${likes.length} people including `}</span>
+                                {likes.some((like) => like.userId === user?.uid)
+                                  ? "you"
+                                  : `${
+                                      likes[0].userName || likes[0].nameId || ""
+                                    } and ${likes.length - 1} others`}
+                              </>
+                            )}
+                          </h2>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -573,25 +588,40 @@ export const Post = (props: Props) => {
                         </p>
                       </div>
                       <div className="flex items-center text-[14px] gap-1 ">
-                        {likes.length > 0 &&
-                          likes.map((like, index) => (
-                            <>
-                              <h2 key={like.likeId}>
-                                <span className="p-[3px]">
-                                  {index === 0 ? "Liked by" : ""}
-                                </span>
-                                <span className="">
-                                  {index === 0 ? "" : ", "}
-                                </span>
-
-                                {like.userId === user?.uid
+                        {likes.length > 0 && (
+                          <h2>
+                            {likes.length === 1 ? (
+                              <>
+                                <span className="p-[3px]">Liked by </span>
+                                {likes[0].userId === user?.uid
                                   ? "You"
-                                  : like.userName || like.nameId
-                                  ? like.userName || like.nameId
-                                  : ""}
-                              </h2>
-                            </>
-                          ))}
+                                  : likes[0].userName || likes[0].nameId || ""}
+                              </>
+                            ) : likes.length === 2 ? (
+                              <>
+                                <span className="p-[3px]">Liked by </span>
+                                {likes[0].userId === user?.uid
+                                  ? "You"
+                                  : likes[0].userName ||
+                                    likes[0].nameId ||
+                                    ""}{" "}
+                                and{" "}
+                                {likes[1].userId === user?.uid
+                                  ? "you"
+                                  : likes[1].userName || likes[1].nameId || ""}
+                              </>
+                            ) : (
+                              <>
+                                <span className="p-[3px]">{`Liked by ${likes.length} people including `}</span>
+                                {likes.some((like) => like.userId === user?.uid)
+                                  ? "you"
+                                  : `${
+                                      likes[0].userName || likes[0].nameId || ""
+                                    } and ${likes.length - 1} others`}
+                              </>
+                            )}
+                          </h2>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -612,7 +642,7 @@ export const Post = (props: Props) => {
                       </button>
                     </>
                   )}
-                    {isSaved ? (
+                  {isSaved ? (
                     <button onClick={removeSaved}>
                       <SavedIcon width={20} height={30} />
                     </button>
@@ -716,7 +746,7 @@ export const Post = (props: Props) => {
                     </p>
                   </div>
                   <div className="flex items-center text-[14px] gap-1 ">
-                    {likes.length > 0 &&
+                    {/* {likes.length > 0 &&
                       likes.map((like, index) => (
                         <>
                           <h2 key={like.likeId}>
@@ -732,7 +762,39 @@ export const Post = (props: Props) => {
                               : ""}
                           </h2>
                         </>
-                      ))}
+                      ))} */}
+                    {likes.length > 0 && (
+                      <h2>
+                        {likes.length === 1 ? (
+                          <>
+                            <span className="p-[3px]">Liked by </span>
+                            {likes[0].userId === user?.uid
+                              ? "You"
+                              : likes[0].userName || likes[0].nameId || ""}
+                          </>
+                        ) : likes.length === 2 ? (
+                          <>
+                            <span className="p-[3px]">Liked by </span>
+                            {likes[0].userId === user?.uid
+                              ? "You"
+                              : likes[0].userName || likes[0].nameId || ""}{" "}
+                            and{" "}
+                            {likes[1].userId === user?.uid
+                              ? "you"
+                              : likes[1].userName || likes[1].nameId || ""}
+                          </>
+                        ) : (
+                          <>
+                            <span className="p-[3px]">{`Liked by ${likes.length} people including `}</span>
+                            {likes.some((like) => like.userId === user?.uid)
+                              ? "you"
+                              : `${
+                                  likes[0].userName || likes[0].nameId || ""
+                                } and ${likes.length - 1} others`}
+                          </>
+                        )}
+                      </h2>
+                    )}
                   </div>
                 </div>
               ) : (
