@@ -7,3 +7,20 @@
   font-family: "Poppins", serif;
 }
 
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); /* change background color and opacity here */
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.group:hover .overlay {
+  display: flex;
+}
