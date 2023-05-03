@@ -30,7 +30,6 @@ const Modal = ({ show, onClose, userID }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploaded, setUploaded] = useState(false);
   const [saving, setSaving] = useState(false);
-  // const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const docRef = doc(db, "users", userID);
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
@@ -45,7 +44,6 @@ const Modal = ({ show, onClose, userID }) => {
   const handleClickShowUpload = (e) => {
     e.preventDefault();
     setShowUpload(!showUpload);
-    // setFile(null);
   };
 
   // const handleSave = async () => {

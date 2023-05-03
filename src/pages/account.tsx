@@ -273,20 +273,22 @@ export const Account = () => {
                       Posts
                     </span>
                   </button>
-                  <button onClick={() => setTab("Saved")}>
-                    <span
-                      className={`flex items-center ${
-                        tab === "Saved" && "text-blue-500"
-                      }`}
-                    >
-                      <UnSavedIcon
-                        width={20}
-                        height={30}
-                        color={`${tab === "Saved" ? "#3b82f6" : "black"}`}
-                      />
-                      Saved
-                    </span>
-                  </button>
+                  {user && uid === user.uid && (
+                    <button onClick={() => setTab("Saved")}>
+                      <span
+                        className={`flex items-center ${
+                          tab === "Saved" && "text-blue-500"
+                        }`}
+                      >
+                        <UnSavedIcon
+                          width={20}
+                          height={30}
+                          color={`${tab === "Saved" ? "#3b82f6" : "black"}`}
+                        />
+                        Saved
+                      </span>
+                    </button>
+                  )}
                 </div>
                 <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
                   {tab === "Posts" && (
@@ -311,7 +313,7 @@ export const Account = () => {
                                 {likesCount[post.id] ? (
                                   <>
                                     {likesCount[post.id]}
-                                    <LikedIcon  styling={"w-6 h-6"} />
+                                    <LikedIcon styling={"w-6 h-6"} />
                                   </>
                                 ) : (
                                   ""
@@ -408,15 +410,18 @@ export const Account = () => {
                         />
                       </span>
                     </button>
-                    <button onClick={() => setTab("Saved")}>
-                      <span className="flex items-center">
-                        <UnSavedIcon
-                          width={20}
-                          height={30}
-                          color={`${tab === "Saved" ? "#3b82f6" : "black"}`}
-                        />
-                      </span>
-                    </button>
+
+                    {user && uid === user.uid && (
+                      <button onClick={() => setTab("Saved")}>
+                        <span className="flex items-center">
+                          <UnSavedIcon
+                            width={20}
+                            height={30}
+                            color={`${tab === "Saved" ? "#3b82f6" : "black"}`}
+                          />
+                        </span>
+                      </button>
+                    )}
                   </div>
                   {tab === "Posts" && (
                     <>
@@ -449,7 +454,7 @@ export const Account = () => {
                                 {likesCount[post.id] ? (
                                   <>
                                     {likesCount[post.id]}
-                                    <LikedIcon  styling={"w-6 h-6"}/>
+                                    <LikedIcon styling={"w-6 h-6"} />
                                   </>
                                 ) : (
                                   ""
