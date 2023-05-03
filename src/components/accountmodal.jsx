@@ -273,7 +273,7 @@ const Modal = ({ show, onClose, userID }) => {
               <img
                 src={userData.photoURL || user?.photoURL || ""}
                 alt={user?.displayName || ""}
-                className="w-8 h-8 rounded-full md:w-10 md:h-10"
+                className="object-cover w-8 h-8 rounded-full md:w-10 md:h-10"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";

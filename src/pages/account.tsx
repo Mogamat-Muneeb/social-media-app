@@ -295,40 +295,71 @@ export const Account = () => {
                     <>
                       <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase "></p>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                        {/* {posts.map((post: IPost) => {
+                          return (
+                            <div key={post.id} className="relative">
+                              <div className="group">
+                                <img
+                                  key={post.id}
+                                  src={post.imageUrl}
+                                  alt=""
+                                  className={`lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg`}
+                                />
+                                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full bg-white opacity-0 group-hover:opacity-30">
+                                  {likesCount[post.id] && (
+                                    <div className="flex items-center justify-center bg-white">
+                                      <span className="mr-2 text-white">
+                                        {likesCount[post.id]}
+                                      </span>
+                                      <LikedIcon styling={"w-6 h-6"} />
+                                    </div>
+                                  )}
+                                  {user && uid === user.uid && (
+                                    <button
+                                      onClick={() =>
+                                        handleDelete(post.id, post.imageUrl)
+                                      }
+                                    >
+                                      delete
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })} */}
+
                         {posts.map((post: IPost) => {
                           return (
                             <div key={post.id} className="relative">
-                              {/* <Link to={`/posts/${post.id}`}> */}
-                              <img
-                                /* @ts-ignore */
-                                key={post.id}
-                                /* @ts-ignore */
-                                src={post.imageUrl}
-                                alt=""
-                                className={`lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg `}
-                              />
-                              {/* </Link>  */}
-
-                              <p className="flex justify-center pt-2">
-                                {likesCount[post.id] ? (
-                                  <>
-                                    {likesCount[post.id]}
-                                    <LikedIcon styling={"w-6 h-6"} />
-                                  </>
-                                ) : (
-                                  ""
-                                )}
-                              </p>
-
-                              {user && uid === user.uid && (
-                                <button
-                                  onClick={() =>
-                                    handleDelete(post.id, post.imageUrl)
-                                  }
-                                >
-                                  delete
-                                </button>
-                              )}
+                              <div className="group">
+                                <img
+                                  key={post.id}
+                                  src={post.imageUrl}
+                                  alt=""
+                                  className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg"
+                                />
+                                <div className="absolute top-0 left-0 items-center justify-center hidden w-full h-full text-white opacity-100 overlay group-hover:flex group-hover:flex-col">
+                                  {likesCount[post.id] && (
+                                    <div>
+                                      <span className="flex items-center gap-1 mr-1 font-medium">
+                                        {likesCount[post.id]}
+                                      <LikedIcon styling={"w-6 h-6"} />
+                                      </span>
+                                    </div>
+                                  )}
+                                  {user && uid === user.uid && (
+                                    <button
+                                      onClick={() =>
+                                        handleDelete(post.id, post.imageUrl)
+                                      }
+                                      className="pt-4 font-medium"
+                                    >
+                                      Delete
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           );
                         })}
