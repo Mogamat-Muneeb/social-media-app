@@ -329,61 +329,148 @@ export const Post = (props: Props) => {
       {showModal && (
         <Modal title="Comments Modal" toggleClick={handleToggleClick}>
           <div className="bg-white rounded">
-            <div className="flex w-full">
+            <div className="grid w-full lg:grid-cols-2 md:grid-cols-1">
               <div className="w-full">
                 <img
                   src={post.imageUrl}
                   alt=""
-                  className="max-h-[600px] object-cover"
+                  className="max-w-[500px]
+                  min-w-[405px]  object-cover"
                   onLoad={() => setLoading(false)}
                   onError={() => setLoading(false)}
                 />
               </div>
-              <div className="w-full">
-                <div className="flex justify-between w-full bg-red-300">
-                  <Link to={`${post.userId}`}>
-                    {post.photoURL ? (
-                      <>
-                        <img
-                          src={`${post.photoURL}?${new Date().getTime()}`}
-                          className="object-cover border rounded-full shadow w-9 h-9"
-                          alt=""
-                          key={Date.now()}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <img
-                          src={post.userPp}
-                          className="object-cover border rounded-full shadow w-9 h-9"
-                          alt=""
-                        />
-                      </>
-                    )}
-                  </Link>
+              <div
+                className="max-w-[500px]
+                  min-w-[405px] p-3"
+              >
+                <div className="flex justify-between w-full ">
+                  <div className="flex items-center gap-2">
+                    <Link to={`${post.userId}`}>
+                      {post.photoURL ? (
+                        <>
+                          <img
+                            src={`${post.photoURL}?${new Date().getTime()}`}
+                            className="object-cover border rounded-full shadow w-9 h-9"
+                            alt=""
+                            key={Date.now()}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <img
+                            src={post.userPp}
+                            className="object-cover border rounded-full shadow w-9 h-9"
+                            alt=""
+                          />
+                        </>
+                      )}
+                    </Link>
+                    <Link to={`${post.userId}`} className="text-[14px]">
+                      {post.userName
+                        ? post.userName
+                        : post.username
+                            ?.split(" ")
+                            .map(
+                              (word) =>
+                                word.substring(0, 1).toLowerCase() +
+                                word.substring(1)
+                            )
+                            .join(" ")}
+                    </Link>
+                  </div>
                   <button onClick={handleToggleClick}>
                     <RxCross2 />
                   </button>
                 </div>
-
-                {comments.map((comment) => (
-                  /* @ts-ignore */
-                  <div key={comment.id}>
-                    <div
-                      className="flex items-center gap-1 "
-                      onClick={handleToggleClick}
-                    >
-                      <p className=" font-semibold  text-[13px]">
-                        {/* @ts-ignore */}
-                        {comment?.userName}
-                      </p>
-                      <p className="font-normal  text-[13px]">
-                        {/* @ts-ignore */}
-                        {comment?.commentText}
-                      </p>
+                <div className="max-h-[500px] h-full overflow-x-scroll mt-6 z-[100]">
+                  {comments.map((comment) => (
+                    /* @ts-ignore */
+                    <div key={comment.id}>
+                      <div
+                        className="flex items-center gap-1 "
+                        onClick={handleToggleClick}
+                      >
+                        <p className=" font-semibold  text-[13px]">
+                          {/* @ts-ignore */}
+                          {comment?.userName}
+                        </p>
+                        <p className="font-normal  text-[13px]">
+                          {/* @ts-ignore */}
+                          {comment?.commentText}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="pt-3">
+                  {likes ? (
+                    <div className="flex flex-col">
+                      <div className="flex items-center w-full gap-3">
+                        <button
+                          className=""
+                          onClick={hasUserLiked ? removeLike : addLike}
+                        >
+                          {hasUserLiked ? (
+                            <>
+                              <LikedIcon styling={"w-6 h-6"} />
+                            </>
+                          ) : (
+                            <>
+                              <UnLikedIcon styling={"w-6 h-6"} />
+                            </>
+                          )}
+                        </button>
+
+                        <p
+                          className={`font-semibold  text-[14px]  ${
+                            likes.length === 0 && "hidden"
+                          }`}
+                        >
+                          {likes.length} likes
+                        </p>
+                      </div>
+                      <div className="flex items-center text-[14px] gap-1 ">
+                        {likes.length > 0 &&
+                          likes.map((like, index) => (
+                            <>
+                              <h2 key={like.likeId}>
+                                <span className="p-[3px]">
+                                  {index === 0 ? "Liked by" : ""}
+                                </span>
+                                <span className="">
+                                  {index === 0 ? "" : ", "}
+                                </span>
+
+                                {like.userId === user?.uid
+                                  ? "You"
+                                  : like.userName || like.nameId
+                                  ? like.userName || like.nameId
+                                  : ""}
+                              </h2>
+                            </>
+                          ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        className=""
+                        onClick={hasUserLiked ? removeLike : addLike}
+                      >
+                        {hasUserLiked ? (
+                          <>
+                            <LikedIcon styling={"w-6 h-6"} />
+                          </>
+                        ) : (
+                          <>
+                            <UnLikedIcon styling={"w-6 h-6"} />
+                          </>
+                        )}
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>

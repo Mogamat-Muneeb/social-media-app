@@ -341,8 +341,8 @@ export const Account = () => {
                                 />
                                 <div className="absolute top-0 left-0 items-center justify-center hidden w-full h-full text-white opacity-100 overlay group-hover:flex group-hover:flex-col">
                                   {likesCount[post.id] && (
-                                    <div >
-                                      <span className="flex items-center gap-1 mr-1">
+                                    <div>
+                                      <span className="flex items-center gap-1 mr-1 font-medium">
                                         {likesCount[post.id]}
                                       <LikedIcon styling={"w-6 h-6"} />
                                       </span>
@@ -353,8 +353,9 @@ export const Account = () => {
                                       onClick={() =>
                                         handleDelete(post.id, post.imageUrl)
                                       }
+                                      className="pt-4 font-medium"
                                     >
-                                      delete
+                                      Delete
                                     </button>
                                   )}
                                 </div>
