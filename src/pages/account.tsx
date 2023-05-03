@@ -476,7 +476,7 @@ export const Account = () => {
                                 className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
                               />
                               <p
-                                className={`flex items-center justify-center w-full  ${
+                                className={`flex flex-col items-center justify-center w-full  ${
                                   likesCount[post.id] === undefined
                                     ? "pt-8 "
                                     : "pt-2"
@@ -490,6 +490,16 @@ export const Account = () => {
                                 ) : (
                                   ""
                                 )}
+                                {user && uid === user.uid && (
+                                    <button
+                                      onClick={() =>
+                                        handleDelete(post.id, post.imageUrl)
+                                      }
+                                      className="font-medium "
+                                    >
+                                      Delete
+                                    </button>
+                                  )}
                               </p>
                             </div>
                           );
