@@ -17,13 +17,13 @@ import {
   orderBy,
   onSnapshot,
   deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { Post as IPost } from "../pages/main/main";
 import { deleteObject, ref } from "firebase/storage";
 import { Modal } from "../components/modal";
-import { RxCross2 } from "react-icons/rx";
 export const Account = () => {
   interface UserData {
     displayName: string;
@@ -46,7 +46,9 @@ export const Account = () => {
   const [likesCount, setLikesCount] = useState<LikesCount>({});
   const [isLoading, setIsLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState([]);
-
+  const [showModal, setShowModal] = useState(false);
+  const [postId, setPostId] = useState<string>("");
+  const [storageRef, setStorageRef] = useState<string>("");
   const [tab, setTab] = useState("Posts");
   useEffect(() => {
     /* @ts-ignore */
@@ -128,7 +130,15 @@ export const Account = () => {
 
   const deletePost = async (postId: string, storageRef: string) => {
     try {
-      await deleteDoc(doc(db, "posts", postId));
+      const postDocRef = doc(db, "posts", postId);
+      const savedQuerySnapshot = await getDocs(
+        query(collection(db, "saved"), where("postId", "==", postId))
+      );
+      const deletePromises = [
+        deleteDoc(postDocRef),
+        ...savedQuerySnapshot.docs.map((doc) => deleteDoc(doc.ref)),
+      ];
+      await Promise.all(deletePromises);
       const postImageRef = ref(storage, storageRef);
       await deleteObject(postImageRef);
     } catch (error) {
@@ -138,10 +148,8 @@ export const Account = () => {
 
   const handleDelete = async (postId: string, storageRef: string) => {
     await deletePost(postId, storageRef);
-    setShowModal(!showModal);
+    setShowModal(false);
   };
-
-  const [showModal, setShowModal] = useState(false);
 
   const handleToggleClick = () => {
     setShowModal(!showModal);
@@ -165,28 +173,22 @@ export const Account = () => {
               Are you sure you want to delete this post?
             </p>
             <div>
-              {posts.map((post: IPost) => {
-                return (
-                  <>
-                    {user && uid === user.uid && (
-                      <div className="flex justify-center gap-4 pt-10">
-                        <button
-                          onClick={() => handleDelete(post.id, post.imageUrl)}
-                          className="font-medium"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          onClick={handleToggleClick}
-                          className="font-medium text-[#ff3040]"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                  </>
-                );
-              })}
+              {user && uid === user.uid && (
+                <div className="flex justify-center gap-4 pt-10">
+                  <button
+                    onClick={() => handleDelete(postId, storageRef)}
+                    className="font-medium"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={handleToggleClick}
+                    className="font-medium text-[#ff3040]"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </Modal>
@@ -359,7 +361,11 @@ export const Account = () => {
                                   )}
                                   {user && uid === user.uid && (
                                     <button
-                                      onClick={() => handleToggleClick()}
+                                      onClick={() => {
+                                        setPostId(post.id);
+                                        setStorageRef(post.imageUrl);
+                                        handleToggleClick();
+                                      }}
                                       className="pt-4 font-medium"
                                     >
                                       Delete
