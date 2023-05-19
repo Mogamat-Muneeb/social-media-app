@@ -7,7 +7,7 @@ import {
   LikedIcon,
   UnSavedIcon,
 } from "../components/icon";
-import Modal from "../components/accountmodal";
+import AccountModal from "../components/accountmodal";
 
 import {
   doc,
@@ -22,6 +22,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
 import { Post as IPost } from "../pages/main/main";
 import { deleteObject, ref } from "firebase/storage";
+import { Modal } from "../components/modal";
+import { RxCross2 } from "react-icons/rx";
 export const Account = () => {
   interface UserData {
     displayName: string;
@@ -126,28 +128,69 @@ export const Account = () => {
 
   const deletePost = async (postId: string, storageRef: string) => {
     try {
-      // Delete the post document from Firestore
       await deleteDoc(doc(db, "posts", postId));
-
-      // Delete the post image from Cloud Storage
       const postImageRef = ref(storage, storageRef);
       await deleteObject(postImageRef);
-
-      console.log(`Post with ID ${postId} deleted successfully`);
     } catch (error) {
       console.error("Error deleting post", error);
     }
   };
 
   const handleDelete = async (postId: string, storageRef: string) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      await deletePost(postId, storageRef);
-    }
+    await deletePost(postId, storageRef);
+    setShowModal(!showModal);
   };
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleToggleClick = () => {
+    setShowModal(!showModal);
+  };
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [showModal]);
 
   return (
     <ProtectedRoute>
-      <Modal show={show} onClose={closeToggle} userID={user?.uid} />
+      <AccountModal show={show} onClose={closeToggle} userID={user?.uid} />
+      {showModal && user && uid === user.uid && (
+        <Modal title="Comments Modal" toggleClick={handleToggleClick}>
+          <div className="bg-white h-[150px] w-[350px] px-4 rounded">
+            <p className="pt-5 font-medium">
+              Are you sure you want to delete this post?
+            </p>
+            <div>
+              {posts.map((post: IPost) => {
+                return (
+                  <>
+                    {user && uid === user.uid && (
+                      <div className="flex justify-center gap-4 pt-10">
+                        <button
+                          onClick={() => handleDelete(post.id, post.imageUrl)}
+                          className="font-medium"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={handleToggleClick}
+                          className="font-medium text-[#ff3040]"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        </Modal>
+      )}
       {isLoading ? (
         <div className="flex items-center justify-center h-screen mt-20">
           <svg
@@ -295,40 +338,6 @@ export const Account = () => {
                     <>
                       <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase "></p>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
-                        {/* {posts.map((post: IPost) => {
-                          return (
-                            <div key={post.id} className="relative">
-                              <div className="group">
-                                <img
-                                  key={post.id}
-                                  src={post.imageUrl}
-                                  alt=""
-                                  className={`lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg`}
-                                />
-                                <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full h-full bg-white opacity-0 group-hover:opacity-30">
-                                  {likesCount[post.id] && (
-                                    <div className="flex items-center justify-center bg-white">
-                                      <span className="mr-2 text-white">
-                                        {likesCount[post.id]}
-                                      </span>
-                                      <LikedIcon styling={"w-6 h-6"} />
-                                    </div>
-                                  )}
-                                  {user && uid === user.uid && (
-                                    <button
-                                      onClick={() =>
-                                        handleDelete(post.id, post.imageUrl)
-                                      }
-                                    >
-                                      delete
-                                    </button>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })} */}
-
                         {posts.map((post: IPost) => {
                           return (
                             <div key={post.id} className="relative">
@@ -350,9 +359,7 @@ export const Account = () => {
                                   )}
                                   {user && uid === user.uid && (
                                     <button
-                                      onClick={() =>
-                                        handleDelete(post.id, post.imageUrl)
-                                      }
+                                      onClick={() => handleToggleClick()}
                                       className="pt-4 font-medium"
                                     >
                                       Delete
@@ -492,10 +499,8 @@ export const Account = () => {
                                 )}
                                 {user && uid === user.uid && (
                                   <button
-                                    onClick={() =>
-                                      handleDelete(post.id, post.imageUrl)
-                                    }
-                                    className="font-medium "
+                                    onClick={() => handleToggleClick()}
+                                    className="font-medium"
                                   >
                                     Delete
                                   </button>

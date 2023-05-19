@@ -124,7 +124,7 @@ export const CreateForm = () => {
       >
         {show === "step1" && (
           <>
-            <div className="flex flex-col items-center justify-center w-full gap-4 mx-auto">
+            <div className="flex flex-col items-center justify-center w-full gap-4 mx-auto ">
               <button
                 type="button"
                 disabled={!file}

@@ -54,13 +54,6 @@ export interface Saved {
   imageUrl: any;
 }
 
-export interface Follower {
-  followerId: string;
-  userId: string;
-  followerName: string;
-  followerPhotoURL: string;
-}
-
 export const Post = (props: Props) => {
   const { post } = props;
   const [user] = useAuthState(auth);
@@ -71,7 +64,6 @@ export const Post = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const likesRef = collection(db, "likes");
-  const [followers, setFollowers] = useState<Follower[] | null>(null);
 
   const likesDoc = useMemo(
     () => query(likesRef, where("postId", "==", post?.id)),
@@ -323,83 +315,6 @@ export const Post = (props: Props) => {
       document.body.classList.remove("overflow-hidden");
     }
   }, [showModal]);
-
-  const followersRef = collection(db, "followers");
-
-  const followersQuery = useMemo(
-    () =>
-      query(
-        followersRef,
-        where("userId", "==", post?.userId ?? null),
-        where("followerId", "==", user?.uid ?? null)
-      ),
-    [post?.userId, user?.uid]
-  );
-
-  const addFollower = async () => {
-    try {
-      const followersQuerySnapshot = await getDocs(followersQuery);
-      const existingFollower = followersQuerySnapshot.docs[0];
-      if (existingFollower) {
-        console.log("You're already following this user.");
-        return;
-      }
-      const newDoc = await addDoc(followersRef, {
-        userId: post?.userId,
-        followerId: user?.uid,
-        followerName: userData?.displayName ?? "",
-        followerPhotoURL: userData?.photoURL ?? "",
-      });
-      /* @ts-ignore */
-      setFollowers((prev) =>
-        prev
-          ? [
-              /* @ts-ignore */
-              ...prev,
-              {
-                userId: post?.userId ?? "",
-                followerId: user?.uid ?? "",
-                followerName: userData?.displayName ?? "",
-                followerPhotoURL: userData?.photoURL ?? "",
-              },
-            ]
-          : [
-              {
-                userId: post?.userId ?? "",
-                followerId: user?.uid ?? "",
-                followerName: userData?.displayName ?? "",
-                followerPhotoURL: userData?.photoURL ?? "",
-              },
-            ]
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const removeFollower = async () => {
-    try {
-      const followersToDeleteQuery = query(
-        followersRef,
-        where("userId", "==", post?.userId ?? null),
-        where("followerId", "==", user?.uid ?? null)
-      );
-      const followersToDeleteData = await getDocs(followersToDeleteQuery);
-      const followerId = followersToDeleteData.docs[0].id;
-      const followerToDelete = doc(followersRef, followerId);
-      await deleteDoc(followerToDelete);
-
-      if (user) {
-        setFollowers(
-          (prev) =>
-            prev &&
-            prev.filter((follower) => follower.followerId !== followerId)
-        );
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <>
@@ -771,7 +686,6 @@ export const Post = (props: Props) => {
                 <span>•</span>
                 {timeAgo}
               </span>
-              <button onClick={addFollower}>Follow</button>
             </div>
             {loading && (
               <>
