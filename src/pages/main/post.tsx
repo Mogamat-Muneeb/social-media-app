@@ -6,14 +6,8 @@ import {
   where,
   deleteDoc,
   doc,
-  getDoc,
   onSnapshot,
-  updateDoc,
-  arrayUnion,
-  setDoc,
   orderBy,
-  serverTimestamp,
-  arrayRemove,
 } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -66,7 +60,6 @@ export interface Follower {
   followerName: string;
   followerPhotoURL: string;
 }
-
 
 export const Post = (props: Props) => {
   const { post } = props;
@@ -274,7 +267,6 @@ export const Post = (props: Props) => {
   const uid = user?.uid;
   useEffect(() => {
     if (!uid) {
-      // console.warn("uid is not defined. Aborting onSnapshot() subscription.");
       return;
     }
 
@@ -343,7 +335,6 @@ export const Post = (props: Props) => {
       ),
     [post?.userId, user?.uid]
   );
-  
 
   const addFollower = async () => {
     try {
@@ -385,8 +376,7 @@ export const Post = (props: Props) => {
       console.log(err);
     }
   };
-  
-  
+
   const removeFollower = async () => {
     try {
       const followersToDeleteQuery = query(
@@ -398,17 +388,18 @@ export const Post = (props: Props) => {
       const followerId = followersToDeleteData.docs[0].id;
       const followerToDelete = doc(followersRef, followerId);
       await deleteDoc(followerToDelete);
-  
+
       if (user) {
         setFollowers(
-          (prev) => prev && prev.filter((follower) => follower.followerId !== followerId)
+          (prev) =>
+            prev &&
+            prev.filter((follower) => follower.followerId !== followerId)
         );
       }
     } catch (err) {
       console.log(err);
     }
   };
-  
 
   return (
     <>
@@ -499,7 +490,7 @@ export const Post = (props: Props) => {
                         >
                           {hasUserLiked ? (
                             <>
-                              <LikedIcon styling={"w-6 h-6"}  />
+                              <LikedIcon styling={"w-6 h-6"} />
                             </>
                           ) : (
                             <>
@@ -688,10 +679,8 @@ export const Post = (props: Props) => {
                                 <span className="p-[3px]">Liked by </span>
                                 {likes[0].userId === user?.uid
                                   ? "You"
-                                  : likes[0].userName ||
-                                    likes[0].nameId ||
-                                    ""}{" "}
-                                and{" "}
+                                  : likes[0].userName || likes[0].nameId || ""}
+                                and
                                 {likes[1].userId === user?.uid
                                   ? "you"
                                   : likes[1].userName || likes[1].nameId || ""}
@@ -751,7 +740,6 @@ export const Post = (props: Props) => {
                 {post.photoURL ? (
                   <>
                     <img
-                      // src={post.photoURL}
                       src={`${post.photoURL}?${new Date().getTime()}`}
                       className="object-cover border rounded-full shadow w-9 h-9"
                       alt=""
@@ -783,7 +771,7 @@ export const Post = (props: Props) => {
                 <span>•</span>
                 {timeAgo}
               </span>
-              <button onClick={addFollower} >Follow</button>
+              <button onClick={addFollower}>Follow</button>
             </div>
             {loading && (
               <>
@@ -833,23 +821,6 @@ export const Post = (props: Props) => {
                     </p>
                   </div>
                   <div className="flex items-center text-[14px] gap-1 ">
-                    {/* {likes.length > 0 &&
-                      likes.map((like, index) => (
-                        <>
-                          <h2 key={like.likeId}>
-                            <span className="p-[3px]">
-                              {index === 0 ? "Liked by" : ""}
-                            </span>
-                            <span className="">{index === 0 ? "" : ", "}</span>
-
-                            {like.userId === user?.uid
-                              ? "You"
-                              : like.userName || like.nameId
-                              ? like.userName || like.nameId
-                              : ""}
-                          </h2>
-                        </>
-                      ))} */}
                     {likes.length > 0 && (
                       <h2>
                         {likes.length === 1 ? (
@@ -865,7 +836,7 @@ export const Post = (props: Props) => {
                             {likes[0].userId === user?.uid
                               ? "You"
                               : likes[0].userName || likes[0].nameId || ""}{" "}
-                            and{" "}
+                            and
                             {likes[1].userId === user?.uid
                               ? "you"
                               : likes[1].userName || likes[1].nameId || ""}

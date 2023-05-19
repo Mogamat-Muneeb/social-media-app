@@ -12,9 +12,7 @@ export const Navbar = () => {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const signUserOut = async () => {
-    // console.log("auth:", auth);
     if (auth) {
-      // console.log("auth.currentUser:", auth.currentUser);
       await signOut(auth);
       navigate("/");
     }
