@@ -344,7 +344,7 @@ export const Account = () => {
                                     <div>
                                       <span className="flex items-center gap-1 mr-1 font-medium">
                                         {likesCount[post.id]}
-                                      <LikedIcon styling={"w-6 h-6"} />
+                                        <LikedIcon styling={"w-6 h-6"} />
                                       </span>
                                     </div>
                                   )}
@@ -491,15 +491,15 @@ export const Account = () => {
                                   ""
                                 )}
                                 {user && uid === user.uid && (
-                                    <button
-                                      onClick={() =>
-                                        handleDelete(post.id, post.imageUrl)
-                                      }
-                                      className="font-medium "
-                                    >
-                                      Delete
-                                    </button>
-                                  )}
+                                  <button
+                                    onClick={() =>
+                                      handleDelete(post.id, post.imageUrl)
+                                    }
+                                    className="font-medium "
+                                  >
+                                    Delete
+                                  </button>
+                                )}
                               </p>
                             </div>
                           );
