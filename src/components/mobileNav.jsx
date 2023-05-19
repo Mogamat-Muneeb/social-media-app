@@ -4,8 +4,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
-
-export const Navbar = () => {
+import { GrHomeRounded } from "react-icons/gr";
+import { FiPlusSquare } from "react-icons/fi";
+export const MobileNav = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
@@ -35,19 +36,16 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className="block md:hidden border-b-[1px] py-2 border-gray-200">
-        <Link to="/" className="font-bold text-[24px] text-[#ff3040]">
-          Circledop
-        </Link>
-      </div>
       <div
-        className={`md:block hidden sticky top-0 right-0 left-0 z-[60]  ${
-          user ? "bg-black text-white " : "bg-white shadow-lg py-2 text-black"
+        className={`md:hidden block fixed bottom-0 right-0 left-0 z-[60]  ${
+          user
+            ? "bg-white border-t-[1px] border-gray-300 text-black py-4 "
+            : "bg-white shadow-lg py-4 text-black"
         } `}
       >
         <div
-          className={`flex items-center max-w-[1228px] w-full mx-auto lg:px-0 md:px-2 px-4 py-2 ${
-            user ? " justify-between" : " justify-center "
+          className={`flex items-center max-w-[1228px] w-full mx-auto lg:px-0 md:px-2 px-4  ${
+            user ? " justify-between " : " justify-center "
           }`}
         >
           <div className="flex gap-4">
@@ -57,7 +55,7 @@ export const Navbar = () => {
                 pathName.pathname === "/" && "text-[#ff3040]"
               }`}
             >
-              Home
+              {user ? <GrHomeRounded className="text-[15px] font-bold" /> : "home"}
             </Link>
             <Link
               to="/createpost"
@@ -65,7 +63,7 @@ export const Navbar = () => {
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/createpost" && "text-[#ff3040]"} `}
             >
-              Create
+              <FiPlusSquare className="text-[16px]" />
             </Link>
             {user?.uid ? null : (
               <>
@@ -115,12 +113,6 @@ export const Navbar = () => {
                     </p>
                   </Link>
                 </div>
-                <button
-                  onClick={signUserOut}
-                  className="font-normal text-[16px] md:block hidden"
-                >
-                  Logout
-                </button>
                 <button
                   onClick={signUserOut}
                   className="font-normal text-[16px] md:hidden block"

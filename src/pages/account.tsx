@@ -1,12 +1,7 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db, storage } from "../config/firebase";
-import { Link, useParams } from "react-router-dom";
-import {
-  RectIcon,
-  RectMobileIcon,
-  LikedIcon,
-  UnSavedIcon,
-} from "../components/icon";
+import { useParams } from "react-router-dom";
+import { RectIcon, LikedIcon, UnSavedIcon } from "../components/icon";
 import AccountModal from "../components/accountmodal";
 
 import {
