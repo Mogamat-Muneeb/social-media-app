@@ -7,6 +7,7 @@ import { Navbar } from "./components/navbar.jsx";
 import { Footer } from "./components/footer";
 import { CreatePost } from "./pages/create-post/create-post";
 import { SinglePost } from "./pages/singlepost";
+import { MobileNav } from "./components/mobileNav";
 function App() {
   return (
     <div className="App">
@@ -19,6 +20,7 @@ function App() {
           <Route path=":uid" element={<Account />} />
           <Route  path="/posts/:postId" element={<SinglePost/>} />
         </Routes>
+        <MobileNav/>
         <Footer/>
       </Router>
     </div>

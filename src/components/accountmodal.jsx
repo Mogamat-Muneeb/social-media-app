@@ -8,12 +8,10 @@ import {
   query,
   updateDoc,
   where,
-  writeBatch,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { ExitIcon } from "./icon";
-import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { toast } from "react-toastify";
 import { config } from "../config/index";
 const Modal = ({ show, onClose, userID }) => {
@@ -46,108 +44,7 @@ const Modal = ({ show, onClose, userID }) => {
     setShowUpload(!showUpload);
   };
 
-  // const handleSave = async () => {
-  //   setLoading(true);
-  //   setSaving(true);
-  //   try {
-
-  //     const currentPhotoURL = userData.photoURL;
-
-  //     if (file && currentPhotoURL) {
-  //       const storageRef = ref(storage, currentPhotoURL);
-  //       await deleteObject(storageRef);
-  //     }
-  //     await updateDoc(doc(db, "users", userID), userData);
-  //     const likesQuery = query(
-  //       collection(db, "likes"),
-  //       where("userId", "==", userID)
-  //     );
-  //     const likesSnapshot = await getDocs(likesQuery);
-  //     likesSnapshot.forEach((doc) => {
-  //       updateDoc(doc.ref, {
-  //         photoURL: userData.photoURL,
-  //         userName: userData.userName,
-  //         bio: userData.bio,
-  //       });
-  //     });
-  //     const postsQuery = query(
-  //       collection(db, "posts"),
-  //       where("userId", "==", userID)
-  //     );
-  //     const postsSnapshot = await getDocs(postsQuery);
-  //     postsSnapshot.forEach((doc) => {
-  //       updateDoc(doc.ref, {
-  //         photoURL: userData.photoURL,
-  //         userName: userData.userName,
-  //         bio: userData.bio,
-  //       });
-  //     });
-
-  //     if (file) {
-  //       const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
-  //       const uploadTask = uploadBytesResumable(storageRef, file);
-  //       uploadTask.on(
-  //         "state_changed",
-  //         (snapshot) => {
-  //           const progress =
-  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //           setUploadProgress(progress);
-  //         },
-  //         (error) => {
-  //           console.log(error);
-  //           setSaving(false);
-  //           setLoading(false);
-  //         },
-  //         async () => {
-  //           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-  //           setUploaded(true);
-  //           const userRef = doc(db, "users", userID);
-  //           await updateDoc(userRef, {
-  //             photoURL: downloadURL,
-  //           });
-  //           await Promise.all([
-  //             updateDoc(userRef, {
-  //               userName: userData.userName,
-  //               bio: userData.bio,
-  //             }),
-  //             likesSnapshot.forEach((doc) => {
-  //               updateDoc(doc.ref, {
-  //                 photoURL: downloadURL,
-  //                 userName: userData.userName,
-  //                 bio: userData.bio,
-  //               });
-  //             }),
-  //             postsSnapshot.forEach((doc) => {
-  //               updateDoc(doc.ref, {
-  //                 photoURL: downloadURL,
-  //                 userName: userData.userName,
-  //                 bio: userData.bio,
-  //               });
-  //             }),
-  //           ]);
-  //           toast("Account updated successfully", {
-  //             ...config,
-  //             type: "success",
-  //           });
-  //           onClose();
-  //           setLoading(false);
-  //           setFile(null);
-  //         }
-  //       );
-  //       await uploadTask;
-  //     } else {
-  //       onClose();
-  //       setLoading(false);
-  //       setFile(null);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     setLoading(false);
-  //     setFile(null);
-  //   }
-  // };
-
-   const handleSave = async () => {
+  const handleSave = async () => {
     setLoading(true);
     setSaving(true);
     try {
