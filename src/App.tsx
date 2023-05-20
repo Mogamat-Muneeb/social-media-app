@@ -20,7 +20,7 @@ function App() {
           <Route  path="/posts/:postId" element={<SinglePost/>} />
         </Routes>
         <MobileNav/>
-        <Footer/>
+        {/* <Footer/> */}
       </Router>
     </div>
   );
