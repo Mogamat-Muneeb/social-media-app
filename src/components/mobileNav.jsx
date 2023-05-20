@@ -18,7 +18,7 @@ export const MobileNav = () => {
       navigate("/");
     }
   };
-  console.log(pathName, "pathName");
+
   useEffect(() => {
     if (user && user.uid) {
       const docRef = doc(db, "users", user.uid);

@@ -647,8 +647,8 @@ export const Post = (props: Props) => {
           </div>
         </Modal>
       )}
-      <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
-        <div className="max-w-[500px] w-full flex flex-col border-[1px] rounded   h-full">
+      <div className="flex flex-col items-center justify-center px-2 mt-10 md:px-0">
+        <div className="max-w-[450px] w-full flex flex-col border-[1px] rounded   h-full">
           <div className="flex flex-col w-full gap-2 p-2 text-start">
             <div className="flex items-center gap-2">
               <Link to={`${post.userId}`}>

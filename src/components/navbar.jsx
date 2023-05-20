@@ -35,7 +35,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className="block md:hidden border-b-[1px] py-2 border-gray-200">
+      <div className="flex justify-center md:hidden border-b-[1px] py-2 border-gray-200">
         <Link to="/" className="font-bold text-[24px] text-[#ff3040]">
           Circledop
         </Link>
