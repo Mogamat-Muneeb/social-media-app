@@ -223,7 +223,7 @@ const Modal = ({ show, onClose, userID }) => {
           </div>
           <div className="flex flex-col items-start justify-start p-2 gap-7">
             <div className="flex flex-col items-start justify-start gap-2 max-w-[500px] mx-auto w-full">
-              <span className="font-medium text-[16px]">userName</span>
+              <span className="font-medium text-[16px]">Username</span>
               <input
                 type="text"
                 value={userData.userName}
