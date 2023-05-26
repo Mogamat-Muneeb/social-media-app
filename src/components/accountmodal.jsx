@@ -23,7 +23,6 @@ const Modal = ({ show, onClose, userID }) => {
   const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
   const [showUpload, setShowUpload] = useState(false);
-  const [image, setImage] = useState(null);
   const [file, setFile] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploaded, setUploaded] = useState(false);

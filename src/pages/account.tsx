@@ -3,7 +3,6 @@ import { auth, db, storage } from "../config/firebase";
 import { useParams } from "react-router-dom";
 import { RectIcon, LikedIcon, UnSavedIcon, LoadingSpinner } from "../components/icon";
 import AccountModal from "../components/accountmodal";
-
 import {
   doc,
   collection,
@@ -216,7 +215,7 @@ export const Account = () => {
                     <img
                       src={userData.photoURL}
                       alt=""
-                      className="rounded-full md:w-[150px] md:h-[150px] w-[130px] h-[130px] shadow-lg object-cover"
+                      className="rounded-full md:w-[200px] md:h-[200px] w-[130px] h-[130px] shadow-lg object-cover"
                     />
                   </div>
                   <div className="flex flex-col items-start w-full gap-2">
