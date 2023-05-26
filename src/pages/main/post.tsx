@@ -326,16 +326,13 @@ export const Post = (props: Props) => {
                 <img
                   src={post.imageUrl}
                   alt=""
-                  className="max-w-[500px]
+                  className="max-w-[200px]
                   min-w-[405px]  object-cover rounded-l"
                   onLoad={() => setLoading(false)}
                   onError={() => setLoading(false)}
                 />
               </div>
-              <div
-                className="max-w-[500px]
-                  min-w-[405px] p-3"
-              >
+              <div className="max-w-[500px] min-w-[405px] p-3">
                 <div className="flex justify-between w-full ">
                   <div className="flex items-center gap-2">
                     <Link to={`${post.userId}`}>
@@ -437,10 +434,8 @@ export const Post = (props: Props) => {
                                 <span className="p-[3px]">Liked by </span>
                                 {likes[0].userId === user?.uid
                                   ? "You"
-                                  : likes[0].userName ||
-                                    likes[0].nameId ||
-                                    ""}{" "}
-                                and{" "}
+                                  : likes[0].userName || likes[0].nameId || ""}
+                                and
                                 {likes[1].userId === user?.uid
                                   ? "you"
                                   : likes[1].userName || likes[1].nameId || ""}
@@ -705,7 +700,6 @@ export const Post = (props: Props) => {
               onError={() => setLoading(false)}
               style={{ display: loading ? "none" : "block" }}
             />
-
             {/* </Link> */}
             <div className="flex items-center justify-between">
               {likes ? (
@@ -749,7 +743,7 @@ export const Post = (props: Props) => {
                             <span className="p-[3px]">Liked by </span>
                             {likes[0].userId === user?.uid
                               ? "You"
-                              : likes[0].userName || likes[0].nameId || ""}{" "}
+                              : likes[0].userName || likes[0].nameId || ""}
                             and
                             {likes[1].userId === user?.uid
                               ? "you"
@@ -825,12 +819,8 @@ export const Post = (props: Props) => {
             {comments.slice(0, 2).map((comment) => (
               /* @ts-ignore */
               <div key={comment.id} className="flex justify-between w-full">
-                <div className="flex items-center w-full gap-1 ">
+                <div className="flex items-center w-full gap-1">
                   <p className=" font-semibold  text-[13px]">
-                    {/* @ts-ignore */}
-                    {/* {comment?.userName} */}
-                    {/* @ts-ignore */}
-                    {/* {comment?.displayName} */}
                     {/* @ts-ignore */}
                     {comment.userName ? (
                       <>
