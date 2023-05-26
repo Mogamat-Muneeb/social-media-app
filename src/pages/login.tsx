@@ -34,7 +34,6 @@ export const Login = () => {
             </h1>
             <span className="text-[14px]">Easy Signup Now</span>
           </div>
-
           <div className="border-[1px] border-gray-400 rounded-md w-[300px] flex justify-center">
             <button
               onClick={signInWithGoogle}
