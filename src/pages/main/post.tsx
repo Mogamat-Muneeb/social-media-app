@@ -219,6 +219,23 @@ export const Post = (props: Props) => {
     getLikes();
   }, []);
 
+  // const currentDate = new Date();
+  // const postDate = new Date(post.date);
+  // /* @ts-ignore */
+  // const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
+
+  // let timeAgo;
+
+  // if (diffInMinutes >= 1440) {
+  //   const diffInDays = Math.floor(diffInMinutes / 1440);
+  //   timeAgo = `${diffInDays}d`;
+  // } else if (diffInMinutes >= 60) {
+  //   const diffInHours = Math.floor(diffInMinutes / 60);
+  //   timeAgo = `${diffInHours}h`;
+  // } else {
+  //   timeAgo = `${diffInMinutes}m`;
+  // }
+
   const currentDate = new Date();
   const postDate = new Date(post.date);
   /* @ts-ignore */
@@ -226,7 +243,10 @@ export const Post = (props: Props) => {
 
   let timeAgo;
 
-  if (diffInMinutes >= 1440) {
+  if (diffInMinutes >= 43200) {
+    const diffInMonths = Math.floor(diffInMinutes / 43200);
+    timeAgo = `${diffInMonths}m`;
+  } else if (diffInMinutes >= 1440) {
     const diffInDays = Math.floor(diffInMinutes / 1440);
     timeAgo = `${diffInDays}d`;
   } else if (diffInMinutes >= 60) {
