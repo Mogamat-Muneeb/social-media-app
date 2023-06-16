@@ -41,7 +41,7 @@ export const Main = () => {
 
   return (
     <div
-      className={`${
+      className={` mb-10 ${
         isLoading
           ? "h-screen"
           : "h-full" && postsList?.length === 0
