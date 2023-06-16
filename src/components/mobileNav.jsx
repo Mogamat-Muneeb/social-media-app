@@ -46,28 +46,30 @@ export const MobileNav = () => {
         } `}
       >
         <div
-          className={`flex items-center max-w-[1228px] w-full mx-auto lg:px-0  px-10  ${
-            user ? " justify-between " : " justify-center "
+          className={`flex items-center  w-full mx-auto lg:px-0  px-10  ${
+            user ? " justify-center gap-10 " : " justify-center "
           }`}
         >
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
                 pathName.pathname === "/" && "text-[#ff3040]"
               }`}
             >
               <span>
                 {user ? <VscHome className="text-[23px] font-bold" /> : "home"}
               </span>
+              <span  className="text-[12px]"> {user && "Home" }</span>
             </Link>
             <Link
               to="/createpost"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/createpost" && "text-[#ff3040]"} `}
             >
-              <FiPlusSquare className="text-[20px]" />
+              <FiPlusSquare className="text-[22px]" />
+              <span  className="text-[12px] pt-[3px]"> {user && "Create" }</span>
             </Link>
             {user?.uid ? null : (
               <>
@@ -85,7 +87,7 @@ export const MobileNav = () => {
           <div className="flex items-center gap-4">
             {user && (
               <>
-                <Link to={user?.uid}>
+                <Link to={user?.uid} className="flex flex-col items-center">
                   <img
                     src={userData?.photoURL}
                     alt={user?.displayName || ""}
@@ -98,6 +100,7 @@ export const MobileNav = () => {
                       e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                     }}
                   />
+                    <span  className={`text-[12px] ${pathName.pathname === `/${user?.uid}` && "text-[#ff3040]"}`}> {user && "Profile" }</span>
                 </Link>
                 <div className="flex-col hidden md:flex text-start">
                   <Link to={user?.uid}>
@@ -122,9 +125,10 @@ export const MobileNav = () => {
                 </div>
                 <button
                   onClick={signUserOut}
-                  className="font-normal text-[16px] md:hidden block"
+                  className="font-normal text-[16px] md:hidden flex flex-col items-center"
                 >
                   <LogoutIcon />
+                  <span className="text-[12px]"> {user && "Logout" }</span>
                 </button>
               </>
             )}
