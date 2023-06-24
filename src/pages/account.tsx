@@ -452,9 +452,17 @@ export const Account = () => {
                     />
                   </div>
                   <div className="flex items-start justify-start">
-                    <p className="text-[16px] font-medium flex flex-col items-center">
-                      <span>{posts.length} </span> <span>posts</span>
-                    </p>
+                    <div className="flex items-center gap-4 pt-[10px]">
+                      <p className="text-[16px] font-medium flex flex-col items-center">
+                        <span>{posts.length} </span> <span>posts</span>
+                      </p>
+                      <p className="text-[16px] font-medium  flex flex-col items-center">
+                        <span>{followers.length} </span> <span>followers</span>
+                      </p>
+                      <p className="text-[16px] font-medium  flex flex-col items-center">
+                        <span>{following.length} </span> <span>following</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col items-start justify-start pt-5">
