@@ -70,64 +70,6 @@ export const Post = (props: Props) => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const likesRef = collection(db, "likes");
   const USER_ID = user?.uid;
-  // const [isFollowing, setIsFollowing] = useState<boolean>(false);
-
-  // const followingRef = collection(db, "following");
-
-  // const followUser = async (userId: string) => {
-  //   try {
-  //     const followingDocRef = doc(followingRef, user?.uid);
-  //     const followingDoc = await getDoc(followingDocRef);
-
-  //     if (!followingDoc.exists()) {
-  //       // Document does not exist, create a new document
-  //       await setDoc(followingDocRef, { following: [userId] });
-  //     } else {
-  //       // Document exists, update the "following" array
-  //       await updateDoc(followingDocRef, {
-  //         following: arrayUnion(userId),
-  //       });
-  //     }
-
-  //     setIsFollowing(true);
-  //   } catch (error) {
-  //     console.error("Error following user:", error);
-  //   }
-  // };
-
-  // const unfollowUser = async (userId: string) => {
-  //   try {
-  //     const followingDoc = doc(followingRef, user?.uid);
-  //     await updateDoc(followingDoc, {
-  //       following: arrayRemove(userId),
-  //     });
-  //     setIsFollowing(false);
-  //   } catch (error) {
-  //     console.error("Error unfollowing user:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const checkFollowing = async () => {
-  //     if (user) {
-  //       try {
-  //         const followingDoc = await getDoc(doc(followingRef, user.uid));
-  //         if (followingDoc.exists()) {
-  //           const followingData = followingDoc.data();
-  //           setIsFollowing(
-  //             followingData && Array.isArray(followingData.following)
-  //               ? followingData.following.includes(post.userId)
-  //               : false
-  //           );
-  //         }
-  //       } catch (error) {
-  //         console.error("Error checking following:", error);
-  //       }
-  //     }
-  //   };
-
-  //   checkFollowing();
-  // }, [user]);
 
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const followingRef = collection(db, "following");
@@ -138,10 +80,8 @@ export const Post = (props: Props) => {
       const followingDoc = await getDoc(followingDocRef);
 
       if (!followingDoc.exists()) {
-        // Document does not exist, create a new document
         await setDoc(followingDocRef, { following: [userId] });
       } else {
-        // Document exists, update the "following" array
         await updateDoc(followingDocRef, {
           following: arrayUnion(userId),
         });
@@ -335,26 +275,9 @@ export const Post = (props: Props) => {
     getLikes();
   }, []);
 
-  // const currentDate = new Date();
-  // const postDate = new Date(post.date);
-  // /* @ts-ignore */
-  // const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
-
-  // let timeAgo;
-
-  // if (diffInMinutes >= 1440) {
-  //   const diffInDays = Math.floor(diffInMinutes / 1440);
-  //   timeAgo = `${diffInDays}d`;
-  // } else if (diffInMinutes >= 60) {
-  //   const diffInHours = Math.floor(diffInMinutes / 60);
-  //   timeAgo = `${diffInHours}h`;
-  // } else {
-  //   timeAgo = `${diffInMinutes}m`;
-  // }
-
   const currentDate = new Date();
   const postDate = new Date(post.date);
-  /* @ts-ignore */
+  //@ts-ignore
   const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
 
   let timeAgo;
@@ -817,17 +740,6 @@ export const Post = (props: Props) => {
                 <span>•</span>
                 {timeAgo}
               </span>
-              {/* <button
-                onClick={() => {
-                  if (isFollowing) {
-                    unfollowUser(post.userId);
-                  } else {
-                    followUser(post.userId);
-                  }
-                }}
-              >
-                {isFollowing ? "Unfollow" : "Follow"}
-              </button> */}
               <button
                 onClick={() => {
                   if (isFollowing) {
