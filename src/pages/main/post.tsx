@@ -448,19 +448,19 @@ export const Post = (props: Props) => {
     <>
       {showModal && (
         <Modal title="Comments Modal" toggleClick={handleToggleClick}>
-          <div className="md:block hidden bg-white rounded  min-h-[500px]">
+          <div className="md:block hidden bg-white rounded  min-h-[500px] max-w-[1220px] w-full max-auto">
             <div className="grid w-full lg:grid-cols-2 md:grid-cols-1">
-              <div className="hidden w-full md:block">
+              <div className="hidden w-full rounded-l md:block">
                 <img
                   src={post.imageUrl}
                   alt=""
-                  className="max-w-[200px]
+                  className="
                   min-w-[405px]  object-cover rounded-l"
                   onLoad={() => setLoading(false)}
                   onError={() => setLoading(false)}
                 />
               </div>
-              <div className="max-w-[500px] min-w-[405px] p-3">
+              <div className="max-w-full min-w-[405px] p-3">
                 <div className="flex justify-between w-full ">
                   <div className="flex items-center gap-2">
                     <Link to={`${post.userId}`}>
@@ -500,7 +500,7 @@ export const Post = (props: Props) => {
                     <RxCross2 />
                   </button>
                 </div>
-                <div className="max-h-[500px] h-full overflow-x-scroll mt-6 z-[100] no-scrollbar">
+                <div className="max-h-[450px] h-full overflow-x-scroll mt-6 z-[100] no-scrollbar">
                   {comments.map((comment) => (
                     /* @ts-ignore */
                     <div key={comment.id}>
