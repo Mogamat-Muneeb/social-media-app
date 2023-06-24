@@ -17,9 +17,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/createpost" element={<CreatePost />} />
           <Route path=":uid" element={<Account />} />
-          <Route  path="/posts/:postId" element={<SinglePost/>} />
+          <Route path="/posts/:postId" element={<SinglePost />} />
         </Routes>
-        <MobileNav/>
+        <MobileNav />
         {/* <Footer/> */}
       </Router>
     </div>

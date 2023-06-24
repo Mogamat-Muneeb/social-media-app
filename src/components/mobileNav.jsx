@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { VscHome } from "react-icons/vsc";
 import { FiPlusSquare } from "react-icons/fi";
+import { LogoutIcon } from "./icon";
 export const MobileNav = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +19,7 @@ export const MobileNav = () => {
       navigate("/");
     }
   };
-  console.log(pathName, "pathName");
+
   useEffect(() => {
     if (user && user.uid) {
       const docRef = doc(db, "users", user.uid);
@@ -45,28 +46,30 @@ export const MobileNav = () => {
         } `}
       >
         <div
-          className={`flex items-center max-w-[1228px] w-full mx-auto lg:px-0  px-10  ${
-            user ? " justify-between " : " justify-center "
+          className={`flex items-center  w-full mx-auto lg:px-0  px-10  ${
+            user ? " justify-center gap-10 " : " justify-center "
           }`}
         >
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
                 pathName.pathname === "/" && "text-[#ff3040]"
               }`}
             >
               <span>
                 {user ? <VscHome className="text-[23px] font-bold" /> : "home"}
               </span>
+              <span  className="text-[12px]"> {user && "Home" }</span>
             </Link>
             <Link
               to="/createpost"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/createpost" && "text-[#ff3040]"} `}
             >
-              <FiPlusSquare className="text-[20px]" />
+              <FiPlusSquare className="text-[22px]" />
+              <span  className="text-[12px] pt-[3px]"> {user && "Create" }</span>
             </Link>
             {user?.uid ? null : (
               <>
@@ -84,7 +87,7 @@ export const MobileNav = () => {
           <div className="flex items-center gap-4">
             {user && (
               <>
-                <Link to={user?.uid}>
+                <Link to={user?.uid} className="flex flex-col items-center">
                   <img
                     src={userData?.photoURL}
                     alt={user?.displayName || ""}
@@ -97,6 +100,7 @@ export const MobileNav = () => {
                       e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                     }}
                   />
+                    <span  className={`text-[12px] ${pathName.pathname === `/${user?.uid}` && "text-[#ff3040]"}`}> {user && "Profile" }</span>
                 </Link>
                 <div className="flex-col hidden md:flex text-start">
                   <Link to={user?.uid}>
@@ -121,23 +125,10 @@ export const MobileNav = () => {
                 </div>
                 <button
                   onClick={signUserOut}
-                  className="font-normal text-[16px] md:hidden block"
+                  className="font-normal text-[16px] md:hidden flex flex-col items-center"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                    />
-                  </svg>
+                  <LogoutIcon />
+                  <span className="text-[12px]"> {user && "Logout" }</span>
                 </button>
               </>
             )}

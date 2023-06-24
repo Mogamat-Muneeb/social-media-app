@@ -8,6 +8,11 @@ import {
   doc,
   onSnapshot,
   orderBy,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -64,6 +69,126 @@ export const Post = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const likesRef = collection(db, "likes");
+  const USER_ID = user?.uid;
+
+  // const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  // const followingRef = collection(db, "following");
+  // const followingDocRef = doc(followingRef, user?.uid);
+
+  // console.log(user, "user");
+
+  // const followUser = async (userId: string) => {
+  //   try {
+  //     const followingDoc = await getDoc(followingDocRef);
+
+  //     if (!followingDoc.exists()) {
+  //       await setDoc(followingDocRef, { following: [userId] });
+  //     } else {
+  //       await updateDoc(followingDocRef, {
+  //         following: arrayUnion(userId),
+  //       });
+  //     }
+
+  //     setIsFollowing(true);
+  //   } catch (error) {
+  //     console.error("Error following user:", error);
+  //   }
+  // };
+
+  // const unfollowUser = async (userId: string) => {
+  //   try {
+  //     await updateDoc(followingDocRef, {
+  //       following: arrayRemove(userId),
+  //     });
+  //     setIsFollowing(false);
+  //   } catch (error) {
+  //     console.error("Error unfollowing user:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
+  //     if (docSnapshot.exists()) {
+  //       const followingData = docSnapshot.data();
+  //       setIsFollowing(
+  //         followingData && Array.isArray(followingData.following)
+  //           ? followingData.following.includes(post.userId)
+  //           : false
+  //       );
+  //     }
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [user]);
+
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const followingRef = collection(db, "following");
+  const followingDocRef = user ? doc(followingRef, user.uid) : null;
+
+  console.log(user, "user");
+
+  const followUser = async (userId: string) => {
+    try {
+      if (!followingDocRef) {
+        console.error("No user is logged in.");
+        return;
+      }
+
+      const followingDoc = await getDoc(followingDocRef);
+
+      if (!followingDoc.exists()) {
+        await setDoc(followingDocRef, { following: [userId] });
+      } else {
+        await updateDoc(followingDocRef, {
+          following: arrayUnion(userId),
+        });
+      }
+
+      setIsFollowing(true);
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const unfollowUser = async (userId: string) => {
+    try {
+      if (!followingDocRef) {
+        console.error("No user is logged in.");
+        return;
+      }
+
+      await updateDoc(followingDocRef, {
+        following: arrayRemove(userId),
+      });
+      setIsFollowing(false);
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!followingDocRef) {
+      console.error("No user is logged in.");
+      return;
+    }
+
+    const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const followingData = docSnapshot.data();
+        setIsFollowing(
+          followingData && Array.isArray(followingData.following)
+            ? followingData.following.includes(post.userId)
+            : false
+        );
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
 
   const likesDoc = useMemo(
     () => query(likesRef, where("postId", "==", post?.id)),
@@ -94,7 +219,7 @@ export const Post = (props: Props) => {
       console.log(err);
     }
   };
-  const USER_ID = user?.uid;
+
   const removeSaved = async () => {
     try {
       const savedToDeleteQuery = query(
@@ -221,12 +346,15 @@ export const Post = (props: Props) => {
 
   const currentDate = new Date();
   const postDate = new Date(post.date);
-  /* @ts-ignore */
+  //@ts-ignore
   const diffInMinutes = Math.floor((currentDate - postDate) / (1000 * 60));
 
   let timeAgo;
 
-  if (diffInMinutes >= 1440) {
+  if (diffInMinutes >= 43200) {
+    const diffInMonths = Math.floor(diffInMinutes / 43200);
+    timeAgo = `${diffInMonths}m`;
+  } else if (diffInMinutes >= 1440) {
     const diffInDays = Math.floor(diffInMinutes / 1440);
     timeAgo = `${diffInDays}d`;
   } else if (diffInMinutes >= 60) {
@@ -326,16 +454,13 @@ export const Post = (props: Props) => {
                 <img
                   src={post.imageUrl}
                   alt=""
-                  className="max-w-[500px]
+                  className="max-w-[200px]
                   min-w-[405px]  object-cover rounded-l"
                   onLoad={() => setLoading(false)}
                   onError={() => setLoading(false)}
                 />
               </div>
-              <div
-                className="max-w-[500px]
-                  min-w-[405px] p-3"
-              >
+              <div className="max-w-[500px] min-w-[405px] p-3">
                 <div className="flex justify-between w-full ">
                   <div className="flex items-center gap-2">
                     <Link to={`${post.userId}`}>
@@ -437,10 +562,8 @@ export const Post = (props: Props) => {
                                 <span className="p-[3px]">Liked by </span>
                                 {likes[0].userId === user?.uid
                                   ? "You"
-                                  : likes[0].userName ||
-                                    likes[0].nameId ||
-                                    ""}{" "}
-                                and{" "}
+                                  : likes[0].userName || likes[0].nameId || ""}
+                                and
                                 {likes[1].userId === user?.uid
                                   ? "you"
                                   : likes[1].userName || likes[1].nameId || ""}
@@ -647,8 +770,8 @@ export const Post = (props: Props) => {
           </div>
         </Modal>
       )}
-      <div className="flex flex-col items-center justify-center px-2 mt-20 md:px-0">
-        <div className="max-w-[500px] w-full flex flex-col border-[1px] rounded   h-full">
+      <div className="flex flex-col items-center justify-center px-2 mt-10 md:px-0">
+        <div className="max-w-[450px] w-full flex flex-col border-[1px] rounded   h-full">
           <div className="flex flex-col w-full gap-2 p-2 text-start">
             <div className="flex items-center gap-2">
               <Link to={`${post.userId}`}>
@@ -686,6 +809,20 @@ export const Post = (props: Props) => {
                 <span>•</span>
                 {timeAgo}
               </span>
+              {user && (
+                <button
+                  onClick={() => {
+                    if (isFollowing) {
+                      unfollowUser(post.userId);
+                    } else {
+                      followUser(post.userId);
+                    }
+                  }}
+                  className={`${post.userId === user?.uid && "hidden"}  `}
+                >
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </button>
+              )}
             </div>
             {loading && (
               <>
@@ -705,7 +842,6 @@ export const Post = (props: Props) => {
               onError={() => setLoading(false)}
               style={{ display: loading ? "none" : "block" }}
             />
-
             {/* </Link> */}
             <div className="flex items-center justify-between">
               {likes ? (
@@ -749,7 +885,7 @@ export const Post = (props: Props) => {
                             <span className="p-[3px]">Liked by </span>
                             {likes[0].userId === user?.uid
                               ? "You"
-                              : likes[0].userName || likes[0].nameId || ""}{" "}
+                              : likes[0].userName || likes[0].nameId || ""}
                             and
                             {likes[1].userId === user?.uid
                               ? "you"
@@ -825,12 +961,8 @@ export const Post = (props: Props) => {
             {comments.slice(0, 2).map((comment) => (
               /* @ts-ignore */
               <div key={comment.id} className="flex justify-between w-full">
-                <div className="flex items-center w-full gap-1 ">
+                <div className="flex items-center w-full gap-1">
                   <p className=" font-semibold  text-[13px]">
-                    {/* @ts-ignore */}
-                    {/* {comment?.userName} */}
-                    {/* @ts-ignore */}
-                    {/* {comment?.displayName} */}
                     {/* @ts-ignore */}
                     {comment.userName ? (
                       <>
