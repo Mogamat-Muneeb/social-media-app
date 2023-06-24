@@ -37,7 +37,7 @@ export const Login = () => {
           <div className="border-[1px] border-gray-400 rounded-md w-[300px] flex justify-center">
             <button
               onClick={signInWithGoogle}
-              className="flex items-center justify-center gap-3 p-3"
+              className="flex items-center justify-center w-full gap-3 py-3 "
             >
               <GoogleIcon />
               Sign in or up with Google

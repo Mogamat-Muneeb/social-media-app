@@ -773,56 +773,63 @@ export const Post = (props: Props) => {
       <div className="flex flex-col items-center justify-center px-2 mt-10 md:px-0">
         <div className="max-w-[450px] w-full flex flex-col border-[1px] rounded   h-full">
           <div className="flex flex-col w-full gap-2 p-2 text-start">
-            <div className="flex items-center gap-2">
-              <Link to={`${post.userId}`}>
-                {post.photoURL ? (
-                  <>
-                    <img
-                      src={`${post.photoURL}?${new Date().getTime()}`}
-                      className="object-cover border rounded-full shadow w-9 h-9"
-                      alt=""
-                      key={Date.now()}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <img
-                      src={post.userPp}
-                      className="object-cover border rounded-full shadow w-9 h-9"
-                      alt=""
-                    />
-                  </>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <Link to={`${post.userId}`}>
+                  {post.photoURL ? (
+                    <>
+                      <img
+                        src={`${post.photoURL}?${new Date().getTime()}`}
+                        className="object-cover border rounded-full shadow w-9 h-9"
+                        alt=""
+                        key={Date.now()}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={post.userPp}
+                        className="object-cover border rounded-full shadow w-9 h-9"
+                        alt=""
+                      />
+                    </>
+                  )}
+                </Link>
+                <Link to={`${post.userId}`}>
+                  {post.userName
+                    ? post.userName
+                    : post.username
+                        ?.split(" ")
+                        .map(
+                          (word) =>
+                            word.substring(0, 1).toLowerCase() +
+                            word.substring(1)
+                        )
+                        .join(" ")}
+                </Link>
+                <span className="flex gap-1">
+                  <span>•</span>
+                  {timeAgo}
+                </span>
+              </div>
+              <div>
+                {user && (
+                  <button
+                    onClick={() => {
+                      if (isFollowing) {
+                        unfollowUser(post.userId);
+                      } else {
+                        followUser(post.userId);
+                      }
+                    }}
+                    className={`${post.userId === user?.uid && "hidden"}  `}
+                  >
+                    <span className="text-[14px] font-semibold text-[#0095f6]">
+                      {isFollowing ? "Unfollow" : "Follow"}
+                    </span>
+                  </button>
                 )}
-              </Link>
-              <Link to={`${post.userId}`}>
-                {post.userName
-                  ? post.userName
-                  : post.username
-                      ?.split(" ")
-                      .map(
-                        (word) =>
-                          word.substring(0, 1).toLowerCase() + word.substring(1)
-                      )
-                      .join(" ")}
-              </Link>
-              <span className="flex gap-1">
-                <span>•</span>
-                {timeAgo}
-              </span>
-              {user && (
-                <button
-                  onClick={() => {
-                    if (isFollowing) {
-                      unfollowUser(post.userId);
-                    } else {
-                      followUser(post.userId);
-                    }
-                  }}
-                  className={`${post.userId === user?.uid && "hidden"}  `}
-                >
-                  {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-              )}
+              </div>
             </div>
             {loading && (
               <>
