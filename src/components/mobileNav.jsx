@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { VscHome } from "react-icons/vsc";
 import { FiPlusSquare } from "react-icons/fi";
+import { BiLogIn } from "react-icons/bi";
 import { LogoutIcon } from "./icon";
 export const MobileNav = () => {
   const [user] = useAuthState(auth);
@@ -46,11 +47,11 @@ export const MobileNav = () => {
         } `}
       >
         <div
-          className={`flex items-center  w-full mx-auto lg:px-0  px-10  ${
-            user ? " justify-center gap-10 " : " justify-center "
+          className={`flex items-center   w-full mx-auto lg:px-0  px-10  ${
+            user ? " justify-between " : " justify-between "
           }`}
         >
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4"> */}
             <Link
               to="/"
               className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
@@ -58,9 +59,9 @@ export const MobileNav = () => {
               }`}
             >
               <span>
-                {user ? <VscHome className="text-[23px] font-bold" /> : "home"}
+                <VscHome className="text-[23px] font-bold" />
               </span>
-              <span  className="text-[12px]"> {user && "Home" }</span>
+              <span  className="text-[12px]">Home</span>
             </Link>
             <Link
               to="/createpost"
@@ -75,16 +76,17 @@ export const MobileNav = () => {
               <>
                 <Link
                   to="/login"
-                  className={`font-medium md:text-[16px]  text-[14px] ${
+                  className={`font-medium md:text-[16px]  text-[14px]  flex items-center flex-col justify-center ${
                     pathName.pathname === "/login" && "text-[#ff3040]"
                   }`}
                 >
+                  <BiLogIn  className="text-[23px] font-semibold"/>
                   Login
                 </Link>
               </>
             )}
-          </div>
-          <div className="flex items-center gap-4">
+          {/* </div> */}
+          {/* <div className="flex items-center gap-4"> */}
             {user && (
               <>
                 <Link to={user?.uid} className="flex flex-col items-center">
@@ -134,7 +136,7 @@ export const MobileNav = () => {
             )}
           </div>
         </div>
-      </div>
+      {/* </div> */}
     </>
   );
 };
