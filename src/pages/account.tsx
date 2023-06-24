@@ -1,7 +1,12 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { auth, db, storage } from "../config/firebase";
 import { useParams } from "react-router-dom";
-import { RectIcon, LikedIcon, UnSavedIcon, LoadingSpinner } from "../components/icon";
+import {
+  RectIcon,
+  LikedIcon,
+  UnSavedIcon,
+  LoadingSpinner,
+} from "../components/icon";
 import AccountModal from "../components/accountmodal";
 import {
   doc,
@@ -44,6 +49,14 @@ export const Account = () => {
   const [postId, setPostId] = useState<string>("");
   const [storageRef, setStorageRef] = useState<string>("");
   const [tab, setTab] = useState("Posts");
+
+  const [followers, setFollowers] = useState<string[]>([]);
+  const [following, setFollowing] = useState<string[]>([]);
+  const followingRef = collection(db, "following");
+  const followingDocRef = doc(followingRef, user?.uid);
+  console.log(followers.length, "followers");
+  console.log(following.length, "following");
+
   useEffect(() => {
     /* @ts-ignore */
     const docRef = doc(db, "users", uid);
@@ -157,6 +170,49 @@ export const Account = () => {
     }
   }, [showModal]);
 
+  useEffect(() => {
+    const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const followingData = docSnapshot.data();
+        if (followingData && Array.isArray(followingData.following)) {
+          setFollowing(followingData.following);
+        } else {
+          setFollowing([]);
+        }
+      } else {
+        setFollowing([]);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(followingRef, (querySnapshot) => {
+      const followersList: string[] = [];
+
+      querySnapshot.forEach((doc) => {
+        if (doc.exists()) {
+          const followingData = doc.data();
+          if (
+            followingData &&
+            Array.isArray(followingData.following) &&
+            followingData.following.includes(user?.uid)
+          ) {
+            followersList.push(doc.id);
+          }
+        }
+      });
+
+      setFollowers(followersList);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
   return (
     <ProtectedRoute>
       <AccountModal show={show} onClose={closeToggle} userID={user?.uid} />
