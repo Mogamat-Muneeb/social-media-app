@@ -71,12 +71,71 @@ export const Post = (props: Props) => {
   const likesRef = collection(db, "likes");
   const USER_ID = user?.uid;
 
+  // const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  // const followingRef = collection(db, "following");
+  // const followingDocRef = doc(followingRef, user?.uid);
+
+  // console.log(user, "user");
+
+  // const followUser = async (userId: string) => {
+  //   try {
+  //     const followingDoc = await getDoc(followingDocRef);
+
+  //     if (!followingDoc.exists()) {
+  //       await setDoc(followingDocRef, { following: [userId] });
+  //     } else {
+  //       await updateDoc(followingDocRef, {
+  //         following: arrayUnion(userId),
+  //       });
+  //     }
+
+  //     setIsFollowing(true);
+  //   } catch (error) {
+  //     console.error("Error following user:", error);
+  //   }
+  // };
+
+  // const unfollowUser = async (userId: string) => {
+  //   try {
+  //     await updateDoc(followingDocRef, {
+  //       following: arrayRemove(userId),
+  //     });
+  //     setIsFollowing(false);
+  //   } catch (error) {
+  //     console.error("Error unfollowing user:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
+  //     if (docSnapshot.exists()) {
+  //       const followingData = docSnapshot.data();
+  //       setIsFollowing(
+  //         followingData && Array.isArray(followingData.following)
+  //           ? followingData.following.includes(post.userId)
+  //           : false
+  //       );
+  //     }
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [user]);
+
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const followingRef = collection(db, "following");
-  const followingDocRef = doc(followingRef, user?.uid);
+  const followingDocRef = user ? doc(followingRef, user.uid) : null;
+
+  console.log(user, "user");
 
   const followUser = async (userId: string) => {
     try {
+      if (!followingDocRef) {
+        console.error("No user is logged in.");
+        return;
+      }
+
       const followingDoc = await getDoc(followingDocRef);
 
       if (!followingDoc.exists()) {
@@ -95,6 +154,11 @@ export const Post = (props: Props) => {
 
   const unfollowUser = async (userId: string) => {
     try {
+      if (!followingDocRef) {
+        console.error("No user is logged in.");
+        return;
+      }
+
       await updateDoc(followingDocRef, {
         following: arrayRemove(userId),
       });
@@ -105,6 +169,11 @@ export const Post = (props: Props) => {
   };
 
   useEffect(() => {
+    if (!followingDocRef) {
+      console.error("No user is logged in.");
+      return;
+    }
+
     const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const followingData = docSnapshot.data();
@@ -740,18 +809,20 @@ export const Post = (props: Props) => {
                 <span>•</span>
                 {timeAgo}
               </span>
-              <button
-                onClick={() => {
-                  if (isFollowing) {
-                    unfollowUser(post.userId);
-                  } else {
-                    followUser(post.userId);
-                  }
-                }}
-                className={`${post.userId === user?.uid && "hidden"}  `}
-              >
-                {isFollowing ? "Unfollow" : "Follow"}
-              </button>
+              {user && (
+                <button
+                  onClick={() => {
+                    if (isFollowing) {
+                      unfollowUser(post.userId);
+                    } else {
+                      followUser(post.userId);
+                    }
+                  }}
+                  className={`${post.userId === user?.uid && "hidden"}  `}
+                >
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </button>
+              )}
             </div>
             {loading && (
               <>

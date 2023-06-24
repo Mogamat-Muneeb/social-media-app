@@ -325,9 +325,17 @@ export const Account = () => {
                           )}
                         </div>
                       </div>
-                      <p className="text-[16px] font-medium">
-                        {posts.length} posts
-                      </p>
+                      <div className="flex items-center gap-4 pt-[10px]">
+                        <p className="text-[16px] font-medium">
+                          {posts.length} posts
+                        </p>
+                        <p className="text-[16px] font-medium">
+                          {followers.length} followers
+                        </p>
+                        <p className="text-[16px] font-medium">
+                          {following.length} following
+                        </p>
+                      </div>
                     </div>
                     <div className="flex flex-col items-start">
                       <p className="text-[16px] font-normal">
