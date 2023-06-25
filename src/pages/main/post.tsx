@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db, auth } from "../../config/firebase";
 import { Post as IPost } from "./main";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { config } from "../../config/index";
 import { Modal } from "../../components/modal";
@@ -62,7 +62,6 @@ export interface Saved {
 export const Post = (props: Props) => {
   const { post } = props;
   const [user] = useAuthState(auth);
-  const navigate = useNavigate();
   const [likes, setLikes] = useState<Like[] | null>(null);
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -71,63 +70,9 @@ export const Post = (props: Props) => {
   const likesRef = collection(db, "likes");
   const USER_ID = user?.uid;
 
-  // const [isFollowing, setIsFollowing] = useState<boolean>(false);
-  // const followingRef = collection(db, "following");
-  // const followingDocRef = doc(followingRef, user?.uid);
-
-  // console.log(user, "user");
-
-  // const followUser = async (userId: string) => {
-  //   try {
-  //     const followingDoc = await getDoc(followingDocRef);
-
-  //     if (!followingDoc.exists()) {
-  //       await setDoc(followingDocRef, { following: [userId] });
-  //     } else {
-  //       await updateDoc(followingDocRef, {
-  //         following: arrayUnion(userId),
-  //       });
-  //     }
-
-  //     setIsFollowing(true);
-  //   } catch (error) {
-  //     console.error("Error following user:", error);
-  //   }
-  // };
-
-  // const unfollowUser = async (userId: string) => {
-  //   try {
-  //     await updateDoc(followingDocRef, {
-  //       following: arrayRemove(userId),
-  //     });
-  //     setIsFollowing(false);
-  //   } catch (error) {
-  //     console.error("Error unfollowing user:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
-  //     if (docSnapshot.exists()) {
-  //       const followingData = docSnapshot.data();
-  //       setIsFollowing(
-  //         followingData && Array.isArray(followingData.following)
-  //           ? followingData.following.includes(post.userId)
-  //           : false
-  //       );
-  //     }
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [user]);
-
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const followingRef = collection(db, "following");
   const followingDocRef = user ? doc(followingRef, user.uid) : null;
-
-  console.log(user, "user");
 
   const followUser = async (userId: string) => {
     try {
@@ -199,14 +144,14 @@ export const Post = (props: Props) => {
       query(
         collection(db, "saved"),
         where("postId", "==", post?.id),
-        where("userId", "==", user?.uid ?? "")
+        where("userId", "==", USER_ID ?? "")
       ),
-    [post?.id, user?.uid]
+    [post?.id, USER_ID]
   );
   const addSaved = async () => {
     try {
       const newDoc = await addDoc(collection(db, "saved"), {
-        userId: user?.uid,
+        userId: USER_ID,
         postId: post?.id,
         imageUrl: post?.imageUrl,
       });
@@ -270,7 +215,7 @@ export const Post = (props: Props) => {
   const addLike = () => {
     try {
       const newDoc = addDoc(likesRef, {
-        userId: user?.uid,
+        userId: USER_ID,
         postId: post.id,
         nameId: user?.displayName ?? null,
         emailId: user?.email ?? null,
@@ -321,7 +266,7 @@ export const Post = (props: Props) => {
       const likeToDeleteQuery = query(
         likesRef,
         where("postId", "==", post.id),
-        where("userId", "==", user?.uid)
+        where("userId", "==", USER_ID)
       );
 
       const likeToDeleteData = await getDocs(likeToDeleteQuery);
@@ -338,7 +283,7 @@ export const Post = (props: Props) => {
     }
   };
 
-  const hasUserLiked = likes?.find((like) => like.userId === user?.uid);
+  const hasUserLiked = likes?.find((like) => like.userId === USER_ID);
 
   useEffect(() => {
     getLikes();
@@ -384,7 +329,7 @@ export const Post = (props: Props) => {
 
     return unsubscribe;
   }, [post.id]);
-  const uid = user?.uid;
+  const uid = USER_ID;
   useEffect(() => {
     if (!uid) {
       return;
@@ -406,7 +351,7 @@ export const Post = (props: Props) => {
     });
 
     return () => unsubscribe();
-  }, [user?.uid]);
+  }, [USER_ID]);
 
   const [newCommentText, setNewCommentText] = useState("");
 
@@ -417,7 +362,7 @@ export const Post = (props: Props) => {
     }
     try {
       const newComment = {
-        userId: user?.uid ?? "",
+        userId: USER_ID ?? "",
         postId: post.id,
         commentText: newCommentText,
         date: Date.now(),
@@ -553,25 +498,25 @@ export const Post = (props: Props) => {
                             {likes.length === 1 ? (
                               <>
                                 <span className="p-[3px]">Liked by </span>
-                                {likes[0].userId === user?.uid
+                                {likes[0].userId === USER_ID
                                   ? "You"
                                   : likes[0].userName || likes[0].nameId || ""}
                               </>
                             ) : likes.length === 2 ? (
                               <>
                                 <span className="p-[3px]">Liked by </span>
-                                {likes[0].userId === user?.uid
+                                {likes[0].userId === USER_ID
                                   ? "You"
                                   : likes[0].userName || likes[0].nameId || ""}
                                 and
-                                {likes[1].userId === user?.uid
+                                {likes[1].userId === USER_ID
                                   ? "you"
                                   : likes[1].userName || likes[1].nameId || ""}
                               </>
                             ) : (
                               <>
                                 <span className="p-[3px]">{`Liked by ${likes.length} people including `}</span>
-                                {likes.some((like) => like.userId === user?.uid)
+                                {likes.some((like) => like.userId === USER_ID)
                                   ? "you"
                                   : `${
                                       likes[0].userName || likes[0].nameId || ""
@@ -708,25 +653,25 @@ export const Post = (props: Props) => {
                             {likes.length === 1 ? (
                               <>
                                 <span className="p-[3px]">Liked by </span>
-                                {likes[0].userId === user?.uid
+                                {likes[0].userId === USER_ID
                                   ? "You"
                                   : likes[0].userName || likes[0].nameId || ""}
                               </>
                             ) : likes.length === 2 ? (
                               <>
                                 <span className="p-[3px]">Liked by </span>
-                                {likes[0].userId === user?.uid
+                                {likes[0].userId === USER_ID
                                   ? "You"
                                   : likes[0].userName || likes[0].nameId || ""}
                                 and
-                                {likes[1].userId === user?.uid
+                                {likes[1].userId === USER_ID
                                   ? "you"
                                   : likes[1].userName || likes[1].nameId || ""}
                               </>
                             ) : (
                               <>
                                 <span className="p-[3px]">{`Liked by ${likes.length} people including `}</span>
-                                {likes.some((like) => like.userId === user?.uid)
+                                {likes.some((like) => like.userId === USER_ID)
                                   ? "you"
                                   : `${
                                       likes[0].userName || likes[0].nameId || ""
@@ -822,7 +767,7 @@ export const Post = (props: Props) => {
                         followUser(post.userId);
                       }
                     }}
-                    className={`${post.userId === user?.uid && "hidden"}  `}
+                    className={`${post.userId === USER_ID && "hidden"}  `}
                   >
                     <span className="text-[14px] font-semibold text-[#0095f6]">
                       {isFollowing ? "Unfollow" : "Follow"}
@@ -883,25 +828,25 @@ export const Post = (props: Props) => {
                         {likes.length === 1 ? (
                           <>
                             <span className="p-[3px]">Liked by </span>
-                            {likes[0].userId === user?.uid
+                            {likes[0].userId === USER_ID
                               ? "You"
                               : likes[0].userName || likes[0].nameId || ""}
                           </>
                         ) : likes.length === 2 ? (
                           <>
                             <span className="p-[3px]">Liked by </span>
-                            {likes[0].userId === user?.uid
+                            {likes[0].userId === USER_ID
                               ? "You"
                               : likes[0].userName || likes[0].nameId || ""}
                             and
-                            {likes[1].userId === user?.uid
+                            {likes[1].userId === USER_ID
                               ? "you"
                               : likes[1].userName || likes[1].nameId || ""}
                           </>
                         ) : (
                           <>
                             <span className="p-[3px]">{`Liked by ${likes.length} people including `}</span>
-                            {likes.some((like) => like.userId === user?.uid)
+                            {likes.some((like) => like.userId === USER_ID)
                               ? "you"
                               : `${
                                   likes[0].userName || likes[0].nameId || ""
@@ -996,7 +941,7 @@ export const Post = (props: Props) => {
               </div>
             ))}
           </div>
-          {user?.uid ? (
+          {USER_ID ? (
             <div className="flex items-center justify-center w-full px-2 pt-2 pb-2 md:px-2">
               <form
                 onSubmit={handleCommentSubmit}
