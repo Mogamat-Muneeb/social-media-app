@@ -32,9 +32,9 @@ export const Login = () => {
               Welcome to
               <span className="text-[#ff3040] px-1">Circledop !!</span>
             </h1>
-            <span className="text-[14px]">Easy Signup Now</span>
+            <span className="text-[14px] font-medium">Easy Signup Now</span>
           </div>
-          <div className="border-[1px] border-gray-400 rounded-md w-[300px] flex justify-center">
+          <div className="border-[1px] border-gray-400 rounded w-[300px] flex justify-center">
             <button
               onClick={signInWithGoogle}
               className="flex items-center justify-center w-full gap-3 py-3 "

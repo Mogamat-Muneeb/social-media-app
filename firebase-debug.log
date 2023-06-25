@@ -1,61 +1,13 @@
-[debug] [2023-06-24T09:51:49.950Z] ----------------------------------------------------------------------
-[debug] [2023-06-24T09:51:49.953Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\davim\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2023-06-24T09:51:49.954Z] CLI Version:   11.10.0
-[debug] [2023-06-24T09:51:49.954Z] Platform:      win32
-[debug] [2023-06-24T09:51:49.954Z] Node Version:  v16.13.2
-[debug] [2023-06-24T09:51:49.962Z] Time:          Sat Jun 24 2023 11:51:49 GMT+0200 (South Africa Standard Time)
-[debug] [2023-06-24T09:51:49.963Z] ----------------------------------------------------------------------
+[debug] [2023-06-24T11:32:18.727Z] ----------------------------------------------------------------------
+[debug] [2023-06-24T11:32:18.729Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\davim\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2023-06-24T11:32:18.729Z] CLI Version:   11.10.0
+[debug] [2023-06-24T11:32:18.729Z] Platform:      win32
+[debug] [2023-06-24T11:32:18.729Z] Node Version:  v16.13.2
+[debug] [2023-06-24T11:32:18.730Z] Time:          Sat Jun 24 2023 13:32:18 GMT+0200 (South Africa Standard Time)
+[debug] [2023-06-24T11:32:18.730Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2023-06-24T09:51:49.966Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
-[debug] [2023-06-24T09:51:50.070Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-06-24T09:51:50.075Z] > authorizing via signed-in user (davimuneeb785@gmail.com)
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
-
-You're about to initialize a Firebase project in this directory:
-
-  D:\davim\Life Choices\Projects\social-media-app
-
-Before we get started, keep in mind:
-
-  * You are initializing within an existing Firebase project directory
-
-[debug] [2023-06-24T09:51:51.049Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
-[debug] [2023-06-24T09:51:51.049Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
-[info] 
-=== Project Setup
-[info] 
-[info] First, let's associate this project directory with a Firebase project.
-[info] You can create multiple project aliases by running firebase use --add, 
-[info] but for now we'll just set up a default project.
-[info] 
-[debug] [2023-06-24T09:52:00.391Z] Using project from CLI flag: circledop
-[debug] [2023-06-24T09:52:00.392Z] > refreshing access token with scopes: []
-[debug] [2023-06-24T09:52:00.393Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
-[debug] [2023-06-24T09:52:00.393Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2023-06-24T09:52:21.440Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
-
-For CI servers and headless environments, generate a new token with firebase login:ci
-[debug] [2023-06-24T09:52:26.458Z] Error: Timed out.
-    at Timeout._onTimeout (C:\Users\davim\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:253:49)
-    at listOnTimeout (node:internal/timers:557:17)
-    at processTimers (node:internal/timers:500:7)
-[error] 
-[error] Error: An unexpected error has occurred.
-[debug] [2023-06-24T09:52:56.827Z] ----------------------------------------------------------------------
-[debug] [2023-06-24T09:52:56.829Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\davim\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2023-06-24T09:52:56.830Z] CLI Version:   11.10.0
-[debug] [2023-06-24T09:52:56.830Z] Platform:      win32
-[debug] [2023-06-24T09:52:56.830Z] Node Version:  v16.13.2
-[debug] [2023-06-24T09:52:56.831Z] Time:          Sat Jun 24 2023 11:52:56 GMT+0200 (South Africa Standard Time)
-[debug] [2023-06-24T09:52:56.831Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2023-06-24T09:52:56.898Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-06-24T09:52:56.898Z] > authorizing via signed-in user (davimuneeb785@gmail.com)
+[debug] [2023-06-24T11:32:18.795Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-06-24T11:32:18.795Z] > authorizing via signed-in user (davimuneeb785@gmail.com)
 [info] 
      ######## #### ########  ######## ########     ###     ######  ########
      ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
@@ -78,51 +30,28 @@ Before we get started, keep in mind:
 [info] You can create multiple project aliases by running firebase use --add, 
 [info] but for now we'll just set up a default project.
 [info] 
-[debug] [2023-06-24T09:53:04.301Z] Using project from CLI flag: circledop
-[debug] [2023-06-24T09:53:04.303Z] > refreshing access token with scopes: []
-[debug] [2023-06-24T09:53:04.306Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
-[debug] [2023-06-24T09:53:04.307Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2023-06-24T09:53:28.300Z] ----------------------------------------------------------------------
-[debug] [2023-06-24T09:53:28.304Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\davim\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2023-06-24T09:53:28.305Z] CLI Version:   11.10.0
-[debug] [2023-06-24T09:53:28.305Z] Platform:      win32
-[debug] [2023-06-24T09:53:28.305Z] Node Version:  v16.13.2
-[debug] [2023-06-24T09:53:28.307Z] Time:          Sat Jun 24 2023 11:53:28 GMT+0200 (South Africa Standard Time)
-[debug] [2023-06-24T09:53:28.307Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2023-06-24T09:53:28.409Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-06-24T09:53:28.409Z] > authorizing via signed-in user (davimuneeb785@gmail.com)
+[debug] [2023-06-24T11:32:23.329Z] Using project from CLI flag: circledop
+[debug] [2023-06-24T11:32:23.334Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/circledop [none]
+[debug] [2023-06-24T11:32:24.307Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/circledop 200
+[debug] [2023-06-24T11:32:24.307Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/circledop {"projectId":"circledop","projectNumber":"625264165607","displayName":"circledop","name":"projects/circledop","resources":{"hostingSite":"circledop","storageBucket":"circledop.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_305a2d44-7153-40d6-a121-a1fd978984a4"}
+[info] i  Using project circledop (circledop) 
 [info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
-
-You're about to initialize a Firebase project in this directory:
-
-  D:\davim\Life Choices\Projects\social-media-app
-
-Before we get started, keep in mind:
-
-  * You are initializing within an existing Firebase project directory
-
+=== Hosting Setup
 [info] 
-=== Project Setup
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
 [info] 
-[info] First, let's associate this project directory with a Firebase project.
-[info] You can create multiple project aliases by running firebase use --add, 
-[info] but for now we'll just set up a default project.
+[debug] [2023-06-24T11:32:30.885Z] >>> [apiv2][query] GET https://www.gstatic.com/firebasejs/releases.json [none]
+[debug] [2023-06-24T11:32:31.676Z] <<< [apiv2][status] GET https://www.gstatic.com/firebasejs/releases.json 200
+[debug] [2023-06-24T11:32:31.676Z] <<< [apiv2][body] GET https://www.gstatic.com/firebasejs/releases.json {"current":{"version":"9.23.0","browserURL":"https://www.gstatic.com/firebasejs/9.23.0/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/9.23.0/firebase.tgz"},"live":{"version":"9.23","browserURL":"https://www.gstatic.com/firebasejs/live/9.23/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/live/9.23/firebase.tgz"},"components":{"analytics":"https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js","app":"https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js","app-check":"https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check.js","auth":"https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js","auth/cordova":"https://www.gstatic.com/firebasejs/9.23.0/firebase-auth/cordova.js","auth/react-native":"https://www.gstatic.com/firebasejs/9.23.0/firebase-auth/react-native.js","functions":"https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js","firestore":"https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js","firestore/lite":"https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore/lite.js","installations":"https://www.gstatic.com/firebasejs/9.23.0/firebase-installations.js","storage":"https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js","performance":"https://www.gstatic.com/firebasejs/9.23.0/firebase-performance.js","remote-config":"https://www.gstatic.com/firebasejs/9.23.0/firebase-remote-config.js","messaging":"https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js","messaging/sw":"https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging/sw.js","database":"https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js","firestore.memory":"https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.memory.js"}}
+[info] i  Skipping write of build/index.html 
 [info] 
-[debug] [2023-06-24T09:54:04.387Z] Using project from CLI flag: circledop
-[debug] [2023-06-24T09:54:04.389Z] > refreshing access token with scopes: []
-[debug] [2023-06-24T09:54:04.395Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
-[debug] [2023-06-24T09:54:04.395Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2023-06-24T09:54:04.999Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
-[debug] [2023-06-24T09:54:04.999Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2023-06-24T09:54:05.009Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/circledop [none]
-[debug] [2023-06-24T09:54:26.083Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/circledop
-[debug] [2023-06-24T09:54:31.098Z] Error: Timed out.
+[info] i  Writing configuration info to firebase.json... 
+[info] i  Writing project information to .firebaserc... 
+[info] 
+[info] +  Firebase initialization complete! 
+[debug] [2023-06-24T11:32:38.318Z] Error: Timed out.
     at Timeout._onTimeout (C:\Users\davim\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:253:49)
     at listOnTimeout (node:internal/timers:557:17)
     at processTimers (node:internal/timers:500:7)

@@ -50,12 +50,19 @@ export const Account = () => {
   const [storageRef, setStorageRef] = useState<string>("");
   const [tab, setTab] = useState("Posts");
 
-  const [followers, setFollowers] = useState<string[]>([]);
-  const [following, setFollowing] = useState<string[]>([]);
-  const followingRef = collection(db, "following");
-  const followingDocRef = doc(followingRef, user?.uid);
-  console.log(followers.length, "followers");
-  console.log(following.length, "following");
+  // const [followers, setFollowers] = useState<string[]>([]);
+  // const [following, setFollowing] = useState<string[]>([]);
+  // const followingRef = collection(db, "following");
+  // const followingDocRef = doc(followingRef, user?.uid);
+  // console.log(followers.length, "followers");
+  // console.log(following.length, "following");
+
+  const [profileFollowers, setProfileFollowers] = useState<string[]>([]);
+  const [profileFollowing, setProfileFollowing] = useState<string[]>([]);
+  const profileFollowingRef = collection(db, "following");
+  const profileFollowingDocRef = doc(profileFollowingRef, uid);
+  // console.log(profileFollowers.length, "profile followers");
+  // console.log(profileFollowing.length, "profile following");
 
   useEffect(() => {
     /* @ts-ignore */
@@ -170,27 +177,71 @@ export const Account = () => {
     }
   }, [showModal]);
 
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
+  //     if (docSnapshot.exists()) {
+  //       const followingData = docSnapshot.data();
+  //       if (followingData && Array.isArray(followingData.following)) {
+  //         setFollowing(followingData.following);
+  //       } else {
+  //         setFollowing([]);
+  //       }
+  //     } else {
+  //       setFollowing([]);
+  //     }
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [user]);
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(followingRef, (querySnapshot) => {
+  //     const followersList: string[] = [];
+
+  //     querySnapshot.forEach((doc) => {
+  //       if (doc.exists()) {
+  //         const followingData = doc.data();
+  //         if (
+  //           followingData &&
+  //           Array.isArray(followingData.following) &&
+  //           followingData.following.includes(user?.uid)
+  //         ) {
+  //           followersList.push(doc.id);
+  //         }
+  //       }
+  //     });
+
+  //     setFollowers(followersList);
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [user]);
+
   useEffect(() => {
-    const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
+    const unsubscribe = onSnapshot(profileFollowingDocRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const followingData = docSnapshot.data();
         if (followingData && Array.isArray(followingData.following)) {
-          setFollowing(followingData.following);
+          setProfileFollowing(followingData.following);
         } else {
-          setFollowing([]);
+          setProfileFollowing([]);
         }
       } else {
-        setFollowing([]);
+        setProfileFollowing([]);
       }
     });
 
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, [uid]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(followingRef, (querySnapshot) => {
+    const unsubscribe = onSnapshot(profileFollowingRef, (querySnapshot) => {
       const followersList: string[] = [];
 
       querySnapshot.forEach((doc) => {
@@ -199,20 +250,20 @@ export const Account = () => {
           if (
             followingData &&
             Array.isArray(followingData.following) &&
-            followingData.following.includes(user?.uid)
+            followingData.following.includes(uid)
           ) {
             followersList.push(doc.id);
           }
         }
       });
 
-      setFollowers(followersList);
+      setProfileFollowers(followersList);
     });
 
     return () => {
       unsubscribe();
     };
-  }, [user]);
+  }, [uid]);
   return (
     <ProtectedRoute>
       <AccountModal show={show} onClose={closeToggle} userID={user?.uid} />
@@ -330,10 +381,10 @@ export const Account = () => {
                           {posts.length} posts
                         </p>
                         <p className="text-[16px] font-medium">
-                          {followers.length} followers
+                          {profileFollowers.length} followers
                         </p>
                         <p className="text-[16px] font-medium">
-                          {following.length} following
+                          {profileFollowing.length} following
                         </p>
                       </div>
                     </div>
@@ -457,10 +508,12 @@ export const Account = () => {
                         <span>{posts.length} </span> <span>posts</span>
                       </p>
                       <p className="text-[16px] font-medium  flex flex-col items-center">
-                        <span>{followers.length} </span> <span>followers</span>
+                        <span>{profileFollowers.length} </span>{" "}
+                        <span>followers</span>
                       </p>
                       <p className="text-[16px] font-medium  flex flex-col items-center">
-                        <span>{following.length} </span> <span>following</span>
+                        <span>{profileFollowing.length} </span>{" "}
+                        <span>following</span>
                       </p>
                     </div>
                   </div>
