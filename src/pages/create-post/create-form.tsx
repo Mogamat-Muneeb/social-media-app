@@ -143,7 +143,7 @@ export const CreateForm = () => {
                       /* @ts-ignore */
                       URL.createObjectURL(file)
                     }
-                    className="rounded-sm shadow-lg  max-w-[500px] w-full  object-cover"
+                    className="rounded shadow-lg  max-w-[500px] w-full  object-cover"
                     alt="Uploaded file"
                   />
                 </div>

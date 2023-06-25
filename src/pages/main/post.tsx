@@ -77,7 +77,7 @@ export const Post = (props: Props) => {
   const followUser = async (userId: string) => {
     try {
       if (!followingDocRef) {
-        console.error("No user is logged in.");
+        // console.error("No user is logged in.");
         return;
       }
 
@@ -100,7 +100,7 @@ export const Post = (props: Props) => {
   const unfollowUser = async (userId: string) => {
     try {
       if (!followingDocRef) {
-        console.error("No user is logged in.");
+        // console.error("No user is logged in.");
         return;
       }
 
@@ -115,7 +115,7 @@ export const Post = (props: Props) => {
 
   useEffect(() => {
     if (!followingDocRef) {
-      console.error("No user is logged in.");
+      // console.error("No user is logged in.");
       return;
     }
 
@@ -789,7 +789,7 @@ export const Post = (props: Props) => {
             <img
               src={post.imageUrl}
               alt=""
-              className="max-h-[600px] object-cover"
+              className="max-h-[600px] object-cover rounded"
               onLoad={() => setLoading(false)}
               onError={() => setLoading(false)}
               style={{ display: loading ? "none" : "block" }}
