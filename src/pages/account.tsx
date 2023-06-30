@@ -50,19 +50,10 @@ export const Account = () => {
   const [storageRef, setStorageRef] = useState<string>("");
   const [tab, setTab] = useState("Posts");
 
-  // const [followers, setFollowers] = useState<string[]>([]);
-  // const [following, setFollowing] = useState<string[]>([]);
-  // const followingRef = collection(db, "following");
-  // const followingDocRef = doc(followingRef, user?.uid);
-  // console.log(followers.length, "followers");
-  // console.log(following.length, "following");
-
   const [profileFollowers, setProfileFollowers] = useState<string[]>([]);
   const [profileFollowing, setProfileFollowing] = useState<string[]>([]);
   const profileFollowingRef = collection(db, "following");
   const profileFollowingDocRef = doc(profileFollowingRef, uid);
-  // console.log(profileFollowers.length, "profile followers");
-  // console.log(profileFollowing.length, "profile following");
 
   useEffect(() => {
     /* @ts-ignore */
@@ -176,50 +167,6 @@ export const Account = () => {
       document.body.classList.remove("overflow-hidden");
     }
   }, [showModal]);
-
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(followingDocRef, (docSnapshot) => {
-  //     if (docSnapshot.exists()) {
-  //       const followingData = docSnapshot.data();
-  //       if (followingData && Array.isArray(followingData.following)) {
-  //         setFollowing(followingData.following);
-  //       } else {
-  //         setFollowing([]);
-  //       }
-  //     } else {
-  //       setFollowing([]);
-  //     }
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [user]);
-
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(followingRef, (querySnapshot) => {
-  //     const followersList: string[] = [];
-
-  //     querySnapshot.forEach((doc) => {
-  //       if (doc.exists()) {
-  //         const followingData = doc.data();
-  //         if (
-  //           followingData &&
-  //           Array.isArray(followingData.following) &&
-  //           followingData.following.includes(user?.uid)
-  //         ) {
-  //           followersList.push(doc.id);
-  //         }
-  //       }
-  //     });
-
-  //     setFollowers(followersList);
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [user]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(profileFollowingDocRef, (docSnapshot) => {
@@ -624,7 +571,7 @@ export const Account = () => {
                   )}
                   {tab === "Saved" && (
                     <>
-                      <h2> Saved</h2>
+                      <h2 className="flex items-center justify-center gap-1 font-medium "> Saved</h2>
                       <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
                         {savedPosts.map((saved) => (
                           /* @ts-ignore */

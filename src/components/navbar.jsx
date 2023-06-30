@@ -3,13 +3,19 @@ import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+  console.log(
+    "🚀 ~ file: navbar.jsx:14 ~ Navbar ~ unreadNotificationsCount:",
+    unreadNotificationsCount
+  );
+
   const navigate = useNavigate();
   const signUserOut = async () => {
     if (auth) {
@@ -27,6 +33,23 @@ export const Navbar = () => {
           console.log("No such document!");
         }
         setIsLoading(false);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (user && user.uid) {
+      const notificationsRef = collection(db, "notifications");
+      const unreadNotificationsQuery = query(
+        notificationsRef,
+        where("viewedBy", "not-in", [user.uid]) // Query for notifications not viewed by the user
+      );
+
+      const unsubscribe = onSnapshot(unreadNotificationsQuery, (snapshot) => {
+        const count = snapshot.docs.length;
+        setUnreadNotificationsCount(count);
       });
 
       return () => unsubscribe();
@@ -75,6 +98,24 @@ export const Navbar = () => {
             >
               Explore
             </Link> */}
+            <Link
+              to="/notifications"
+              className={`font-medium md:text-[16px] text-[14px] ${
+                user ? "block" : "hidden"
+              } ${pathName.pathname === "/notifications" && "text-[#ff3040]"} `}
+            >
+              <div
+                className={`${
+                  unreadNotificationsCount
+                    ? "bg-[#ff3040] rounded-full w-[10px] h-[10px] justify-end items-end absolute ml-[90px]"
+                    : ""
+                }`}
+              ></div>
+              <span className="relative">
+                Notifications
+                {/* <span className="text-white">{unreadNotificationsCount}</span> */}
+              </span>
+            </Link>
             {user?.uid ? null : (
               <>
                 <Link

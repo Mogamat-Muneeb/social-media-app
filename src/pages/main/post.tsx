@@ -785,7 +785,7 @@ export const Post = (props: Props) => {
                 </div>
               </>
             )}
-            {/* <Link to={`/posts/${post.id}`}> */}
+            <Link to={`/posts/${post.id}`}>
             <img
               src={post.imageUrl}
               alt=""
@@ -794,7 +794,7 @@ export const Post = (props: Props) => {
               onError={() => setLoading(false)}
               style={{ display: loading ? "none" : "block" }}
             />
-            {/* </Link> */}
+            </Link>
             <div className="flex items-center justify-between">
               {likes ? (
                 <div className="flex flex-col">

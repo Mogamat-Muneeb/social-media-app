@@ -1,13 +1,150 @@
+// import { useForm } from "react-hook-form";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+// import { auth, db, storage } from "../../config/firebase";
+// import { useAuthState } from "react-firebase-hooks/auth";
+// import { useNavigate } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+// import { LoadingSpinner } from "../../components/icon";
+
+// interface CreateFormData {
+//   description: string;
+// }
+
+// export const CreateForm = () => {
+//   const [user] = useAuthState(auth);
+//   const navigate = useNavigate();
+//   const [file, setFile] = useState("");
+//   const [uploadProgress, setUploadProgress] = useState(0);
+//   const [uploaded, setUploaded] = useState(false);
+//   const [saving, setSaving] = useState(false);
+//   const [show, setShowing] = useState("step1");
+//   const [description, setDescription] = useState("");
+//   const [buttonDisabled, setButtonDisabled] = useState(true);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const schema = yup.object().shape({
+//     description: yup.string().required("You must add a description."),
+//   });
+
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//   } = useForm<CreateFormData>({
+//     resolver: yupResolver(schema),
+//   });
+
+//   const handleChange = (event: any) => {
+//     setFile(event.target.files[0]);
+//   };
+
+//   const handleChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+//     setDescription(event.target.value);
+//   };
+
+//   useEffect(() => {
+//     if (description.trim().length > 0) {
+//       setButtonDisabled(false);
+//     } else {
+//       setButtonDisabled(true);
+//     }
+//   }, [description]);
+
+//   const postsRef = collection(db, "posts");
+//   const [userData, setUserData] = useState(null);
+
+//   useEffect(() => {
+//     //@ts-ignore
+//     const docRef = doc(db, "users", user?.uid);
+//     //@ts-ignore
+//     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+//       if (docSnapshot.exists()) {
+//         //@ts-ignore
+//         setUserData(docSnapshot.data());
+//       }
+//     });
+
+//     return () => unsubscribe();
+//   }, [user?.uid]);
+
+//   const onPostSubmit = async (data: CreateFormData) => {
+//     if (file === "") {
+//       alert("Please add the file");
+//       return;
+//     }
+
+//     const storageRef = ref(storage, `posts/${user?.displayName}/${Date.now()}`);
+//     //@ts-ignore
+//     const uploadTask = uploadBytesResumable(storageRef, file);
+
+//     setUploaded(false);
+//     setSaving(true);
+//     setIsLoading(true);
+//     uploadTask.on(
+//       "state_changed",
+//       (snapshot) => {
+//         const progress =
+//           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+//         setUploadProgress(progress);
+//       },
+//       (error) => {
+//         console.log(error);
+//         setSaving(false);
+//       },
+//       async () => {
+//         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+//         const postDocRef = await addDoc(postsRef, {
+//           ...data,
+//           //@ts-ignore
+//           userName: userData?.userName ?? null,
+//           //@ts-ignore
+//           bio: userData?.bio ?? null,
+//           //@ts-ignore
+//           username: userData?.displayName ?? null,
+//           //@ts-ignore
+//           photoURL: userData?.photoURL,
+//           //@ts-ignore
+//           userId: userData?.uid,
+//           date: Date.now(),
+//           imageUrl: downloadURL,
+//         });
+
+//         const notificationsRef = collection(db, "notifications");
+//         await addDoc(notificationsRef, {
+//           postId: postDocRef.id, // ?Use the post document ID as the notification ID
+//           //@ts-ignore
+//           userId: userData?.uid,
+//           //@ts-ignore
+//           username: userData?.displayName ?? null,
+//           //@ts-ignore
+//           userName: userData?.userName ?? null,
+//           //@ts-ignore
+//           photoURL: userData?.photoURL,
+//           date: Date.now(),
+//           lookedAt: false, // ?A boolean property to track if the user has looked at the notification or not
+//         });
+
+//         setUploaded(true);
+//         setSaving(false);
+//         setIsLoading(false);
+//         navigate("/");
+//       }
+//     );
+//   };
+
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, query, where, getDocs } from "firebase/firestore";
 import { auth, db, storage } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { LoadingSpinner } from "../../components/icon";
+
 interface CreateFormData {
   description: string;
 }
@@ -38,6 +175,7 @@ export const CreateForm = () => {
   const handleChange = (event: any) => {
     setFile(event.target.files[0]);
   };
+
   const handleChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(event.target.value);
   };
@@ -54,11 +192,11 @@ export const CreateForm = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    /* @ts-ignore */
+      //@ts-ignore
     const docRef = doc(db, "users", user?.uid);
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
-        /* @ts-ignore */
+          //@ts-ignore
         setUserData(docSnapshot.data());
       }
     });
@@ -73,8 +211,7 @@ export const CreateForm = () => {
     }
 
     const storageRef = ref(storage, `posts/${user?.displayName}/${Date.now()}`);
-
-    /* @ts-ignore */
+      //@ts-ignore
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     setUploaded(false);
@@ -83,8 +220,7 @@ export const CreateForm = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setUploadProgress(progress);
       },
       (error) => {
@@ -93,29 +229,48 @@ export const CreateForm = () => {
       },
       async () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        addDoc(postsRef, {
+        const postDocRef = await addDoc(postsRef, {
           ...data,
-          /* @ts-ignore */
-          userName: userData.userName ?? null,
-          /* @ts-ignore */
-          bio: userData.bio ?? null,
-          /* @ts-ignore */
-          username: userData.displayName ?? null,
-          /* @ts-ignore */
-          photoURL: userData.photoURL,
-          /* @ts-ignore */
-          userId: userData.uid,
+            //@ts-ignore
+          userName: userData?.userName ?? null,
+            //@ts-ignore
+          bio: userData?.bio ?? null,
+            //@ts-ignore
+          username: userData?.displayName ?? null,
+            //@ts-ignore
+          photoURL: userData?.photoURL,
+            //@ts-ignore
+          userId: userData?.uid,
           date: Date.now(),
           imageUrl: downloadURL,
-        }).then(() => {
-          setUploaded(true);
-          setSaving(false);
-          setIsLoading(false);
-          navigate("/");
         });
+
+        const notificationsRef = collection(db, "notifications");
+        const userNotificationsQuery = query(
+          notificationsRef,
+          where("postId", "==", postDocRef.id),
+            //@ts-ignore
+          where("userId", "==", userData?.uid)
+        );
+        const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
+
+        const lookedAt = !userNotificationsSnapshot.empty;
+
+        await addDoc(notificationsRef, {
+          postId: postDocRef.id,
+            //@ts-ignore
+          userId: userData?.uid,
+          lookedAt: lookedAt,
+        });
+
+        setUploaded(true);
+        setSaving(false);
+        setIsLoading(false);
+        navigate("/");
       }
     );
   };
+
 
   return (
     <div className="flex flex-wrap items-center justify-center h-screen">
