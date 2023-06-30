@@ -7,6 +7,7 @@ import { Footer } from "./components/footer";
 import { CreatePost } from "./pages/create-post/create-post";
 import { SinglePost } from "./pages/singlepost";
 import { MobileNav } from "./components/mobileNav";
+import Explore from "./pages/explore";
 function App() {
   return (
     <div className="App">
@@ -18,6 +19,7 @@ function App() {
           <Route path="/createpost" element={<CreatePost />} />
           <Route path=":uid" element={<Account />} />
           <Route path="/posts/:postId" element={<SinglePost />} />
+          <Route path="/explore" element={<Explore />} />
         </Routes>
         <MobileNav />
         {/* <Footer/> */}

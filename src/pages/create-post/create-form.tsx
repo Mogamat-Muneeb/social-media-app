@@ -143,14 +143,14 @@ export const CreateForm = () => {
                       /* @ts-ignore */
                       URL.createObjectURL(file)
                     }
-                    className="rounded-sm shadow-lg  max-w-[500px] w-full  object-cover"
+                    className="rounded shadow-lg  max-w-[500px] w-full  object-cover"
                     alt="Uploaded file"
                   />
                 </div>
               )}
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center  h-full bg-black rounded-lg max-w-[500px] w-full cursor-pointer "
+                className="flex flex-col items-center justify-center  h-full bg-black rounded-lg max-w-[500px] w-full cursor-pointer hover:opacity-70"
               >
                 <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
                   <p className="flex items-center text-sm text-white">
