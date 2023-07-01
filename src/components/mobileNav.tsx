@@ -3,7 +3,7 @@ import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where, Unsubscribe } from "firebase/firestore";
 import { VscHome } from "react-icons/vsc";
 import { FiPlusSquare } from "react-icons/fi";
 import { BiLogIn } from "react-icons/bi";
@@ -14,7 +14,8 @@ export const MobileNav = () => {
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
-  // const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+
   const navigate = useNavigate();
   const signUserOut = async () => {
     if (auth) {
@@ -28,6 +29,7 @@ export const MobileNav = () => {
       const docRef = doc(db, "users", user.uid);
       const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
+           //@ts-ignore
           setUserData(docSnapshot.data());
         } else {
           console.log("No such document!");
@@ -39,22 +41,41 @@ export const MobileNav = () => {
     }
   }, [user?.uid]);
 
-  // useEffect(() => {
-  //   if (user && user.uid) {
-  //     const notificationsRef = collection(db, "notifications");
-  //     const unreadNotificationsQuery = query(
-  //       notificationsRef,
-  //       where("viewedBy", "not-in", [user.uid]) // Query for notifications not viewed by the user
-  //     );
 
-  //     const unsubscribe = onSnapshot(unreadNotificationsQuery, (snapshot) => {
-  //       const count = snapshot.docs.length;
-  //       setUnreadNotificationsCount(count);
-  //     });
 
-  //     return () => unsubscribe();
-  //   }
-  // }, [user?.uid]);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const notificationsRef = collection(db, "notifications");
+      const unsubscribe = onSnapshot(notificationsRef, (snapshot) => {
+        const updatedNotifications = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        //@ts-ignore
+        setNotifications(updatedNotifications);
+      });
+
+      return unsubscribe;
+    };
+
+    let unsubscribe: Unsubscribe | undefined;
+
+    const getNotifications = async () => {
+      unsubscribe = await fetchNotifications();
+    };
+
+    getNotifications();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+//@ts-ignore
+  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
+const count = filteredNotifications.length;
+
 
   return (
     <>
@@ -97,13 +118,13 @@ export const MobileNav = () => {
               user ? "block" : "hidden"
             } `}
           >
-            {/* <div
+            <div
               className={`${
-                unreadNotificationsCount
+                count
                   ? "bg-[#ff3040] rounded-full w-[8px] h-[8px] justify-end items-end absolute ml-4"
                   : ""
               }`}
-            ></div> */}
+            ></div>
             <AiFillHeart className="text-[22px]" />
             <span
               className={`relative text-[12px] pt-[3px]  ${
@@ -111,7 +132,9 @@ export const MobileNav = () => {
               } `}
             >
               Notifications
-              {/* <span className="text-white">{unreadNotificationsCount}</span> */}
+              {/* {unviewedCount > 0 && (
+                  <span className="text-white">{unviewedCount}</span>
+                )} */}
             </span>
           </Link>
           {user?.uid ? null : (
@@ -136,6 +159,7 @@ export const MobileNav = () => {
                 className="flex flex-col items-center font-medium"
               >
                 <img
+                  /*@ts-ignore */
                   src={userData?.photoURL}
                   alt={user?.displayName || ""}
                   className={`object-cover w-6 h-6 rounded-full  ${
@@ -143,7 +167,9 @@ export const MobileNav = () => {
                     "border-[1px] border-[#ff3040] "
                   }`}
                   onError={(e) => {
+                      /*@ts-ignore */
                     e.target.onerror = null;
+                      /*@ts-ignore */
                     e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                   }}
                 />
@@ -158,8 +184,11 @@ export const MobileNav = () => {
               <div className="flex-col hidden font-medium md:flex text-start">
                 <Link to={user?.uid}>
                   <p className="font-normal text-[14px] flex flex-col">
-                    {userData?.userName ? (
-                      <>{userData?.userName}</>
+                    
+                    {  /*@ts-ignore */
+                    userData?.userName ? (
+                      <>{  /*@ts-ignore */
+                        userData?.userName}</>
                     ) : (
                       <>
                         {user?.displayName
@@ -172,7 +201,8 @@ export const MobileNav = () => {
                           .join(" ")}
                       </>
                     )}
-                    <span>{userData?.displayName}</span>
+                    <span>{  /*@ts-ignore */
+                    userData?.displayName}</span>
                   </p>
                 </Link>
               </div>

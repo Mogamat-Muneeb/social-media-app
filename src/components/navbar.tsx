@@ -17,8 +17,6 @@ export const Navbar = () => {
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
-  const [notifications, setNotifications] = useState([]);
-  const [unviewedCount, setUnviewedCount] = useState(0); // New state for unviewed count
 
   const navigate = useNavigate();
   const signUserOut = async () => {
@@ -45,6 +43,8 @@ export const Navbar = () => {
     }
   }, [user?.uid]);
 
+  const [notifications, setNotifications] = useState([]);
+
   useEffect(() => {
     const fetchNotifications = async () => {
       const notificationsRef = collection(db, "notifications");
@@ -55,13 +55,6 @@ export const Navbar = () => {
         }));
         //@ts-ignore
         setNotifications(updatedNotifications);
-
-        // Update the unviewed count
-        const unviewedNotifications = updatedNotifications.filter(
-          //@ts-ignore
-          (notification) => !notification.viewedBy
-        );
-        setUnviewedCount(unviewedNotifications.length);
       });
 
       return unsubscribe;
@@ -81,6 +74,10 @@ export const Navbar = () => {
       }
     };
   }, []);
+//@ts-ignore
+  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
+const count = filteredNotifications.length;
+
 
   return (
     <>
@@ -130,17 +127,29 @@ export const Navbar = () => {
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/notifications" && "text-[#ff3040]"} `}
             >
-              {/* <div
+              <div
                 className={`${
-                  unreadNotificationsCount
+                  count
                     ? "bg-[#ff3040] rounded-full w-[10px] h-[10px] justify-end items-end absolute ml-[90px]"
                     : ""
                 }`}
-              ></div> */}
-              <span className="relative">
-                Notifications
-                <span className="text-white">{unviewedCount}</span>
-              </span>
+              ></div>
+
+              {/* {notifications.map((notification: any) => (
+                <div key={notification.id}>
+                  {
+                    !notification.viewedBy?.includes(user?.uid) && (
+                      <div>
+                        <Link to={`/posts/${notification.postId}`}>
+                          <p>{notification.postId} (Not viewed yet)</p>
+                        </Link>
+                      </div>
+                    )}
+                </div>
+              ))}
+{notifications.length} */}
+{/* {count} */}
+              <span className="relative">Notifications</span>
             </Link>
             {user?.uid ? null : (
               <>
@@ -194,7 +203,6 @@ export const Navbar = () => {
                         )
                       }
                       <span>
-                        {" "}
                         {
                           /*@ts-ignore */
                           userData?.displayName

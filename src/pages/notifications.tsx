@@ -64,7 +64,7 @@ const Notifications = () => {
           style={{ cursor: "pointer", marginBottom: "10px" }}
         >
           {notification.viewedBy && notification.viewedBy.includes(user?.uid) ? (
-            <div>
+            <div className="text-rose-600">
               <Link to={`/posts/${notification.postId}`}>
                 <p>{notification.postId} (Already viewed)</p>
               </Link>
