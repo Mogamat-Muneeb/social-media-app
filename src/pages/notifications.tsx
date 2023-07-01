@@ -7,6 +7,7 @@ import {
   query,
   where,
   Unsubscribe,
+  arrayUnion,
 } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 import { Link } from "react-router-dom";
@@ -49,7 +50,7 @@ const Notifications = () => {
   const handleNotificationClick = async (notificationId: any) => {
     const notificationDocRef = doc(db, "notifications", notificationId);
     await updateDoc(notificationDocRef, {
-      viewedBy: user?.uid,
+      viewedBy: arrayUnion(user?.uid),
     });
   };
 
@@ -62,7 +63,7 @@ const Notifications = () => {
           onClick={() => handleNotificationClick(notification.id)}
           style={{ cursor: "pointer", marginBottom: "10px" }}
         >
-          {notification.viewedBy && notification.viewedBy === user?.uid ? (
+          {notification.viewedBy && notification.viewedBy.includes(user?.uid) ? (
             <div>
               <Link to={`/posts/${notification.postId}`}>
                 <p>{notification.postId} (Already viewed)</p>

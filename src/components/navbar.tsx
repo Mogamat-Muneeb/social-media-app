@@ -3,18 +3,22 @@ import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  where,
+  Unsubscribe,
+} from "firebase/firestore";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
-  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
-  console.log(
-    "🚀 ~ file: navbar.jsx:14 ~ Navbar ~ unreadNotificationsCount:",
-    unreadNotificationsCount
-  );
+  const [notifications, setNotifications] = useState([]);
+  const [unviewedCount, setUnviewedCount] = useState(0); // New state for unviewed count
 
   const navigate = useNavigate();
   const signUserOut = async () => {
@@ -23,11 +27,13 @@ export const Navbar = () => {
       navigate("/");
     }
   };
+
   useEffect(() => {
     if (user && user.uid) {
       const docRef = doc(db, "users", user.uid);
       const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
+          //@ts-ignore
           setUserData(docSnapshot.data());
         } else {
           console.log("No such document!");
@@ -40,21 +46,41 @@ export const Navbar = () => {
   }, [user?.uid]);
 
   useEffect(() => {
-    if (user && user.uid) {
+    const fetchNotifications = async () => {
       const notificationsRef = collection(db, "notifications");
-      const unreadNotificationsQuery = query(
-        notificationsRef,
-        where("viewedBy", "not-in", [user.uid]) // Query for notifications not viewed by the user
-      );
+      const unsubscribe = onSnapshot(notificationsRef, (snapshot) => {
+        const updatedNotifications = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        //@ts-ignore
+        setNotifications(updatedNotifications);
 
-      const unsubscribe = onSnapshot(unreadNotificationsQuery, (snapshot) => {
-        const count = snapshot.docs.length;
-        setUnreadNotificationsCount(count);
+        // Update the unviewed count
+        const unviewedNotifications = updatedNotifications.filter(
+          //@ts-ignore
+          (notification) => !notification.viewedBy
+        );
+        setUnviewedCount(unviewedNotifications.length);
       });
 
-      return () => unsubscribe();
-    }
-  }, [user?.uid]);
+      return unsubscribe;
+    };
+
+    let unsubscribe: Unsubscribe | undefined;
+
+    const getNotifications = async () => {
+      unsubscribe = await fetchNotifications();
+    };
+
+    getNotifications();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -104,16 +130,16 @@ export const Navbar = () => {
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/notifications" && "text-[#ff3040]"} `}
             >
-              <div
+              {/* <div
                 className={`${
                   unreadNotificationsCount
                     ? "bg-[#ff3040] rounded-full w-[10px] h-[10px] justify-end items-end absolute ml-[90px]"
                     : ""
                 }`}
-              ></div>
+              ></div> */}
               <span className="relative">
                 Notifications
-                {/* <span className="text-white">{unreadNotificationsCount}</span> */}
+                <span className="text-white">{unviewedCount}</span>
               </span>
             </Link>
             {user?.uid ? null : (
@@ -134,11 +160,14 @@ export const Navbar = () => {
               <>
                 <Link to={user?.uid}>
                   <img
+                    //@ts-ignore
                     src={userData?.photoURL}
                     alt={user?.displayName || ""}
                     className="object-cover w-10 h-10 rounded-full"
                     onError={(e) => {
+                      //@ts-ignore
                       e.target.onerror = null;
+                      //@ts-ignore
                       e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                     }}
                   />
@@ -146,21 +175,31 @@ export const Navbar = () => {
                 <div className="flex-col hidden md:flex text-start">
                   <Link to={user?.uid}>
                     <p className="font-normal text-[14px] flex flex-col">
-                      {userData?.userName ? (
-                        <>{userData?.userName}</>
-                      ) : (
-                        <>
-                          {user?.displayName
-                            ?.split(" ")
-                            .map(
-                              (word) =>
-                                word.substring(0, 1).toUpperCase() +
-                                word.substring(1)
-                            )
-                            .join(" ")}
-                        </>
-                      )}
-                      <span>{userData?.displayName}</span>
+                      {
+                        /*@ts-ignore */
+                        userData?.userName ? (
+                          /*@ts-ignore */
+                          <>{userData?.userName}</>
+                        ) : (
+                          <>
+                            {user?.displayName
+                              ?.split(" ")
+                              .map(
+                                (word) =>
+                                  word.substring(0, 1).toUpperCase() +
+                                  word.substring(1)
+                              )
+                              .join(" ")}
+                          </>
+                        )
+                      }
+                      <span>
+                        {" "}
+                        {
+                          /*@ts-ignore */
+                          userData?.displayName
+                        }
+                      </span>
                     </p>
                   </Link>
                 </div>

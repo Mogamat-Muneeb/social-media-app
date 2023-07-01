@@ -14,7 +14,7 @@ export const MobileNav = () => {
   const [isLoading, setIsLoading] = useState(true);
   const pathName = useLocation() || "/";
   const [userData, setUserData] = useState(null);
-  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+  // const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
   const navigate = useNavigate();
   const signUserOut = async () => {
     if (auth) {
@@ -39,22 +39,22 @@ export const MobileNav = () => {
     }
   }, [user?.uid]);
 
-  useEffect(() => {
-    if (user && user.uid) {
-      const notificationsRef = collection(db, "notifications");
-      const unreadNotificationsQuery = query(
-        notificationsRef,
-        where("viewedBy", "not-in", [user.uid]) // Query for notifications not viewed by the user
-      );
+  // useEffect(() => {
+  //   if (user && user.uid) {
+  //     const notificationsRef = collection(db, "notifications");
+  //     const unreadNotificationsQuery = query(
+  //       notificationsRef,
+  //       where("viewedBy", "not-in", [user.uid]) // Query for notifications not viewed by the user
+  //     );
 
-      const unsubscribe = onSnapshot(unreadNotificationsQuery, (snapshot) => {
-        const count = snapshot.docs.length;
-        setUnreadNotificationsCount(count);
-      });
+  //     const unsubscribe = onSnapshot(unreadNotificationsQuery, (snapshot) => {
+  //       const count = snapshot.docs.length;
+  //       setUnreadNotificationsCount(count);
+  //     });
 
-      return () => unsubscribe();
-    }
-  }, [user?.uid]);
+  //     return () => unsubscribe();
+  //   }
+  // }, [user?.uid]);
 
   return (
     <>
@@ -97,15 +97,19 @@ export const MobileNav = () => {
               user ? "block" : "hidden"
             } `}
           >
-            <div
+            {/* <div
               className={`${
                 unreadNotificationsCount
                   ? "bg-[#ff3040] rounded-full w-[8px] h-[8px] justify-end items-end absolute ml-4"
                   : ""
               }`}
-            ></div>
-            <AiFillHeart  className="text-[22px]" />
-            <span className={`relative text-[12px] pt-[3px]  ${pathName.pathname === "/notifications" && "text-[#ff3040]"} `}>
+            ></div> */}
+            <AiFillHeart className="text-[22px]" />
+            <span
+              className={`relative text-[12px] pt-[3px]  ${
+                pathName.pathname === "/notifications" && "text-[#ff3040]"
+              } `}
+            >
               Notifications
               {/* <span className="text-white">{unreadNotificationsCount}</span> */}
             </span>
@@ -127,7 +131,10 @@ export const MobileNav = () => {
           {/* <div className="flex items-center gap-4"> */}
           {user && (
             <>
-              <Link to={user?.uid} className="flex flex-col items-center font-medium">
+              <Link
+                to={user?.uid}
+                className="flex flex-col items-center font-medium"
+              >
                 <img
                   src={userData?.photoURL}
                   alt={user?.displayName || ""}
@@ -145,7 +152,6 @@ export const MobileNav = () => {
                     pathName.pathname === `/${user?.uid}` && "text-[#ff3040]"
                   }`}
                 >
-                  {" "}
                   {user && "Profile"}
                 </span>
               </Link>
