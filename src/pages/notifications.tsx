@@ -4,8 +4,6 @@ import {
   doc,
   onSnapshot,
   updateDoc,
-  query,
-  where,
   Unsubscribe,
   arrayUnion,
 } from "firebase/firestore";
@@ -16,7 +14,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [user] = useAuthState(auth);
-
+  console.log(notifications, "notifications");
   useEffect(() => {
     const fetchNotifications = async () => {
       const notificationsRef = collection(db, "notifications");
@@ -54,30 +52,68 @@ const Notifications = () => {
     });
   };
 
+  const currentDate = new Date();
+//@ts-ignore
+  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
+  console.log(filteredNotifications, "@")
   return (
-    <div>
-      <h2>Notifications</h2>
-      {notifications.map((notification: any) => (
-        <div
-          key={notification.id}
-          onClick={() => handleNotificationClick(notification.id)}
-          style={{ cursor: "pointer", marginBottom: "10px" }}
-        >
-          {notification.viewedBy && notification.viewedBy.includes(user?.uid) ? (
-            <div className="text-rose-600">
-              <Link to={`/posts/${notification.postId}`}>
-                <p>{notification.postId} (Already viewed)</p>
-              </Link>
+    <div className="max-w-[1220px] mx-auto w-full">
+      <h2 className="font-bold md:text-[32px] text-[20px] pt-10">Notifications</h2>
+      {notifications.map((notification: any) => {
+        const postDate = new Date(notification.date);
+        const diffInMinutes = Math.floor(
+          /* @ts-ignore */
+          (currentDate - postDate) / (1000 * 60)
+        );
+
+        let timeAgo;
+
+        if (diffInMinutes >= 43200) {
+          const diffInMonths = Math.floor(diffInMinutes / 43200);
+          timeAgo = `${diffInMonths}m`;
+        } else if (diffInMinutes >= 1440) {
+          const diffInDays = Math.floor(diffInMinutes / 1440);
+          timeAgo = `${diffInDays}d`;
+        } else if (diffInMinutes >= 60) {
+          const diffInHours = Math.floor(diffInMinutes / 60);
+          timeAgo = `${diffInHours}h`;
+        } else {
+          timeAgo = `${diffInMinutes}m`;
+        }
+
+        return (
+          <div
+            key={notification.id}
+            onClick={() => handleNotificationClick(notification.id)}
+            style={{ cursor: "pointer", marginBottom: "10px" }}
+          >
+            <div className="pt-4">
+              <hr />
+              {notification.viewedBy &&
+              notification.viewedBy.includes(user?.uid) ? (
+                <div className="flex flex-col">
+                  <div className="text-rose-600 pt-4 flex items-center justify-start">
+                    <Link to={`/posts/${notification.postId}`}>
+                      <p>{notification.postId} (Already viewed)</p>
+                    </Link>
+                    <span className="px-2">.{timeAgo}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col pt-4">
+                  <h2 className="font-bold text-[16px]">New</h2>
+                  <div className="flex items-center justify-start pt-4">
+                    <Link to={`/posts/${notification.postId}`}>
+                      <p>{notification.postId} (Not viewed yet)</p>
+                    </Link>
+                    <span className="px-2">.{timeAgo}</span>
+                  </div>
+                </div>
+              )}
             </div>
-          ) : (
-            <div>
-              <Link to={`/posts/${notification.postId}`}>
-                <p>{notification.postId} (Not viewed yet)</p>
-              </Link>
-            </div>
-          )}
-        </div>
-      ))}
+          </div>
+        );
+      })}
     </div>
   );
 };

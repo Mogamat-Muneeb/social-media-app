@@ -7,8 +7,6 @@ import {
   collection,
   doc,
   onSnapshot,
-  query,
-  where,
   Unsubscribe,
 } from "firebase/firestore";
 
@@ -134,21 +132,6 @@ const count = filteredNotifications.length;
                     : ""
                 }`}
               ></div>
-
-              {/* {notifications.map((notification: any) => (
-                <div key={notification.id}>
-                  {
-                    !notification.viewedBy?.includes(user?.uid) && (
-                      <div>
-                        <Link to={`/posts/${notification.postId}`}>
-                          <p>{notification.postId} (Not viewed yet)</p>
-                        </Link>
-                      </div>
-                    )}
-                </div>
-              ))}
-{notifications.length} */}
-{/* {count} */}
               <span className="relative">Notifications</span>
             </Link>
             {user?.uid ? null : (
