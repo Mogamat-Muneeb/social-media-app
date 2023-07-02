@@ -1,11 +1,28 @@
 import { auth, provider, db } from "../config/firebase";
 import { sendEmailVerification, signInWithPopup } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { GoogleIcon } from "../components/icon";
 
 export const Login = () => {
   const navigate = useNavigate();
+  // const signInWithGoogle = async () => {
+  //   const result = await signInWithPopup(auth, provider);
+  //   const userRef = doc(db, "users", result.user.uid);
+  //   const docSnapshot = await getDoc(userRef);
+
+  //   if (!docSnapshot.exists()) {
+  //     await setDoc(userRef, {
+  //       uid: result.user.uid,
+  //       displayName: result.user.displayName,
+  //       email: result.user.email,
+  //       photoURL: result.user.photoURL,
+  //     });
+  //     await sendEmailVerification(result.user);
+  //   }
+  //   navigate("/");
+  // };
+
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const userRef = doc(db, "users", result.user.uid);
@@ -19,6 +36,18 @@ export const Login = () => {
         photoURL: result.user.photoURL,
       });
       await sendEmailVerification(result.user);
+
+      const notificationsRef = collection(db, "notifications");
+      await addDoc(notificationsRef, {
+        postId: "",
+        userId: result.user.uid,
+        userName: result.user.displayName ?? null,
+        username: result.user.displayName ?? null,
+        date: Date.now(),
+        lookedAt: false,
+        imageUrl: "",
+        origin: "joined",
+      });
     }
     navigate("/");
   };

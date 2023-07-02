@@ -77,7 +77,6 @@ export const Post = (props: Props) => {
   const followUser = async (userId: string) => {
     try {
       if (!followingDocRef) {
-        // console.error("No user is logged in.");
         return;
       }
 
@@ -92,6 +91,18 @@ export const Post = (props: Props) => {
       }
 
       setIsFollowing(true);
+
+      const notificationsRef = collection(db, "notifications");
+      await addDoc(notificationsRef, {
+        postId: post.id,
+        userId: userData?.uid,
+        userName: userData?.userName ?? null,
+        username: userData?.displayName ?? null,
+        date: Date.now(),
+        lookedAt: false, // Assuming lookedAt is initially false
+        imageUrl: "",
+        origin: "follow-user",
+      });
     } catch (error) {
       console.error("Error following user:", error);
     }
@@ -100,7 +111,6 @@ export const Post = (props: Props) => {
   const unfollowUser = async (userId: string) => {
     try {
       if (!followingDocRef) {
-        // console.error("No user is logged in.");
         return;
       }
 
@@ -115,7 +125,6 @@ export const Post = (props: Props) => {
 
   useEffect(() => {
     if (!followingDocRef) {
-      // console.error("No user is logged in.");
       return;
     }
 
@@ -212,9 +221,59 @@ export const Post = (props: Props) => {
     return unsubscribe;
   };
 
-  const addLike = () => {
+  // const addLike = () => {
+  //   try {
+  //     const newDoc = addDoc(likesRef, {
+  //       userId: USER_ID,
+  //       postId: post.id,
+  //       nameId: user?.displayName ?? null,
+  //       emailId: user?.email ?? null,
+  //       /* @ts-ignore */
+  //       userName: user?.userName ?? null,
+  //     });
+  //     if (user) {
+  //       setLikes((prev) =>
+  //         prev
+  //           ? [
+  //               ...prev,
+  //               {
+  //                 userId: user.uid,
+  //                 /* @ts-ignore */
+  //                 likeId: newDoc.id,
+  //                 nameId: user.displayName ?? null,
+  //                 emailId: user.email ?? null,
+  //                 postId: post.id,
+  //                 /* @ts-ignore */
+  //                 userName: post.userName ?? null,
+  //               },
+  //             ]
+  //           : [
+  //               {
+  //                 userId: user.uid,
+  //                 /* @ts-ignore */
+  //                 likeId: newDoc.id,
+  //                 nameId: user.displayName ?? null,
+  //                 emailId: user.email ?? null,
+  //                 postId: post.id,
+  //                 /* @ts-ignore */
+  //                 userName: post.userName ?? null,
+  //               },
+  //             ]
+  //       );
+  //     }
+  //   } catch (err) {
+  //     toast("Please login to like", {
+  //       ...config,
+  //       type: "error",
+  //     });
+  //     console.log(err);
+  //   }
+  // };
+
+  const addLike = async () => {
     try {
-      const newDoc = addDoc(likesRef, {
+      // Add the like document to the "likes" collection
+      const likeDocRef = await addDoc(likesRef, {
         userId: USER_ID,
         postId: post.id,
         nameId: user?.displayName ?? null,
@@ -222,6 +281,23 @@ export const Post = (props: Props) => {
         /* @ts-ignore */
         userName: user?.userName ?? null,
       });
+
+      // Prepare the notification data
+      const notificationData = {
+        postId: post.id,
+        userId: userData?.uid,
+        userName: userData?.userName ?? null,
+        username: userData?.displayName ?? null,
+        date: Date.now(),
+        lookedAt: false,
+        imageUrl: "",
+        origin: "liked-post",
+      };
+
+      // Add the notification document to the "notifications" collection
+      const notificationsRef = collection(db, "notifications");
+      await addDoc(notificationsRef, notificationData);
+
       if (user) {
         setLikes((prev) =>
           prev
@@ -229,24 +305,20 @@ export const Post = (props: Props) => {
                 ...prev,
                 {
                   userId: user.uid,
-                  /* @ts-ignore */
-                  likeId: newDoc.id,
+                  likeId: likeDocRef.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
                   postId: post.id,
-                  /* @ts-ignore */
                   userName: post.userName ?? null,
                 },
               ]
             : [
                 {
                   userId: user.uid,
-                  /* @ts-ignore */
-                  likeId: newDoc.id,
+                  likeId: likeDocRef.id,
                   nameId: user.displayName ?? null,
                   emailId: user.email ?? null,
                   postId: post.id,
-                  /* @ts-ignore */
                   userName: post.userName ?? null,
                 },
               ]
@@ -786,14 +858,14 @@ export const Post = (props: Props) => {
               </>
             )}
             <Link to={`/posts/${post.id}`}>
-            <img
-              src={post.imageUrl}
-              alt=""
-              className="max-h-[600px] object-cover rounded"
-              onLoad={() => setLoading(false)}
-              onError={() => setLoading(false)}
-              style={{ display: loading ? "none" : "block" }}
-            />
+              <img
+                src={post.imageUrl}
+                alt=""
+                className=" object-cover rounded w-full"
+                onLoad={() => setLoading(false)}
+                onError={() => setLoading(false)}
+                style={{ display: loading ? "none" : "block" }}
+              />
             </Link>
             <div className="flex items-center justify-between">
               {likes ? (

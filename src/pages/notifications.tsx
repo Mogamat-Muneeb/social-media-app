@@ -53,12 +53,13 @@ const Notifications = () => {
   };
 
   const currentDate = new Date();
-//@ts-ignore
-  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
-  console.log(filteredNotifications, "@")
+  //@ts-ignore
+
   return (
     <div className="max-w-[1220px] mx-auto w-full">
-      <h2 className="font-bold md:text-[32px] text-[20px] pt-10">Notifications</h2>
+      <h2 className="font-bold md:text-[32px] text-[20px] pt-10">
+        Notifications
+      </h2>
       {notifications.map((notification: any) => {
         const postDate = new Date(notification.date);
         const diffInMinutes = Math.floor(
@@ -94,7 +95,21 @@ const Notifications = () => {
                 <div className="flex flex-col">
                   <div className="text-rose-600 pt-4 flex items-center justify-start">
                     <Link to={`/posts/${notification.postId}`}>
-                      <p>{notification.postId} (Already viewed)</p>
+                      <p> {notification.postId} (Already viewed)</p>
+                      <p>
+
+                        {notification.userName
+                          ? notification.userName
+                          : notification.username
+                              ?.split(" ")
+                              .map(
+                                (word: any) =>
+                                  word.substring(0, 1).toLowerCase() +
+                                  word.substring(1)
+                              )
+                              .join(" ")}
+                      </p>
+                      <p>{notification.origin === "follow-user" && "muneeb"} (Already viewed)</p>
                     </Link>
                     <span className="px-2">.{timeAgo}</span>
                   </div>
@@ -105,6 +120,19 @@ const Notifications = () => {
                   <div className="flex items-center justify-start pt-4">
                     <Link to={`/posts/${notification.postId}`}>
                       <p>{notification.postId} (Not viewed yet)</p>
+                      <p>
+                        {notification.userName
+                          ? notification.userName
+                          : notification.username
+                              ?.split(" ")
+                              .map(
+                                (word: any) =>
+                                  word.substring(0, 1).toLowerCase() +
+                                  word.substring(1)
+                              )
+                              .join(" ")}
+                      </p>
+                      <p>{notification.origin} (Not viewed yet)</p>
                     </Link>
                     <span className="px-2">.{timeAgo}</span>
                   </div>
