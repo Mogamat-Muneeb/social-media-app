@@ -111,14 +111,14 @@ const count = filteredNotifications.length;
             >
               Create
             </Link>
-            {/* <Link
+            <Link
               to="/explore"
               className={`font-medium md:text-[16px] text-[14px] ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
             >
               Explore
-            </Link> */}
+            </Link>
             <Link
               to="/notifications"
               className={`font-medium md:text-[16px] text-[14px] ${

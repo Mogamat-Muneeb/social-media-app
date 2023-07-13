@@ -131,6 +131,7 @@ export const CreateForm = () => {
           date: Date.now(),
           lookedAt: lookedAt,
           imageUrl: downloadURL,
+          usage: "created a post"
         });
 
         setUploaded(true);

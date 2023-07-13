@@ -212,7 +212,7 @@ export const Post = (props: Props) => {
     return unsubscribe;
   };
 
-  const addLike = () => {
+  const addLike = async () => {
     try {
       const newDoc = addDoc(likesRef, {
         userId: USER_ID,
@@ -251,6 +251,30 @@ export const Post = (props: Props) => {
                 },
               ]
         );
+        const notificationsRef = collection(db, "notifications");
+        const userNotificationsQuery = query(
+          notificationsRef,
+          where("postId", "==", post.id),
+          //@ts-ignore
+          where("userId", "==", userData?.uid)
+        );
+        const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
+
+        const lookedAt = !userNotificationsSnapshot.empty;
+
+        await addDoc(notificationsRef, {
+          postId: post.id,
+          //@ts-ignore
+          userId: userData?.uid,
+          //@ts-ignore
+          userName: userData?.userName ?? null,
+          //@ts-ignore
+          username: userData?.displayName ?? null,
+          date: Date.now(),
+          lookedAt: lookedAt,
+          imageUrl: "",
+          usage: "liked your post",
+        });
       }
     } catch (err) {
       toast("Please login to like", {
@@ -261,6 +285,28 @@ export const Post = (props: Props) => {
     }
   };
 
+  // const removeLike = async () => {
+  //   try {
+  //     const likeToDeleteQuery = query(
+  //       likesRef,
+  //       where("postId", "==", post.id),
+  //       where("userId", "==", USER_ID)
+  //     );
+
+  //     const likeToDeleteData = await getDocs(likeToDeleteQuery);
+  //     const likeId = likeToDeleteData.docs[0].id;
+  //     const likeToDelete = doc(db, "likes", likeId);
+  //     await deleteDoc(likeToDelete);
+  //     if (user) {
+  //       setLikes(
+  //         (prev) => prev && prev.filter((like) => like.likeId !== likeId)
+  //       );
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   const removeLike = async () => {
     try {
       const likeToDeleteQuery = query(
@@ -268,20 +314,33 @@ export const Post = (props: Props) => {
         where("postId", "==", post.id),
         where("userId", "==", USER_ID)
       );
-
+  
       const likeToDeleteData = await getDocs(likeToDeleteQuery);
       const likeId = likeToDeleteData.docs[0].id;
       const likeToDelete = doc(db, "likes", likeId);
       await deleteDoc(likeToDelete);
+  
+      // Remove the corresponding notification
+      const notificationsRef = collection(db, "notifications");
+      const notificationQuery = query(
+        notificationsRef,
+        where("postId", "==", post.id),
+        where("userId", "==", USER_ID)
+      );
+      const notificationSnapshot = await getDocs(notificationQuery);
+  
+      notificationSnapshot.forEach((doc) => {
+        deleteDoc(doc.ref);
+      });
+  
       if (user) {
-        setLikes(
-          (prev) => prev && prev.filter((like) => like.likeId !== likeId)
-        );
+        setLikes((prev) => prev && prev.filter((like) => like.likeId !== likeId));
       }
     } catch (err) {
       console.log(err);
     }
   };
+  
 
   const hasUserLiked = likes?.find((like) => like.userId === USER_ID);
 
@@ -720,7 +779,7 @@ export const Post = (props: Props) => {
           <div className="flex flex-col w-full gap-2 p-2 text-start">
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
-                <Link to={`${post.userId}`}>
+                <Link to={`/user/${post.userId}`}>
                   {post.photoURL ? (
                     <>
                       <img
@@ -740,7 +799,7 @@ export const Post = (props: Props) => {
                     </>
                   )}
                 </Link>
-                <Link to={`${post.userId}`}>
+                <Link to={`/user/${post.userId}`}>
                   {post.userName
                     ? post.userName
                     : post.username
@@ -786,14 +845,14 @@ export const Post = (props: Props) => {
               </>
             )}
             <Link to={`/posts/${post.id}`}>
-            <img
-              src={post.imageUrl}
-              alt=""
-              className="max-h-[600px] object-cover rounded"
-              onLoad={() => setLoading(false)}
-              onError={() => setLoading(false)}
-              style={{ display: loading ? "none" : "block" }}
-            />
+              <img
+                src={post.imageUrl}
+                alt=""
+                className="max-h-[600px] object-cover rounded"
+                onLoad={() => setLoading(false)}
+                onError={() => setLoading(false)}
+                style={{ display: loading ? "none" : "block" }}
+              />
             </Link>
             <div className="flex items-center justify-between">
               {likes ? (

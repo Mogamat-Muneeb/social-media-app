@@ -92,19 +92,25 @@ const Notifications = () => {
               {notification.viewedBy &&
               notification.viewedBy.includes(user?.uid) ? (
                 <div className="flex flex-col">
-                  <div className="text-rose-600 pt-4 flex items-center justify-start">
+                  <div className="flex items-center justify-start pt-4 text-rose-600">
+                  {/* (Already viewed) */}
                     <Link to={`/posts/${notification.postId}`}>
                       <p>{notification.postId} (Already viewed)</p>
+                      <p>{notification.userName ? notification.userName : notification.username} Posted this</p>
+                      <p>{notification.usage} </p>
                     </Link>
                     <span className="px-2">.{timeAgo}</span>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col pt-4">
-                  <h2 className="font-bold text-[16px]">New</h2>
+                  {/* <h2 className="font-bold text-[16px]">New</h2> */}
+                  {/* (Already viewed) */}
                   <div className="flex items-center justify-start pt-4">
                     <Link to={`/posts/${notification.postId}`}>
                       <p>{notification.postId} (Not viewed yet)</p>
+                      <p>{notification.userName ? notification.userName : notification.username } Posted this</p>
+                      <p>{notification.usage} </p>
                     </Link>
                     <span className="px-2">.{timeAgo}</span>
                   </div>

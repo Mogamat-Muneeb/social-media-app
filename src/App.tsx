@@ -18,7 +18,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/createpost" element={<CreatePost />} />
-          <Route path=":uid" element={<Account />} />
+          <Route path="/user/:uid" element={<Account />} />
           <Route path="/posts/:postId" element={<SinglePost />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/notifications" element={<Notifications />} />
