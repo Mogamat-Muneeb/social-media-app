@@ -111,14 +111,14 @@ const count = filteredNotifications.length;
             >
               Create
             </Link>
-            <Link
+            {/* <Link
               to="/explore"
               className={`font-medium md:text-[16px] text-[14px] ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
             >
               Explore
-            </Link>
+            </Link> */}
             <Link
               to="/notifications"
               className={`font-medium md:text-[16px] text-[14px] ${
@@ -150,22 +150,20 @@ const count = filteredNotifications.length;
           <div className="flex items-center gap-3">
             {user && (
               <>
-                <Link to={user?.uid}>
+                <Link to={`/user/${user.uid} `}>
                   <img
                     //@ts-ignore
                     src={userData?.photoURL}
                     alt={user?.displayName || ""}
                     className="object-cover w-10 h-10 rounded-full"
-                    onError={(e) => {
-                      //@ts-ignore
+                    onError={(e: any) => {
                       e.target.onerror = null;
-                      //@ts-ignore
                       e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                     }}
                   />
                 </Link>
                 <div className="flex-col hidden md:flex text-start">
-                  <Link to={user?.uid}>
+                  <Link to={`/user/${user.uid} `}>
                     <p className="font-normal text-[14px] flex flex-col">
                       {
                         /*@ts-ignore */

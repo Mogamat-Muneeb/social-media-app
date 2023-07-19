@@ -51,7 +51,7 @@ export const Main = () => {
     >
       <div>
         {postsList?.length === 0 && (
-          <div className="pt-10">No posts right now</div>
+          <div className="flex justify-center pt-10 item-center">No posts right now</div>
         )}
       </div>
       {isLoading ? (

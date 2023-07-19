@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  font-family: -apple-system, "system-ui", "Segoe UI", Roboto, Helvetica, Arial,
+  font-family: "Playfair",
     sans-serif;
 }
 

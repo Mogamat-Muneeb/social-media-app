@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  collection,
-  doc,
-  onSnapshot,
-  updateDoc,
-  Unsubscribe,
-  arrayUnion,
-} from "firebase/firestore";
+import { collection, onSnapshot, Unsubscribe } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Link } from "react-router-dom";
 
@@ -55,13 +48,13 @@ const Explore = () => {
 
   return (
     <div className="max-w-[1280px] mx-auto w-full px-4 md:px-0">
-      <h2>Explore</h2>
+     <h2 className="font-bold md:text-[32px] text-[20px] pt-10">Explore</h2>
       <div>
         {/* @ts-ignore */}
         {users?.map((user: any) => {
           return (
             <div>
-              <div className="flex py-4 gap-3">
+              <div className="flex gap-4 py-4">
                 <div>
                   <img
                     src={user.photoURL}
@@ -77,9 +70,9 @@ const Explore = () => {
                     <p>{user.userName}</p>
                     <p>{user.bio}</p>
                   </div>
+                  {/* <div className="border-b border-[0.5px] border-gray-300 w-full"></div> */}
                 </div>
               </div>
-                <div className="border-b border-[1px] border-gray-300"></div>
             </div>
           );
         })}

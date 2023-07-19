@@ -14,7 +14,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [user] = useAuthState(auth);
-  console.log(notifications, "notifications");
+
   useEffect(() => {
     const fetchNotifications = async () => {
       const notificationsRef = collection(db, "notifications");
@@ -53,12 +53,17 @@ const Notifications = () => {
   };
 
   const currentDate = new Date();
-//@ts-ignore
-  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
-  console.log(filteredNotifications, "@")
+
+  const filteredNotifications = notifications.filter(
+    //@ts-ignore
+    (notification) => !notification.viewedBy?.includes(user?.uid)
+  );
+
   return (
     <div className="max-w-[1220px] mx-auto w-full">
-      <h2 className="font-bold md:text-[32px] text-[20px] pt-10">Notifications</h2>
+      <h2 className="font-bold md:text-[32px] text-[20px] pt-10">
+        Notifications
+      </h2>
       {notifications.map((notification: any) => {
         const postDate = new Date(notification.date);
         const diffInMinutes = Math.floor(
@@ -83,20 +88,26 @@ const Notifications = () => {
 
         return (
           <div
+            className="px-4 md:px-0"
             key={notification.id}
             onClick={() => handleNotificationClick(notification.id)}
             style={{ cursor: "pointer", marginBottom: "10px" }}
           >
-            <div className="pt-4">
+            <div className="pt-4 ">
               <hr />
               {notification.viewedBy &&
               notification.viewedBy.includes(user?.uid) ? (
                 <div className="flex flex-col">
                   <div className="flex items-center justify-start pt-4 text-rose-600">
-                  {/* (Already viewed) */}
+                    {/* (Already viewed) */}
                     <Link to={`/posts/${notification.postId}`}>
                       <p>{notification.postId} (Already viewed)</p>
-                      <p>{notification.userName ? notification.userName : notification.username} Posted this</p>
+                      <p>
+                        {notification.userName
+                          ? notification.userName
+                          : notification.username}{" "}
+                        Posted this
+                      </p>
                       <p>{notification.usage} </p>
                     </Link>
                     <span className="px-2">.{timeAgo}</span>
@@ -109,7 +120,12 @@ const Notifications = () => {
                   <div className="flex items-center justify-start pt-4">
                     <Link to={`/posts/${notification.postId}`}>
                       <p>{notification.postId} (Not viewed yet)</p>
-                      <p>{notification.userName ? notification.userName : notification.username } Posted this</p>
+                      <p>
+                        {notification.userName
+                          ? notification.userName
+                          : notification.username}{" "}
+                        Posted this
+                      </p>
                       <p>{notification.usage} </p>
                     </Link>
                     <span className="px-2">.{timeAgo}</span>

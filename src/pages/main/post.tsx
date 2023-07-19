@@ -251,30 +251,31 @@ export const Post = (props: Props) => {
                 },
               ]
         );
-        const notificationsRef = collection(db, "notifications");
-        const userNotificationsQuery = query(
-          notificationsRef,
-          where("postId", "==", post.id),
-          //@ts-ignore
-          where("userId", "==", userData?.uid)
-        );
-        const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
+        // !!Notifications
+        // const notificationsRef = collection(db, "notifications");
+        // const userNotificationsQuery = query(
+        //   notificationsRef,
+        //   where("postId", "==", post.id),
+        //   //@ts-ignore
+        //   where("userId", "==", userData?.uid)
+        // );
+        // const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
 
-        const lookedAt = !userNotificationsSnapshot.empty;
+        // const lookedAt = !userNotificationsSnapshot.empty;
 
-        await addDoc(notificationsRef, {
-          postId: post.id,
-          //@ts-ignore
-          userId: userData?.uid,
-          //@ts-ignore
-          userName: userData?.userName ?? null,
-          //@ts-ignore
-          username: userData?.displayName ?? null,
-          date: Date.now(),
-          lookedAt: lookedAt,
-          imageUrl: "",
-          usage: "liked your post",
-        });
+        // await addDoc(notificationsRef, {
+        //   postId: post.id,
+        //   //@ts-ignore
+        //   userId: userData?.uid,
+        //   //@ts-ignore
+        //   userName: userData?.userName ?? null,
+        //   //@ts-ignore
+        //   username: userData?.displayName ?? null,
+        //   date: Date.now(),
+        //   lookedAt: lookedAt,
+        //   imageUrl: "",
+        //   usage: "liked your post",
+        // });
       }
     } catch (err) {
       toast("Please login to like", {
@@ -314,12 +315,12 @@ export const Post = (props: Props) => {
         where("postId", "==", post.id),
         where("userId", "==", USER_ID)
       );
-  
+
       const likeToDeleteData = await getDocs(likeToDeleteQuery);
       const likeId = likeToDeleteData.docs[0].id;
       const likeToDelete = doc(db, "likes", likeId);
       await deleteDoc(likeToDelete);
-  
+
       // Remove the corresponding notification
       const notificationsRef = collection(db, "notifications");
       const notificationQuery = query(
@@ -328,19 +329,20 @@ export const Post = (props: Props) => {
         where("userId", "==", USER_ID)
       );
       const notificationSnapshot = await getDocs(notificationQuery);
-  
+
       notificationSnapshot.forEach((doc) => {
         deleteDoc(doc.ref);
       });
-  
+
       if (user) {
-        setLikes((prev) => prev && prev.filter((like) => like.likeId !== likeId));
+        setLikes(
+          (prev) => prev && prev.filter((like) => like.likeId !== likeId)
+        );
       }
     } catch (err) {
       console.log(err);
     }
   };
-  
 
   const hasUserLiked = likes?.find((like) => like.userId === USER_ID);
 
@@ -534,7 +536,10 @@ export const Post = (props: Props) => {
                         >
                           {hasUserLiked ? (
                             <>
-                              <LikedIcon styling={"w-6 h-6"} />
+                              <LikedIcon
+                                styling={"w-6 h-6"}
+                                color={"#ff3040"}
+                              />
                             </>
                           ) : (
                             <>
@@ -594,7 +599,7 @@ export const Post = (props: Props) => {
                       >
                         {hasUserLiked ? (
                           <>
-                            <LikedIcon styling={"w-6 h-6"} />
+                            <LikedIcon styling={"w-6 h-6"} color={"#ff3040"} />
                           </>
                         ) : (
                           <>
@@ -689,7 +694,10 @@ export const Post = (props: Props) => {
                         >
                           {hasUserLiked ? (
                             <>
-                              <LikedIcon styling={"w-6 h-6"} />
+                              <LikedIcon
+                                styling={"w-6 h-6"}
+                                color={"#ff3040"}
+                              />
                             </>
                           ) : (
                             <>
@@ -749,7 +757,7 @@ export const Post = (props: Props) => {
                       >
                         {hasUserLiked ? (
                           <>
-                            <LikedIcon styling={"w-6 h-6"} />
+                            <LikedIcon styling={"w-6 h-6"} color={"#ff3040"} />
                           </>
                         ) : (
                           <>
@@ -848,7 +856,7 @@ export const Post = (props: Props) => {
               <img
                 src={post.imageUrl}
                 alt=""
-                className="max-h-[600px] object-cover rounded"
+                className="max-h-[600px] w-full object-cover rounded"
                 onLoad={() => setLoading(false)}
                 onError={() => setLoading(false)}
                 style={{ display: loading ? "none" : "block" }}
@@ -864,7 +872,7 @@ export const Post = (props: Props) => {
                     >
                       {hasUserLiked ? (
                         <>
-                          <LikedIcon styling={"w-6 h-6"} />
+                          <LikedIcon styling={"w-6 h-6"} color={"#ff3040"} />
                         </>
                       ) : (
                         <>
@@ -924,7 +932,7 @@ export const Post = (props: Props) => {
                   >
                     {hasUserLiked ? (
                       <>
-                        <LikedIcon styling={"w-6 h-6"} />
+                        <LikedIcon styling={"w-6 h-6"} color={"#ff3040"} />
                       </>
                     ) : (
                       <>

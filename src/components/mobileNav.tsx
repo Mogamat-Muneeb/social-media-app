@@ -5,9 +5,10 @@ import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { collection, doc, onSnapshot, query, where, Unsubscribe } from "firebase/firestore";
 import { VscHome } from "react-icons/vsc";
-import { FiPlusSquare } from "react-icons/fi";
+import { FiPlusSquare, FiSearch } from "react-icons/fi";
 import { BiLogIn } from "react-icons/bi";
 import { AiFillHeart } from "react-icons/ai";
+
 import { LogoutIcon } from "./icon";
 export const MobileNav = () => {
   const [user] = useAuthState(auth);
@@ -74,7 +75,7 @@ export const MobileNav = () => {
   }, []);
 //@ts-ignore
   const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
-const count = filteredNotifications.length;
+  const count = filteredNotifications.length;
 
 
   return (
@@ -91,7 +92,6 @@ const count = filteredNotifications.length;
             user ? " justify-between " : " justify-between "
           }`}
         >
-          {/* <div className="flex items-center gap-4"> */}
           <Link
             to="/"
             className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
@@ -101,7 +101,6 @@ const count = filteredNotifications.length;
             <span>
               <VscHome className="text-[23px] font-bold" />
             </span>
-            <span className="text-[12px]">Home</span>
           </Link>
           <Link
             to="/createpost"
@@ -110,7 +109,6 @@ const count = filteredNotifications.length;
             } ${pathName.pathname === "/createpost" && "text-[#ff3040]"} `}
           >
             <FiPlusSquare className="text-[22px]" />
-            <span className="text-[12px] pt-[3px]"> {user && "Create"}</span>
           </Link>
           <Link
             to="/notifications"
@@ -131,12 +129,16 @@ const count = filteredNotifications.length;
                 pathName.pathname === "/notifications" && "text-[#ff3040]"
               } `}
             >
-              Notifications
-              {/* {unviewedCount > 0 && (
-                  <span className="text-white">{unviewedCount}</span>
-                )} */}
             </span>
           </Link>
+          {/* <Link
+            to="/explore"
+            className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
+              user ? "block" : "hidden"
+            } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
+          >
+            <FiSearch className="text-[23px]" />
+          </Link> */}
           {user?.uid ? null : (
             <>
               <Link
@@ -146,16 +148,13 @@ const count = filteredNotifications.length;
                 }`}
               >
                 <BiLogIn className="text-[23px] font-semibold" />
-                Login
               </Link>
             </>
           )}
-          {/* </div> */}
-          {/* <div className="flex items-center gap-4"> */}
           {user && (
             <>
               <Link
-                to={user?.uid}
+                to= {`/user/${user.uid} `}
                 className="flex flex-col items-center font-medium"
               >
                 <img
@@ -166,25 +165,17 @@ const count = filteredNotifications.length;
                     pathName.pathname === `/${user?.uid}` &&
                     "border-[1px] border-[#ff3040] "
                   }`}
-                  onError={(e) => {
-                      /*@ts-ignore */
+                  onError={(e: any) => {
+
                     e.target.onerror = null;
-                      /*@ts-ignore */
+
                     e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                   }}
                 />
-                <span
-                  className={`text-[12px] ${
-                    pathName.pathname === `/${user?.uid}` && "text-[#ff3040]"
-                  }`}
-                >
-                  {user && "Profile"}
-                </span>
               </Link>
               <div className="flex-col hidden font-medium md:flex text-start">
                 <Link to={user?.uid}>
                   <p className="font-normal text-[14px] flex flex-col">
-                    
                     {  /*@ts-ignore */
                     userData?.userName ? (
                       <>{  /*@ts-ignore */
@@ -211,13 +202,11 @@ const count = filteredNotifications.length;
                 className="font-normal text-[16px] md:hidden flex flex-col items-center"
               >
                 <LogoutIcon />
-                <span className="text-[12px]"> {user && "Logout"}</span>
               </button>
             </>
           )}
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 };
