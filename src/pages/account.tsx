@@ -379,17 +379,16 @@ export const Account = () => {
                 <div className="flex gap-2  max-w-[1000px] mx-auto w-full flex-col pt-10">
                   {tab === "Posts" && (
                     <>
-                      <p className="flex flex-col items-center justify-center gap-1 font-medium text-[14px] uppercase "></p>
-                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                      <div className="grid grid-cols-4 flex-wrap  gap-2 max-w-[1000px] mx-auto w-full pt-10  px-4 lg:px-0  md:px-2">
                         {posts.map((post: IPost) => {
                           return (
                             <div key={post.id} className="relative">
-                              <div className="group">
+                              <div className="">
                                 <img
                                   key={post.id}
                                   src={post.imageUrl}
                                   alt=""
-                                  className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg"
+                                  className="lg:w-[240px] lg:h-[240px] md:w-[225px] md:h-[225px]    cursor-pointer object-cover shadow-lg"
                                 />
                                 <div className="absolute top-0 left-0 items-center justify-center hidden w-full h-full text-white opacity-100 overlay group-hover:flex group-hover:flex-col">
                                   {likesCount[post.id] && (
@@ -425,12 +424,12 @@ export const Account = () => {
                   )}
                   {tab === "Saved" && (
                     <>
-                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-10  px-4 md:px-0">
+                      <div className="grid grid-cols-4 flex-wrap  gap-2 max-w-[1000px] mx-auto w-full pt-10  px-4 lg:px-0  md:px-2">
                         {savedPosts.map((saved) => (
-                          /* @ts-ignore */
+                          // @ts-ignore
                           <div key={saved.id}>
                             <img
-                              /* @ts-ignore */
+                              // @ts-ignore
                               src={saved.imageUrl}
                               alt=""
                               className="lg:w-[240px] lg:h-[240px] md:w-[200px] md:h-[200px] w-[150px] h-[150px] cursor-pointer object-cover shadow-lg"
@@ -526,7 +525,7 @@ export const Account = () => {
                       <p className="flex items-center justify-center gap-1 font-medium ">
                         Posts
                       </p>
-                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
+                      <div className="flex flex-wrap items-center justify-center gap-2">
                         {posts.map((post: IPost) => {
                           return (
                             <div
@@ -534,21 +533,21 @@ export const Account = () => {
                               className="flex flex-col justify-center"
                             >
                               <img
-                                /* @ts-ignore */
+                                // @ts-ignore
                                 key={post.id}
-                                /* @ts-ignore */
+                                // @ts-ignore
                                 src={post.imageUrl}
                                 alt=""
-                                className="md:w-[200px] md:h-[200px] w-[150px] h-[150px]  object-cover shadow-lg"
+                                className="w-[180px] h-[180px] object-cover shadow-lg "
                               />
                               <p
                                 className={`flex flex-col items-center justify-center w-full  ${
                                   likesCount[post.id] === undefined
                                     ? "pt-8 "
-                                    : "pt-2"
+                                    : "pt-8"
                                 }`}
                               >
-                                {likesCount[post.id] ? (
+                                {/* {likesCount[post.id] ? (
                                   <>
                                     {likesCount[post.id]}
                                     <LikedIcon
@@ -558,15 +557,15 @@ export const Account = () => {
                                   </>
                                 ) : (
                                   ""
-                                )}
-                                {user && uid === user.uid && (
+                                )} */}
+                                {/* {user && uid === user.uid && (
                                   <button
                                     onClick={() => handleToggleClick()}
                                     className="font-medium"
                                   >
                                     Delete
                                   </button>
-                                )}
+                                )} */}
                               </p>
                             </div>
                           );
@@ -579,7 +578,7 @@ export const Account = () => {
                       <h2 className="flex items-center justify-center gap-1 font-medium ">
                         Saved
                       </h2>
-                      <div className="flex gap-2 max-w-[1000px] flex-wrap mx-auto w-full pt-3  px-1">
+                      <div className="flex flex-wrap items-center justify-center gap-2">
                         {savedPosts.map((saved: any) => (
                           <div key={saved.id}>
                             <img

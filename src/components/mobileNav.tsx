@@ -3,7 +3,14 @@ import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, doc, onSnapshot, query, where, Unsubscribe } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  where,
+  Unsubscribe,
+} from "firebase/firestore";
 import { VscHome } from "react-icons/vsc";
 import { FiPlusSquare, FiSearch } from "react-icons/fi";
 import { BiLogIn } from "react-icons/bi";
@@ -30,7 +37,7 @@ export const MobileNav = () => {
       const docRef = doc(db, "users", user.uid);
       const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
-           //@ts-ignore
+          //@ts-ignore
           setUserData(docSnapshot.data());
         } else {
           console.log("No such document!");
@@ -41,8 +48,6 @@ export const MobileNav = () => {
       return () => unsubscribe();
     }
   }, [user?.uid]);
-
-
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -73,10 +78,12 @@ export const MobileNav = () => {
       }
     };
   }, []);
-//@ts-ignore
-  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
+  //@ts-ignore
+  const filteredNotifications = notifications.filter(
+    //@ts-ignore
+    (notification) => !notification.viewedBy?.includes(user?.uid)
+  );
   const count = filteredNotifications.length;
-
 
   return (
     <>
@@ -128,17 +135,16 @@ export const MobileNav = () => {
               className={`relative text-[12px] pt-[3px]  ${
                 pathName.pathname === "/notifications" && "text-[#ff3040]"
               } `}
-            >
-            </span>
+            ></span>
           </Link>
-          {/* <Link
+          <Link
             to="/explore"
             className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
               user ? "block" : "hidden"
             } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
           >
             <FiSearch className="text-[23px]" />
-          </Link> */}
+          </Link>
           {user?.uid ? null : (
             <>
               <Link
@@ -154,7 +160,7 @@ export const MobileNav = () => {
           {user && (
             <>
               <Link
-                to= {`/user/${user.uid} `}
+                to={`/user/${user.uid} `}
                 className="flex flex-col items-center font-medium"
               >
                 <img
@@ -166,7 +172,6 @@ export const MobileNav = () => {
                     "border-[1px] border-[#ff3040] "
                   }`}
                   onError={(e: any) => {
-
                     e.target.onerror = null;
 
                     e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
@@ -176,24 +181,29 @@ export const MobileNav = () => {
               <div className="flex-col hidden font-medium md:flex text-start">
                 <Link to={user?.uid}>
                   <p className="font-normal text-[14px] flex flex-col">
-                    {  /*@ts-ignore */
-                    userData?.userName ? (
-                      <>{  /*@ts-ignore */
-                        userData?.userName}</>
-                    ) : (
-                      <>
-                        {user?.displayName
-                          ?.split(" ")
-                          .map(
-                            (word) =>
-                              word.substring(0, 1).toUpperCase() +
-                              word.substring(1)
-                          )
-                          .join(" ")}
-                      </>
-                    )}
-                    <span>{  /*@ts-ignore */
-                    userData?.displayName}</span>
+                    {
+                      /*@ts-ignore */
+                      userData?.userName ? (
+                        /*@ts-ignore */
+                        <>{userData?.userName}</>
+                      ) : (
+                        <>
+                          {user?.displayName
+                            ?.split(" ")
+                            .map(
+                              (word) =>
+                                word.substring(0, 1).toUpperCase() +
+                                word.substring(1)
+                            )
+                            .join(" ")}
+                        </>
+                      )
+                    }
+
+                    <span>
+                      {/* @ts-ignore */}
+                      {userData?.displayName}
+                    </span>
                   </p>
                 </Link>
               </div>

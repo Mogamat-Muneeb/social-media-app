@@ -252,30 +252,30 @@ export const Post = (props: Props) => {
               ]
         );
         // !!Notifications
-        // const notificationsRef = collection(db, "notifications");
-        // const userNotificationsQuery = query(
-        //   notificationsRef,
-        //   where("postId", "==", post.id),
-        //   //@ts-ignore
-        //   where("userId", "==", userData?.uid)
-        // );
-        // const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
+        const notificationsRef = collection(db, "notifications");
+        const userNotificationsQuery = query(
+          notificationsRef,
+          where("postId", "==", post.id),
+          //@ts-ignore
+          where("userId", "==", userData?.uid)
+        );
+        const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
 
-        // const lookedAt = !userNotificationsSnapshot.empty;
+        const lookedAt = !userNotificationsSnapshot.empty;
 
-        // await addDoc(notificationsRef, {
-        //   postId: post.id,
-        //   //@ts-ignore
-        //   userId: userData?.uid,
-        //   //@ts-ignore
-        //   userName: userData?.userName ?? null,
-        //   //@ts-ignore
-        //   username: userData?.displayName ?? null,
-        //   date: Date.now(),
-        //   lookedAt: lookedAt,
-        //   imageUrl: "",
-        //   usage: "liked your post",
-        // });
+        await addDoc(notificationsRef, {
+          postId: post.id,
+          //@ts-ignore
+          userId: userData?.uid,
+          //@ts-ignore
+          userName: userData?.userName ?? null,
+          //@ts-ignore
+          username: userData?.displayName ?? null,
+          date: Date.now(),
+          lookedAt: lookedAt,
+          imageUrl: "",
+          usage: "liked your post",
+        });
       }
     } catch (err) {
       toast("Please login to like", {

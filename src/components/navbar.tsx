@@ -3,12 +3,7 @@ import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import {
-  collection,
-  doc,
-  onSnapshot,
-  Unsubscribe,
-} from "firebase/firestore";
+import { collection, doc, onSnapshot, Unsubscribe } from "firebase/firestore";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
@@ -72,10 +67,21 @@ export const Navbar = () => {
       }
     };
   }, []);
-//@ts-ignore
-  const filteredNotifications = notifications.filter(notification => !notification.viewedBy?.includes(user?.uid));
-const count = filteredNotifications.length;
+  // @ts-ignore
+  const filteredNotifications = notifications.filter(
+      // @ts-ignore
+    (notification) => !notification.viewedBy?.includes(user?.uid)
+  );
+  const count = filteredNotifications.length;
 
+  // const filteredNotifications = notifications.filter(
+  //   (notification) =>
+  //   //@ts-ignore
+  //     !notification.viewedBy?.includes(user?.uid) &&
+  //     //@ts-ignore
+  //     (notification.usage === "liked your post" || notification.userId !== user?.uid)
+  // );
+  // const count = filteredNotifications.length;
 
   return (
     <>
@@ -111,14 +117,14 @@ const count = filteredNotifications.length;
             >
               Create
             </Link>
-            {/* <Link
+            <Link
               to="/explore"
               className={`font-medium md:text-[16px] text-[14px] ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
             >
               Explore
-            </Link> */}
+            </Link>
             <Link
               to="/notifications"
               className={`font-medium md:text-[16px] text-[14px] ${
@@ -132,7 +138,7 @@ const count = filteredNotifications.length;
                     : ""
                 }`}
               ></div>
-              <span className="relative">Notifications</span>
+              <span className="relative">Notifications ({count})</span>
             </Link>
             {user?.uid ? null : (
               <>
