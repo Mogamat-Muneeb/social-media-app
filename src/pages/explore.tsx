@@ -15,6 +15,8 @@ interface UserData {
 
 const Explore = () => {
   const [users, setUsers] = useState<UserData[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   const [userFollowers, setUserFollowers] = useState<{
     [userId: string]: string[];
   }>({});
@@ -52,6 +54,7 @@ const Explore = () => {
   useEffect(() => {
     const fetchProfileFollowers = async (userId: string) => {
       const profileFollowingRef = collection(db, "following");
+
       const unsubscribe = onSnapshot(profileFollowingRef, (querySnapshot) => {
         const followersList: string[] = [];
 
@@ -84,11 +87,26 @@ const Explore = () => {
     });
   }, [users]);
 
+  const filteredUsers = users.filter((user: UserData) => {
+    const lowercaseQuery = searchQuery.toLowerCase();
+    return (
+      user.displayName?.toLowerCase().includes(lowercaseQuery) ||
+      user.userName?.toLowerCase().includes(lowercaseQuery)
+    );
+  });
+
   return (
     <div className="max-w-[1280px] mx-auto w-full px-4 md:px-0">
       <h2 className="font-bold md:text-[32px] text-[20px] pt-10">Explore</h2>
       <div>
-        {users?.map((user: UserData) => (
+        <input
+          type="text"
+          placeholder="Search users..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-2 py-1 mt-4 border rounded focus:outline-0"
+        />
+        {filteredUsers?.map((user: UserData) => (
           <div key={user.uid}>
             <div className="flex gap-4 py-4">
               <div>

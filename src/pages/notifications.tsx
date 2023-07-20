@@ -13,12 +13,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
-  console.log(
-    "🚀 ~ file: notifications.tsx:16 ~ Notifications ~ notifications:",
-    notifications
-  );
+
   const [user] = useAuthState(auth);
-  console.log("🚀 ~ file: notifications.tsx:18 ~ Notifications ~ user:", user);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -49,8 +45,6 @@ const Notifications = () => {
       }
     };
   }, []);
-
-
 
   const handleNotificationClick = async (notificationId: any) => {
     const notificationDocRef = doc(db, "notifications", notificationId);
