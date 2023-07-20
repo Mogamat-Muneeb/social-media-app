@@ -97,15 +97,21 @@ const Explore = () => {
 
   return (
     <div className="max-w-[1280px] mx-auto w-full px-4 md:px-0">
-      <h2 className="font-bold md:text-[32px] text-[20px] pt-10">Explore</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="Search users..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-2 py-1 mt-4 border rounded focus:outline-0"
-        />
+      <div className="h-screen ">
+        <div className="sticky left-0 right-0 flex flex-col bg-white md:top-14 top-12">
+          <h2 className="font-bold md:text-[32px] text-[20px] pt-10">
+            Explore
+          </h2>
+          <div>
+            <input
+              type="text"
+              placeholder="Search.."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-2 py-1 text-[14px]  mt-4 border rounded focus:outline-0"
+            />
+          </div>
+        </div>
         {filteredUsers?.map((user: UserData) => (
           <div key={user.uid}>
             <div className="flex gap-4 py-4">

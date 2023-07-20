@@ -14,7 +14,15 @@ import { ExitIcon, LoadingSpinner } from "./icon";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { toast } from "react-toastify";
 import { config } from "../config/index";
-const Modal = ({ show, onClose, userID }) => {
+const Modal = ({
+  show,
+  onClose,
+  userID,
+}: {
+  show: any;
+  onClose: any;
+  userID: any;
+}) => {
   const [userData, setUserData] = useState({
     userName: "",
     bio: "",
@@ -31,6 +39,7 @@ const Modal = ({ show, onClose, userID }) => {
     const docRef = doc(db, "users", userID);
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
+        //@ts-ignore
         setUserData(docSnapshot.data());
       }
     });
@@ -38,7 +47,7 @@ const Modal = ({ show, onClose, userID }) => {
     return () => unsubscribe();
   }, [userID]);
 
-  const handleClickShowUpload = (e) => {
+  const handleClickShowUpload = (e: any) => {
     e.preventDefault();
     setShowUpload(!showUpload);
   };
@@ -75,6 +84,7 @@ const Modal = ({ show, onClose, userID }) => {
 
       if (file) {
         const storageRef = ref(storage, `users/${userID}/${Date.now()}`);
+        //@ts-ignore
         const uploadTask = uploadBytesResumable(storageRef, file);
         uploadTask.on(
           "state_changed",
@@ -121,6 +131,7 @@ const Modal = ({ show, onClose, userID }) => {
             });
             onClose();
             setLoading(false);
+            //@ts-ignore
             setFile(null);
           }
         );
@@ -128,16 +139,18 @@ const Modal = ({ show, onClose, userID }) => {
       } else {
         onClose();
         setLoading(false);
+        //@ts-ignore
         setFile(null);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       setLoading(false);
+      //@ts-ignore
       setFile(null);
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);
   };
 
@@ -171,7 +184,9 @@ const Modal = ({ show, onClose, userID }) => {
                 alt={user?.displayName || ""}
                 className="object-cover w-8 h-8 rounded-full md:w-10 md:h-10"
                 onError={(e) => {
+                  //@ts-ignore
                   e.target.onerror = null;
+                  //@ts-ignore
                   e.target.src = "https://i.postimg.cc/zfyc4Ftq/image.png";
                 }}
               />
@@ -179,10 +194,11 @@ const Modal = ({ show, onClose, userID }) => {
                 <p className="text-[16px] font-medium">
                   {userData.userName
                     ? userData.userName
-                    : userData.displayName
+                    : //@ts-ignore
+                      userData.displayName
                         ?.split(" ")
                         .map(
-                          (word) =>
+                          (word: any) =>
                             word.substring(0, 1).toLowerCase() +
                             word.substring(1)
                         )
@@ -236,6 +252,7 @@ const Modal = ({ show, onClose, userID }) => {
             <div className="flex flex-col items-start justify-start gap-2 max-w-[500px] mx-auto w-full">
               <span className="font-medium text-[16px]">Bio</span>
               <textarea
+                //@ts-ignore
                 type="text"
                 value={userData.bio}
                 onChange={(e) =>

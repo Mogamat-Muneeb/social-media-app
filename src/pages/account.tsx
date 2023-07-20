@@ -6,6 +6,7 @@ import {
   LikedIcon,
   UnSavedIcon,
   LoadingSpinner,
+  ShareIcon,
 } from "../components/icon";
 import AccountModal from "../components/accountmodal";
 import {
@@ -23,6 +24,9 @@ import { useEffect, useState } from "react";
 import { Post as IPost } from "../pages/main/main";
 import { deleteObject, ref } from "firebase/storage";
 import { Modal } from "../components/modal";
+import ShareButtons from "../components/shareButtons";
+import {GrClose} from "react-icons/gr"
+
 export const Account = () => {
   interface UserData {
     displayName: string;
@@ -42,6 +46,7 @@ export const Account = () => {
   const { uid } = useParams();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [show, setShow] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [likesCount, setLikesCount] = useState<LikesCount>({});
   const [isLoading, setIsLoading] = useState(true);
   const [savedPosts, setSavedPosts] = useState([]);
@@ -49,11 +54,11 @@ export const Account = () => {
   const [postId, setPostId] = useState<string>("");
   const [storageRef, setStorageRef] = useState<string>("");
   const [tab, setTab] = useState("Posts");
-
   const [profileFollowers, setProfileFollowers] = useState<string[]>([]);
   const [profileFollowing, setProfileFollowing] = useState<string[]>([]);
   const profileFollowingRef = collection(db, "following");
   const profileFollowingDocRef = doc(profileFollowingRef, uid);
+  const shareUrl = `http://localhost:3000/users/${uid}`;
 
   useEffect(() => {
     /* @ts-ignore */
@@ -159,6 +164,9 @@ export const Account = () => {
   const handleToggleClick = () => {
     setShowModal(!showModal);
   };
+  const handleToggleClickShare = () => {
+    setShowShare(!showShare);
+  };
 
   useEffect(() => {
     if (showModal) {
@@ -211,6 +219,9 @@ export const Account = () => {
       unsubscribe();
     };
   }, [uid]);
+
+  const projLink = "https://circledop.web.app/";
+
   return (
     <ProtectedRoute>
       <AccountModal show={show} onClose={closeToggle} userID={user?.uid} />
@@ -225,18 +236,34 @@ export const Account = () => {
                 <div className="flex justify-center gap-4 pt-10">
                   <button
                     onClick={() => handleDelete(postId, storageRef)}
-                    className="font-medium"
+                    className="font-medium text-[#ff3040]"
                   >
                     Delete
                   </button>
                   <button
                     onClick={handleToggleClick}
-                    className="font-medium text-[#ff3040]"
+                    className="font-medium "
                   >
                     Cancel
                   </button>
                 </div>
               )}
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {showShare && (
+        <Modal title="Comments Modal" toggleClick={handleToggleClickShare}>
+          <div className="bg-white  w-[300px] px-4 rounded py-5">
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleToggleClickShare}
+                className="font-medium text-[#ff3040] flex justify-end items-end w-full"
+              >
+                <GrClose/>
+              </button>
+              <ShareButtons userData={user?.displayName} link={projLink} />
             </div>
           </div>
         </Modal>
@@ -333,6 +360,21 @@ export const Account = () => {
                         <p className="text-[16px] font-medium">
                           {profileFollowing.length} following
                         </p>
+
+                        {user && uid === user.uid ? (
+                          <button
+                            className="px-4 py-1 font-medium border rounded"
+                            onClick={handleToggleClickShare}
+                          >
+                            Share Profile
+                          </button>
+                        ) : (
+                          <>
+                            <button onClick={handleToggleClickShare}>
+                              <ShareIcon />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-col items-start">
@@ -383,14 +425,14 @@ export const Account = () => {
                         {posts.map((post: IPost) => {
                           return (
                             <div key={post.id} className="relative">
-                              <div className="">
+                              <div className="group">
                                 <img
                                   key={post.id}
                                   src={post.imageUrl}
                                   alt=""
                                   className="lg:w-[240px] lg:h-[240px] md:w-[225px] md:h-[225px]    cursor-pointer object-cover shadow-lg"
                                 />
-                                <div className="absolute top-0 left-0 items-center justify-center hidden w-full h-full text-white opacity-100 overlay group-hover:flex group-hover:flex-col">
+                                <div className="absolute top-0 left-0 items-center justify-center w-full h-full text-white opacity-100 overlay group-hover:flex group-hover:flex-col">
                                   {likesCount[post.id] && (
                                     <div>
                                       <span className="flex items-center gap-1 mr-1 font-bold">
@@ -468,32 +510,50 @@ export const Account = () => {
                   </div>
                 </div>
                 <div className="flex flex-col items-start justify-start pt-5">
-                  <p className="text-[16px] font-medium ">
-                    {userData.userName ? (
-                      <>{userData.userName}</>
+                  <div className="flex justify-between w-full">
+                    <p className="text-[16px] font-medium ">
+                      {userData.userName ? (
+                        <>{userData.userName}</>
+                      ) : (
+                        <>{userData.displayName}</>
+                      )}
+                    </p>
+                    {/* @ts-ignore */}
+                    {user && uid === user.uid ? (
+                      ""
                     ) : (
-                      <>{userData.displayName}</>
+                      <>
+                        <button onClick={handleToggleClickShare}>
+                          <ShareIcon />
+                        </button>
+                      </>
                     )}
-                  </p>
-
+                  </div>
                   <p className="text-[16px] font-normal">
                     {userData.displayName}
                   </p>
-
                   <p className="text-[14px] font-normal text-left">
                     {userData.bio}
                   </p>
                 </div>
-                <div className="flex flex-col justify-start pt-5">
+                <div className="flex justify-between w-full gap-3 pt-5">
                   {user && uid === user.uid && (
                     <button
-                      className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
+                      className="p-[5px] w-full text-white bg-black rounded hover:opacity-70"
                       onClick={(event) => {
                         event.preventDefault();
                         handleClick(event);
                       }}
                     >
                       Edit
+                    </button>
+                  )}
+                  {user && uid === user.uid && (
+                    <button
+                      className="p-[5px] w-full font-medium border rounded"
+                      onClick={handleToggleClickShare}
+                    >
+                      Share Profile
                     </button>
                   )}
                 </div>
