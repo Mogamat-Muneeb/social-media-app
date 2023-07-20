@@ -110,6 +110,14 @@ export const MobileNav = () => {
             </span>
           </Link>
           <Link
+            to="/explore"
+            className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
+              user ? "block" : "hidden"
+            } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
+          >
+            <FiSearch className="text-[23px]" />
+          </Link>
+          <Link
             to="/createpost"
             className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
               user ? "block" : "hidden"
@@ -117,6 +125,7 @@ export const MobileNav = () => {
           >
             <FiPlusSquare className="text-[22px]" />
           </Link>
+
           <Link
             to="/notifications"
             className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center  ${
@@ -137,14 +146,7 @@ export const MobileNav = () => {
               } `}
             ></span>
           </Link>
-          <Link
-            to="/explore"
-            className={`font-medium md:text-[16px] text-[14px] flex flex-col items-center ${
-              user ? "block" : "hidden"
-            } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
-          >
-            <FiSearch className="text-[23px]" />
-          </Link>
+
           {user?.uid ? null : (
             <>
               <Link
