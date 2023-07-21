@@ -53,7 +53,7 @@ const ShareButtons = ({ userData, link }: { userData: any; link: any }) => {
   return (
     <>
       <div className="flex justify-between gap-2 ">
-        <div className="flex items-center justify-center font-normal px-6 py-1 w-full text-[14px] hover:opacity-70 text-white bg-black rounded cursor-pointer">
+        <div className="flex items-center justify-center font-normal px-6 py-1 w-full text-[14px] border rounded cursor-pointer">
           <p
             onClick={handleCopyClick}
             className="flex flex-col items-center justify-center gap-1"
@@ -64,7 +64,7 @@ const ShareButtons = ({ userData, link }: { userData: any; link: any }) => {
         </div>
         <div
           onClick={handleShareVia}
-          className="flex items-center justify-center px-6 py-1 w-full font-normal text-[14px] hover:opacity-70 text-white bg-black rounded cursor-pointer"
+          className="flex items-center justify-center font-normal px-6 py-1 w-full text-[14px] border rounded cursor-pointer"
         >
           <p className="flex flex-col items-center justify-center gap-1">
             <ShareViaIcon /> <span>Share Via</span>

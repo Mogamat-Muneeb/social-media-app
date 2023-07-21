@@ -69,7 +69,7 @@ export const Navbar = () => {
   }, []);
   // @ts-ignore
   const filteredNotifications = notifications.filter(
-      // @ts-ignore
+    // @ts-ignore
     (notification) => !notification.viewedBy?.includes(user?.uid)
   );
   const count = filteredNotifications.length;
@@ -103,7 +103,7 @@ export const Navbar = () => {
           <div className="flex gap-4">
             <Link
               to="/"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-normal text-[14px] ${
                 pathName.pathname === "/" && "text-[#ff3040]"
               }`}
             >
@@ -111,7 +111,7 @@ export const Navbar = () => {
             </Link>
             <Link
               to="/createpost"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-normal text-[14px] ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/createpost" && "text-[#ff3040]"} `}
             >
@@ -119,7 +119,7 @@ export const Navbar = () => {
             </Link>
             <Link
               to="/explore"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-normal text-[14px] ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/explore" && "text-[#ff3040]"} `}
             >
@@ -127,7 +127,7 @@ export const Navbar = () => {
             </Link>
             <Link
               to="/notifications"
-              className={`font-medium md:text-[16px] text-[14px] ${
+              className={`font-normal text-[14px] ${
                 user ? "block" : "hidden"
               } ${pathName.pathname === "/notifications" && "text-[#ff3040]"} `}
             >
@@ -144,7 +144,7 @@ export const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className={`font-medium md:text-[16px]  text-[14px] ${
+                  className={`font-normal  text-[14px] ${
                     pathName.pathname === "/login" && "text-[#ff3040]"
                   }`}
                 >
@@ -172,9 +172,9 @@ export const Navbar = () => {
                   <Link to={`/user/${user.uid} `}>
                     <p className="font-normal text-[14px] flex flex-col">
                       {
-                        /*@ts-ignore */
+                        //@ts-ignore
                         userData?.userName ? (
-                          /*@ts-ignore */
+                          //@ts-ignore
                           <>{userData?.userName}</>
                         ) : (
                           <>
@@ -191,7 +191,7 @@ export const Navbar = () => {
                       }
                       <span>
                         {
-                          /*@ts-ignore */
+                          //@ts-ignore
                           userData?.displayName
                         }
                       </span>
@@ -200,7 +200,7 @@ export const Navbar = () => {
                 </div>
                 <button
                   onClick={signUserOut}
-                  className="font-normal text-[16px] md:block hidden"
+                  className="font-normal text-[14px] md:block hidden"
                 >
                   Logout
                 </button>

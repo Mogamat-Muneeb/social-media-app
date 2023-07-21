@@ -315,7 +315,7 @@ export const Account = () => {
                         <div>
                           {user && uid === user.uid && (
                             <button
-                              className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
+                              className="px-5 py-1 w-[130px] font-medium border rounded"
                               onClick={(event) => {
                                 event.preventDefault();
                                 handleClick(event);
@@ -339,7 +339,7 @@ export const Account = () => {
                         <div>
                           {user && uid === user.uid && (
                             <button
-                              className="p-[5px] w-[130px] text-white bg-black rounded hover:opacity-70"
+                              className="px-4 py-1 font-medium border rounded"
                               onClick={(event) => {
                                 event.preventDefault();
                                 handleClick(event);
@@ -539,7 +539,7 @@ export const Account = () => {
                 <div className="flex justify-between w-full gap-3 pt-5">
                   {user && uid === user.uid && (
                     <button
-                      className="p-[5px] w-full text-white bg-black rounded hover:opacity-70"
+                      className="p-[5px] w-full font-medium border rounded"
                       onClick={(event) => {
                         event.preventDefault();
                         handleClick(event);

@@ -1,7 +1,15 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { addDoc, collection, doc, onSnapshot, query, where, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { auth, db, storage } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -56,11 +64,11 @@ export const CreateForm = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-      //@ts-ignore
+    //@ts-ignore
     const docRef = doc(db, "users", user?.uid);
     const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
-          //@ts-ignore
+        //@ts-ignore
         setUserData(docSnapshot.data());
       }
     });
@@ -75,7 +83,7 @@ export const CreateForm = () => {
     }
 
     const storageRef = ref(storage, `posts/${user?.displayName}/${Date.now()}`);
-      //@ts-ignore
+    //@ts-ignore
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     setUploaded(false);
@@ -84,7 +92,8 @@ export const CreateForm = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setUploadProgress(progress);
       },
       (error) => {
@@ -95,15 +104,15 @@ export const CreateForm = () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         const postDocRef = await addDoc(postsRef, {
           ...data,
-            //@ts-ignore
+          //@ts-ignore
           userName: userData?.userName ?? null,
-            //@ts-ignore
+          //@ts-ignore
           bio: userData?.bio ?? null,
-            //@ts-ignore
+          //@ts-ignore
           username: userData?.displayName ?? null,
-            //@ts-ignore
+          //@ts-ignore
           photoURL: userData?.photoURL,
-            //@ts-ignore
+          //@ts-ignore
           userId: userData?.uid,
           date: Date.now(),
           imageUrl: downloadURL,
@@ -113,7 +122,7 @@ export const CreateForm = () => {
         const userNotificationsQuery = query(
           notificationsRef,
           where("postId", "==", postDocRef.id),
-            //@ts-ignore
+          //@ts-ignore
           where("userId", "==", userData?.uid)
         );
         const userNotificationsSnapshot = await getDocs(userNotificationsQuery);
@@ -122,16 +131,16 @@ export const CreateForm = () => {
 
         await addDoc(notificationsRef, {
           postId: postDocRef.id,
-            //@ts-ignore
+          //@ts-ignore
           userId: userData?.uid,
-             //@ts-ignore
+          //@ts-ignore
           userName: userData?.userName ?? null,
-             //@ts-ignore
+          //@ts-ignore
           username: userData?.displayName ?? null,
           date: Date.now(),
           lookedAt: lookedAt,
           imageUrl: downloadURL,
-          usage: "created a post"
+          usage: "created a post",
         });
 
         setUploaded(true);
@@ -141,7 +150,6 @@ export const CreateForm = () => {
       }
     );
   };
-
 
   return (
     <div className="flex flex-wrap items-center justify-center h-screen">
@@ -166,7 +174,7 @@ export const CreateForm = () => {
                 <div className="rounded shadow">
                   <img
                     src={
-                      /* @ts-ignore */
+                      //@ts-ignore
                       URL.createObjectURL(file)
                     }
                     className="rounded shadow-lg  max-w-[500px] w-full  object-cover"
@@ -176,11 +184,11 @@ export const CreateForm = () => {
               )}
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center  h-full bg-black rounded-lg max-w-[500px] w-full cursor-pointer hover:opacity-70"
+                className="flex flex-col items-center justify-center  h-full border rounded-lg max-w-[500px] w-full cursor-pointer hover:opacity-70"
               >
                 <div className="flex flex-col items-center justify-center px-1 py-5 md:px-2 md:py-4">
-                  <p className="flex items-center text-sm text-white">
-                    <span className="font-medium">
+                  <p className="flex items-center text-[14px] text-black">
+                    <span className="font-medium text-[14px]">
                       {file ? ` Image Uploaded ` : ` Click to upload`}
                     </span>
                   </p>
@@ -222,7 +230,7 @@ export const CreateForm = () => {
                   <div className="">
                     <img
                       src={
-                        /* @ts-ignore */
+                        //@ts-ignore
                         URL.createObjectURL(file)
                       }
                       className="w-full rounded-sm shadow-lg max-w-[500px]  object-cover mx-auto"

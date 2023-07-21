@@ -836,7 +836,7 @@ export const Post = (props: Props) => {
                     }}
                     className={`${post.userId === USER_ID && "hidden"}  `}
                   >
-                    <span className="text-[14px] font-semibold text-[#0095f6]">
+                    <span className="text-[14px] font-medium text-[#0095f6]">
                       {isFollowing ? "Unfollow" : "Follow"}
                     </span>
                   </button>
