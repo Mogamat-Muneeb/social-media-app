@@ -114,12 +114,12 @@ const Explore = () => {
         </div>
         {filteredUsers?.map((user: UserData) => (
           <div key={user.uid}>
-            <div className="flex gap-4 py-4">
-              <div>
+            <div className="flex gap-2 py-4">
+              <div className="w-12">
                 <img
                   src={user.photoURL}
                   alt=""
-                  className="w-10 h-10 rounded-full"
+                  className="object-cover w-10 h-10 rounded-full"
                 />
               </div>
               <div className="flex flex-col w-full">
