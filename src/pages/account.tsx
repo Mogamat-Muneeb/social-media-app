@@ -25,7 +25,7 @@ import { Post as IPost } from "../pages/main/main";
 import { deleteObject, ref } from "firebase/storage";
 import { Modal } from "../components/modal";
 import ShareButtons from "../components/shareButtons";
-import {GrClose} from "react-icons/gr"
+import { GrClose } from "react-icons/gr";
 
 export const Account = () => {
   interface UserData {
@@ -240,10 +240,7 @@ export const Account = () => {
                   >
                     Delete
                   </button>
-                  <button
-                    onClick={handleToggleClick}
-                    className="font-medium "
-                  >
+                  <button onClick={handleToggleClick} className="font-medium ">
                     Cancel
                   </button>
                 </div>
@@ -261,7 +258,7 @@ export const Account = () => {
                 onClick={handleToggleClickShare}
                 className="font-medium text-[#ff3040] flex justify-end items-end w-full"
               >
-                <GrClose/>
+                <GrClose />
               </button>
               <ShareButtons userData={user?.displayName} link={projLink} />
             </div>
