@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import {
   formatTimestamp,
   generateChatRoomId,
@@ -8,6 +8,7 @@ import {
   sendMessage,
 } from "../../helper";
 import { auth, db } from "../../config/firebase";
+import { LoadingSpinner } from "../icon";
 
 const ChatArea = ({
   currentUser,
@@ -24,6 +25,7 @@ const ChatArea = ({
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [roomID, setRoomID] = useState("");
+  const [loadingMessages, setLoadingMessages] = useState(true);
 
   // Getting chat id
   const roomChat = async () => {
@@ -77,6 +79,7 @@ const ChatArea = ({
     const fetchData = async () => {
       if (uuid && currentUser && currentUser && currentUser.uid) {
         try {
+          setLoadingMessages(true);
           const currentUserUUID = currentUser.uid;
           const chatRoomId = await generateChatRoomId({
             user1: currentUserUUID,
@@ -86,10 +89,12 @@ const ChatArea = ({
           const unsubscribe = onSnapshot(chatQuery, (snapshot) => {
             const msgs: any = snapshot.docs.map((doc) => doc.data());
             setMessages(msgs);
+            setLoadingMessages(false);
           });
           return () => unsubscribe();
         } catch (error) {
           console.error("Error fetching chat room ID:", error);
+          setLoadingMessages(false);
         }
       }
     };
@@ -116,43 +121,54 @@ const ChatArea = ({
             <div
               className={`lg:h-[650px]  md:h-[600px]  overflow-y-auto no-scrollbar  flex flex-col  basis-0 grow mx-4 pt-14 `}
             >
-              {messages.map((message: any) => {
-                return (
-                  <>
-                    <div
-                      className={`max-w-full w-full ${
-                        message.user === currentUser.email
-                          ? " flex justify-end items-end "
-                          : "flex justify-start items-start"
-                      }`}
-                    >
-                      <div
-                        key={message.timestamp}
-                        className={`py-[40px] ${
-                          message.user === currentUser.email ? "" : ""
-                        }`}
-                      >
+              {loadingMessages ? (
+                <div className="flex items-center justify-center w-full">
+                  <LoadingSpinner />
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-center w-full">
+                    {messages.length === 0 && "No message found.."}
+                  </div>
+                  {messages.map((message: any) => {
+                    return (
+                      <>
                         <div
-                          className={`max-w-full w-full flex flex-col ${
+                          className={`max-w-full w-full ${
                             message.user === currentUser.email
-                              ? "bg-gray-300 py-2 px-4 w-full max-w-[400px] text-white rounded-2xl  flex justify-center items-center "
-                              : "bg-gray-700 py-2 px-4 w-full max-w-[400px] text-white rounded-2xl  flex justify-center items-center"
+                              ? " flex justify-end items-end "
+                              : "flex justify-start items-start"
                           }`}
                         >
-                          <p>
-                            <span>{message.text}</span>
-                            {/* {`${message.user}:
+                          <div
+                            key={message.timestamp}
+                            className={`py-[40px] ${
+                              message.user === currentUser.email ? "" : ""
+                            }`}
+                          >
+                            <div
+                              className={`max-w-full w-full flex flex-col ${
+                                message.user === currentUser.email
+                                  ? "bg-gray-300 py-2 px-4 w-full max-w-[400px] text-white rounded-2xl  flex justify-center items-center "
+                                  : "bg-gray-700 py-2 px-4 w-full max-w-[400px] text-white rounded-2xl  flex justify-center items-center"
+                              }`}
+                            >
+                              <p>
+                                <span>{message.text}</span>
+                                {/* {`${message.user}:
                            ${}`} */}
-                          </p>
-                          <span className=" flex justify-end items-end w-full text-[10px]">
-                            {formatTimestamp(message.timestamp)}
-                          </span>
+                              </p>
+                              <span className=" flex justify-end items-end w-full text-[10px]">
+                                {formatTimestamp(message.timestamp)}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </>
-                );
-              })}
+                      </>
+                    );
+                  })}
+                </>
+              )}
             </div>
             <form
               onSubmit={(e) => e.preventDefault()}

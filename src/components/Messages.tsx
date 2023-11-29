@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { getAuth } from "firebase/auth";
-
 import Chat from "../components/Messages/Chat";
 import ChatArea from "../components/Messages/ChatArea";
-import {
-  collection,
-  getFirestore,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { getMessages } from "../helper";
 import { auth, db } from "../config/firebase";
@@ -35,19 +27,6 @@ const Messages = () => {
         ...doc.data(),
       }));
       setUsers(user);
-    });
-  };
-
-  const getUsersCurrentUser = async () => {
-    const currentUserUid = auth?.currentUser?.uid;
-    const userQuery = query(postsRef, where("uid", "==", currentUserUid));
-
-    onSnapshot(userQuery, (snapshot: any) => {
-      const user = snapshot?.docs?.map((doc: any) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setCurrentUser(user);
     });
   };
 

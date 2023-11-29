@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Chat = ({
   allUsers,
@@ -14,8 +13,6 @@ const Chat = ({
   handleStartChat: any;
   selectedUser: any;
 }) => {
-  const { uuid } = useParams();
-
   return (
     <div className="w-full ">
       <div className="flex items-start justify-start px-3 py-2 ">

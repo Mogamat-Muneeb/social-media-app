@@ -3,7 +3,7 @@ import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { collection, doc, onSnapshot, Unsubscribe } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 export const Navbar = () => {
   const [user] = useAuthState(auth);
