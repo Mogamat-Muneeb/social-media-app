@@ -134,6 +134,7 @@ const ChatArea = ({
                     return (
                       <>
                         <div
+                        key={message.uid}
                           className={`max-w-full w-full ${
                             message.user === currentUser.email
                               ? " flex justify-end items-end "

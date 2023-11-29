@@ -15,7 +15,6 @@ const Messages = () => {
   const [usersChat, setUsersChat] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
   const [allMessages, setAllMessages] = useState([]);
-  // const [showChat, setShowChat] = useState(true);
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
   const postsRef = collection(db, "users");
