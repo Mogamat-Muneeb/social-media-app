@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { getMessages } from "../helper";
 import { auth, db } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Messages = () => {
   const { uuid } = useParams();
@@ -73,24 +74,26 @@ const Messages = () => {
 
   return (
     <>
-      <div className="flex ">
-        <div className="sidenav border-gray-400 w-full mt-5 lg:max-w-[350px] ">
-          <Chat
-            allUsers={users}
-            currentUser={user}
-            allMessages={allMessages}
-            handleStartChat={handleStartChat}
-            selectedUser={selectedUser}
-          />
+      <ProtectedRoute>
+        <div className="flex ">
+          <div className="sidenav border-gray-400 w-full mt-5 lg:max-w-[350px] ">
+            <Chat
+              allUsers={users}
+              currentUser={user}
+              allMessages={allMessages}
+              handleStartChat={handleStartChat}
+              selectedUser={selectedUser}
+            />
+          </div>
+          <div className="w-full h-full lg:ml-[350px]  px-4">
+            <ChatArea
+              currentUser={user}
+              otherUser={uuid || ""}
+              usersChat={usersChat}
+            />
+          </div>
         </div>
-        <div className="w-full h-full lg:ml-[350px]  px-4">
-          <ChatArea
-            currentUser={user}
-            otherUser={uuid || ""}
-            usersChat={usersChat}
-          />
-        </div>
-      </div>
+      </ProtectedRoute>
     </>
   );
 };
