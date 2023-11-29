@@ -36,43 +36,43 @@ export const Navbar = () => {
     }
   }, [user?.uid]);
 
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const notificationsRef = collection(db, "notifications");
-      const unsubscribe = onSnapshot(notificationsRef, (snapshot) => {
-        const updatedNotifications = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        //@ts-ignore
-        setNotifications(updatedNotifications);
-      });
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     const notificationsRef = collection(db, "notifications");
+  //     const unsubscribe = onSnapshot(notificationsRef, (snapshot) => {
+  //       const updatedNotifications = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       //@ts-ignore
+  //       setNotifications(updatedNotifications);
+  //     });
 
-      return unsubscribe;
-    };
+  //     return unsubscribe;
+  //   };
 
-    let unsubscribe: Unsubscribe | undefined;
+  //   let unsubscribe: Unsubscribe | undefined;
 
-    const getNotifications = async () => {
-      unsubscribe = await fetchNotifications();
-    };
+  //   const getNotifications = async () => {
+  //     unsubscribe = await fetchNotifications();
+  //   };
 
-    getNotifications();
+  //   getNotifications();
 
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
-  }, []);
-  // @ts-ignore
-  const filteredNotifications = notifications.filter(
-    // @ts-ignore
-    (notification) => !notification.viewedBy?.includes(user?.uid)
-  );
-  const count = filteredNotifications.length;
+  //   return () => {
+  //     if (unsubscribe) {
+  //       unsubscribe();
+  //     }
+  //   };
+  // }, []);
+  // // @ts-ignore
+  // const filteredNotifications = notifications.filter(
+  //   // @ts-ignore
+  //   (notification) => !notification.viewedBy?.includes(user?.uid)
+  // );
+  // const count = filteredNotifications.length;
 
   // const filteredNotifications = notifications.filter(
   //   (notification) =>
@@ -125,7 +125,7 @@ export const Navbar = () => {
             >
               Explore
             </Link>
-            <Link
+            {/* <Link
               to="/notifications"
               className={`font-normal text-[14px] ${
                 user ? "block" : "hidden"
@@ -139,7 +139,7 @@ export const Navbar = () => {
                 }`}
               ></div>
               <span className="relative">Notifications ({count})</span>
-            </Link>
+            </Link> */}
             {user?.uid ? null : (
               <>
                 <Link

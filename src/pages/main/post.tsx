@@ -359,15 +359,15 @@ export const Post = (props: Props) => {
 
   if (diffInMinutes >= 43200) {
     const diffInMonths = Math.floor(diffInMinutes / 43200);
-    timeAgo = `${diffInMonths}m`;
+    timeAgo = `${diffInMonths} mo`;
   } else if (diffInMinutes >= 1440) {
     const diffInDays = Math.floor(diffInMinutes / 1440);
-    timeAgo = `${diffInDays}d`;
+    timeAgo = `${diffInDays} d`;
   } else if (diffInMinutes >= 60) {
     const diffInHours = Math.floor(diffInMinutes / 60);
-    timeAgo = `${diffInHours}h`;
+    timeAgo = `${diffInHours} h`;
   } else {
-    timeAgo = `${diffInMinutes}m`;
+    timeAgo = `${diffInMinutes} m`;
   }
 
   const [loading, setLoading] = useState(true);
